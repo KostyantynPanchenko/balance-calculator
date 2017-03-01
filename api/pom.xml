@@ -7,6 +7,10 @@
   </parent>
   <artifactId>api</artifactId>
   
+  <properties>
+    <dropwizard.version>0.9.2</dropwizard.version>
+  </properties>
+  
   <dependencies>
     <dependency>
         <groupId>com.softserveinc</groupId>
@@ -17,6 +21,11 @@
         <groupId>com.softserveinc</groupId>
         <artifactId>dto</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+        <groupId>io.dropwizard</groupId>
+        <artifactId>dropwizard-core</artifactId>
+        <version>${dropwizard.version}</version>
     </dependency>
   </dependencies>
 </project>

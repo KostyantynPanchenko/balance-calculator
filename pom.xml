@@ -11,4 +11,36 @@
       <module>domain</module>
       <module>service</module>
   </modules>
+  
+  <properties>    
+    <spring-framework.version>4.3.5.RELEASE</spring-framework.version>
+    <logback.version>1.1.7</logback.version>
+    <slf4j.version>1.7.7</slf4j.version>
+  </properties>
+  
+  <dependencies>
+    <!--
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-core</artifactId>
+        <version>${spring-framework.version}</version>
+    </dependency>
+    -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>${spring-framework.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${logback.version}</version>
+        <scope>runtime</scope>
+    </dependency>
+  </dependencies>
 </project>
