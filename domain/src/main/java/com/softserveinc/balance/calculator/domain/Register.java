@@ -9,6 +9,37 @@ public class Register {
     
     public Register() { }
 
+    public static class Builder {
+        
+        private Register register;
+        
+        public Builder() { }
+        
+        public Builder setId(Long id) {
+            this.register.setId(id);
+            return this;
+        }
+        
+        public Builder setStoreId(Long storeId) {
+            this.register.setStoreId(storeId);
+            return this;
+        }
+        
+        public Builder setName(String name) {
+            this.register.setName(name);
+            return this;
+        }
+        
+        public Builder setTimezone(String timezone) {
+            this.register.setTimezome(timezone);
+            return this;
+        }
+        
+        public Register build() {
+            return this.register;
+        }
+    }
+    
     public long getId() {
         return id;
     }

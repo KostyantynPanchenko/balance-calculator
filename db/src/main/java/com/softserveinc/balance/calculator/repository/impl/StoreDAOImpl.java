@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import com.softserveinc.balance.calculator.domain.Store;
 import com.softserveinc.balance.calculator.repository.StoreDAO;
 
-public class JdbcStoreDAO implements StoreDAO {
+public class StoreDAOImpl implements StoreDAO {
     
     private final String INSERT = "insert into stores(tenant_id, name, description) values(?, ?, ?)";
     private final String GET_BY_ID = "select id, tenant_id, name, description from stores where id = ?";
@@ -20,10 +20,6 @@ public class JdbcStoreDAO implements StoreDAO {
         this.template = new JdbcTemplate(dataSource);
     }
 
-    public int save(final Store store) {
-        return this.template.update(INSERT, new Object[] {store.getTenantId(), store.getName(), store.getDescription()});
-    }
-
     public Store getStoreById(final Long id) {
         Store store = null;
         try {
@@ -32,6 +28,10 @@ public class JdbcStoreDAO implements StoreDAO {
             // nothing we can do except log it
         }
         return store;
+    }
+    
+    public int save(final Store store) {
+        return this.template.update(INSERT, new Object[] {store.getTenantId(), store.getName(), store.getDescription()});
     }
 
     public int update(Store store, Long id) {
