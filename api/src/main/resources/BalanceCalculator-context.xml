@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="storeResource" class="com.softserveinc.balance.calculator.api.resources.impl.StoreResourceImpl">
+        <constructor-arg name="storeService" ref="storeService" />
+    </bean>
+    
+    <bean id="storeService" class="com.softserveinc.balance.calculator.service.impl.StoreServiceImpl">
+        <constructor-arg name="storeDao" ref="storeDao"/>
+    </bean>
+    
+    <bean id="storeDao" class="com.softserveinc.balance.calculator.repository.impl.JdbcStoreDAO" />
+
+</beans>
