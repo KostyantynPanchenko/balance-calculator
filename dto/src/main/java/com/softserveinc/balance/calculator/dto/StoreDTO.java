@@ -1,3 +1,4 @@
+
 package com.softserveinc.balance.calculator.dto;
 
 import com.softserveinc.balance.calculator.domain.Store;
@@ -7,8 +8,9 @@ public class StoreDTO {
     private Long tenantId;
     private String name;
     private String description;
-    
-    public StoreDTO() { }
+
+    public StoreDTO() {
+    }
 
     public StoreDTO(Store store) {
         this.id = store.getId();

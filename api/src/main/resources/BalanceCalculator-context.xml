@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context.xsd">
 
     <bean id="storeResource" class="com.softserveinc.balance.calculator.api.resources.impl.StoreResourceImpl">
         <constructor-arg name="storeService" ref="storeService" />
@@ -11,6 +15,19 @@
         <constructor-arg name="storeDao" ref="storeDao"/>
     </bean>
     
-    <bean id="storeDao" class="com.softserveinc.balance.calculator.repository.impl.JdbcStoreDAO" />
+    <!-- bean id="storeDao" class="com.softserveinc.balance.calculator.repository.impl.JdbcStoreDAO" /-->
+    
+    <bean id="storeDao" class="com.softserveinc.balance.calculator.repository.impl.JdbcStoreDAO">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <context:property-placeholder location="jdbc.properties" />
 
 </beans>

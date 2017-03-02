@@ -11,7 +11,11 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
 public class BalanceCalculatorApplication extends Application<BalanceCalculatorConfig> {
-
+    
+    public static void main(String[] args) throws Exception {
+        new BalanceCalculatorApplication().run(args);
+    }
+    
     @Override
     public void run(BalanceCalculatorConfig config, Environment environment) throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("BalanceCalculator-context.xml");
@@ -23,10 +27,6 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
     @Override
     public void initialize(Bootstrap<BalanceCalculatorConfig> bootstrap) {
         super.initialize(bootstrap);
-    }
-    
-    public static void main(String[] args) throws Exception {
-        new BalanceCalculatorApplication().run(args);
     }
 
 }

@@ -4,12 +4,12 @@ import com.softserveinc.balance.calculator.domain.Store;
 
 public interface StoreDAO {
     
-    void save(Store store);
-    
     Store getStoreById(Long id);
     
-    void update(Store store);
+    int save(Store store);
     
-    void deleteById(long id);
+    int update(Store store, Long id);
+    
+    int deleteById(long id);
 
 }
