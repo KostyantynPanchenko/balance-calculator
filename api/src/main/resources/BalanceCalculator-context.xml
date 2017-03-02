@@ -15,9 +15,7 @@
         <constructor-arg name="storeDao" ref="storeDao"/>
     </bean>
     
-    <!-- bean id="storeDao" class="com.softserveinc.balance.calculator.repository.impl.JdbcStoreDAO" /-->
-    
-    <bean id="storeDao" class="com.softserveinc.balance.calculator.repository.impl.JdbcStoreDAO">
+    <bean id="storeDao" class="com.softserveinc.balance.calculator.repository.impl.StoreDAOImpl">
         <property name="dataSource" ref="dataSource"></property>
     </bean>
     
