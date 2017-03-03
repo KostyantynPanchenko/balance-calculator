@@ -1,6 +1,5 @@
 package com.softserveinc.balance.calculator.api;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.softserveinc.balance.calculator.api.resources.RegisterResource;
@@ -20,12 +19,13 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
     
     @Override
     public void run(BalanceCalculatorConfig config, Environment environment) throws Exception {
-        ApplicationContext context = new ClassPathXmlApplicationContext("BalanceCalculator-context.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("BalanceCalculator-context.xml");
         StoreResource storeResource = context.getBean(StoreResourceImpl.class);
         RegisterResource registerResource = context.getBean(RegisterResourceImpl.class);
         
         environment.jersey().register(storeResource);
         environment.jersey().register(registerResource);
+        context.close();
     }
 
     @Override

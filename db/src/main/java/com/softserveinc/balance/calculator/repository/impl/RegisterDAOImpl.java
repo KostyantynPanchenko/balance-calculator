@@ -3,11 +3,15 @@ package com.softserveinc.balance.calculator.repository.impl;
 import javax.sql.DataSource;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.softserveinc.balance.calculator.domain.Register;
 import com.softserveinc.balance.calculator.repository.RegisterDAO;
+import com.softserveinc.balance.calculator.repository.exception.DataIntegrityViolationRepositoryException;
+import com.softserveinc.balance.calculator.repository.exception.DomainEntityNotFoundException;
+import com.softserveinc.balance.calculator.repository.exception.RepositoryException;
 
 public class RegisterDAOImpl implements RegisterDAO {
 
@@ -21,33 +25,38 @@ public class RegisterDAOImpl implements RegisterDAO {
         this.template = new JdbcTemplate(dataSource);
     }
     
-    public Register getRegisterById(Long registerId) {
+    public Register getRegisterById(Long registerId) throws RepositoryException {
         Register register = null;
         try {
             register = (Register) template.queryForObject(GET_BY_ID, new Object[]{registerId}, new RegisterRowMapper());
-        } catch (EmptyResultDataAccessException e) {
-            // nothing we can do except log it
+        } catch (EmptyResultDataAccessException empty) {
+            throw new DomainEntityNotFoundException();
+        } catch (DataAccessException e) {
+            throw new RepositoryException(e.getMessage());
         }
         return register;
     }
 
-    public int save(Register register) {
-        int status = 0;
+    public int save(Register register) throws RepositoryException {
+        return execute(INSERT, new Object[] {register.getStoreId(), register.getName(), register.getTimezone()});
+    }
+
+    public int update(Register register, Long registerId) throws RepositoryException {
+        return execute(UPDATE, new Object[] {register.getName(), register.getTimezone(), registerId});
+    }
+
+    public int delete(Long storeId, Long registerId) throws RepositoryException {
+        return execute(DELETE, new Object[] {registerId, storeId});
+    }
+    
+    private int execute(String SQL, Object[] params) throws RepositoryException {
         try {
-            return template.update(INSERT, new Object[] {register.getStoreId(), register.getName(), register.getTimezone()});
+            return template.update(SQL, params);
+        } catch (DataIntegrityViolationException violation) {
+            throw new DataIntegrityViolationRepositoryException(violation.getMessage());
         } catch (DataAccessException e) {
-            
+            throw new RepositoryException(e.getMessage());
         }
-        return status;
-    }
-
-    public int update(Register register, Long registerId) {
-        return template.update(UPDATE, new Object[] {register.getName(), register.getTimezone(), registerId});
-    }
-
-    public int delete(Long storeId, Long registerId) {
-        System.out.println("DAO");
-        return template.update(DELETE, new Object[] {registerId, storeId});
     }
 
 }

@@ -107,6 +107,11 @@ public class Register {
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "Register [id=" + id + ", storeId=" + storeId + ", name=" + name + ", timezone=" + timezone + "]";
+    }
     
     
 }

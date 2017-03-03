@@ -19,7 +19,7 @@ public interface RegisterResource {
 
     @GET
     @Path("/{register-id}")
-    RegisterDTO getRegisterById(@PathParam("register-id") Long registerId);
+    Response getRegisterById(@PathParam("register-id") Long registerId);
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
