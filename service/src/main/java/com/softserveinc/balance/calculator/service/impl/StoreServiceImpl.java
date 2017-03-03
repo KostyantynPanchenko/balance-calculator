@@ -22,12 +22,8 @@ public class StoreServiceImpl implements StoreService {
     }
 
     public int update(StoreDTO storeDto, Long id) {
-        Store store = new Store.Builder()
-                            .setId(id)
-                            .setTenantId(storeDto.getTenantId())
-                            .setName(storeDto.getName())
-                            .setDescription(storeDto.getDescription())
-                            .build();
+        Store store = createStore(storeDto);
+        store.setId(id);
         return storeDao.update(store, id);
     }
 
@@ -36,12 +32,15 @@ public class StoreServiceImpl implements StoreService {
     }
 
     public int save(StoreDTO storeDto) {
-        Store store = new Store.Builder()
-                            .setTenantId(storeDto.getTenantId())
-                            .setName(storeDto.getName())
-                            .setDescription(storeDto.getDescription())
-                            .build();
-        return storeDao.save(store);
+        return storeDao.save(createStore(storeDto));
+    }
+    
+    private Store createStore(StoreDTO storeDto) {
+        return new Store.Builder()
+                .setTenantId(storeDto.getTenantId())
+                .setName(storeDto.getName())
+                .setDescription(storeDto.getDescription())
+                .build();
     }
 
 }
