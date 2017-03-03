@@ -79,4 +79,67 @@ public class Balance {
     public void setTotalUnallocatedConsumptionAmount(BigDecimal totalUnallocatedConsumptionAmount) {
         this.totalUnallocatedConsumptionAmount = totalUnallocatedConsumptionAmount;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
+        result = prime * result + ((createdOn == null) ? 0 : createdOn.hashCode());
+        result = prime * result + (int) (registerId ^ (registerId >>> 32));
+        result = prime * result
+                + ((totalAllocatedConsumptionAmount == null) ? 0 : totalAllocatedConsumptionAmount.hashCode());
+        result = prime * result
+                + ((totalAllocatedContributionAmount == null) ? 0 : totalAllocatedContributionAmount.hashCode());
+        result = prime * result
+                + ((totalUnallocatedConsumptionAmount == null) ? 0 : totalUnallocatedConsumptionAmount.hashCode());
+        result = prime * result
+                + ((totalUnallocatedContributionAmount == null) ? 0 : totalUnallocatedContributionAmount.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Balance other = (Balance) obj;
+        if (createdBy == null) {
+            if (other.createdBy != null)
+                return false;
+        } else if (!createdBy.equals(other.createdBy))
+            return false;
+        if (createdOn == null) {
+            if (other.createdOn != null)
+                return false;
+        } else if (!createdOn.equals(other.createdOn))
+            return false;
+        if (registerId != other.registerId)
+            return false;
+        if (totalAllocatedConsumptionAmount == null) {
+            if (other.totalAllocatedConsumptionAmount != null)
+                return false;
+        } else if (!totalAllocatedConsumptionAmount.equals(other.totalAllocatedConsumptionAmount))
+            return false;
+        if (totalAllocatedContributionAmount == null) {
+            if (other.totalAllocatedContributionAmount != null)
+                return false;
+        } else if (!totalAllocatedContributionAmount.equals(other.totalAllocatedContributionAmount))
+            return false;
+        if (totalUnallocatedConsumptionAmount == null) {
+            if (other.totalUnallocatedConsumptionAmount != null)
+                return false;
+        } else if (!totalUnallocatedConsumptionAmount.equals(other.totalUnallocatedConsumptionAmount))
+            return false;
+        if (totalUnallocatedContributionAmount == null) {
+            if (other.totalUnallocatedContributionAmount != null)
+                return false;
+        } else if (!totalUnallocatedContributionAmount.equals(other.totalUnallocatedContributionAmount))
+            return false;
+        return true;
+    }
+    
 }

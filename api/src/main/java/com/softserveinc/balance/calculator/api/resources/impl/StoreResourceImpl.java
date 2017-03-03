@@ -1,6 +1,5 @@
 package com.softserveinc.balance.calculator.api.resources.impl;
 
-import javax.validation.Valid;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;

@@ -9,28 +9,32 @@ public class RegisterServiceImpl implements RegisterService {
 
     private RegisterDAO registerDao;
     
-    public RegisterServiceImpl(RegisterDAO dao) {
-        this.registerDao = dao;
+    public RegisterServiceImpl(RegisterDAO registerDao) {
+        this.registerDao = registerDao;
     }
     
-    public RegisterDTO getRegisterById(Long storeId, Long registerId) {
-        Register register = registerDao.getRegisterById(storeId, registerId);
+    public RegisterDTO getRegisterById(Long registerId) {
+        Register register = registerDao.getRegisterById(registerId);
         return (register == null) ? null : new RegisterDTO(register);
     }
 
-    public int save(RegisterDTO registerDto) {
-        // TODO Auto-generated method stub
-        return 0;
+    public int save(RegisterDTO registerDto, Long storeId) {
+        return registerDao.save(createRegister(registerDto, storeId));
     }
 
     public int update(RegisterDTO registerDto, Long storeId, Long registerId) {
-        // TODO Auto-generated method stub
-        return 0;
+        return registerDao.update(createRegister(registerDto, storeId), registerId);
     }
 
     public int delete(Long storeId, Long registerId) {
-        // TODO Auto-generated method stub
-        return 0;
+        return registerDao.delete(storeId, registerId);
+    }
+    
+    private Register createRegister(RegisterDTO registerDto, Long storeId) {
+        return new Register.Builder().setStoreId(storeId)
+                                    .setName(registerDto.getName())
+                                    .setTimezone(registerDto.getTimezone())
+                                    .build();
     }
 
 }

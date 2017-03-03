@@ -1,6 +1,9 @@
 package com.softserveinc.balance.calculator.api.resources.impl;
 
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import com.softserveinc.balance.calculator.api.resources.RegisterResource;
 import com.softserveinc.balance.calculator.dto.RegisterDTO;
@@ -10,32 +13,38 @@ public class RegisterResourceImpl implements RegisterResource {
 
     private RegisterService registerService;
     
-    public RegisterResourceImpl(RegisterService regsterService) {
+    public RegisterResourceImpl(RegisterService registerService) {
         this.registerService = registerService;
     }
     
-    public RegisterDTO getRegisterById(Long storeId, Long registerId) {
-        RegisterDTO register = registerService.getRegisterById(storeId, registerId);
-        if (register == null) {
-            throw new NotFoundException();
-        }
+    public RegisterDTO getRegisterById(Long registerId) {
+        RegisterDTO register = registerService.getRegisterById(registerId);
+        checkOperationStatus(register == null ? 0 : 1, register.getStoreId(), registerId);
         return register;
     }
 
-    public int save(RegisterDTO registerDto) {
-        // TODO Auto-generated method stub
-        return 0;
+    public Response save(RegisterDTO registerDto, Long storeId) {
+        System.out.println("RESOURCE");
+        if (registerService.save(registerDto, storeId) != 1) {
+            throw new InternalServerErrorException("Could not save entity");
+        }
+        return Response.status(Status.CREATED).build();
+
     }
 
-    public int update(RegisterDTO registerDto, Long storeId, Long registerId) {
-        // TODO Auto-generated method stub
-        return 0;
+    public Response update(RegisterDTO registerDto, Long storeId, Long registerId) {
+        checkOperationStatus(registerService.update(registerDto, storeId, registerId), storeId, registerId);
+        return Response.noContent().build();
     }
 
-    public int delete(Long storeId, Long registerId) {
-        // TODO Auto-generated method stub
-        return 0;
+    public Response delete(Long storeId, Long registerId) {
+        checkOperationStatus(registerService.delete(storeId, registerId), storeId, registerId);
+        return Response.noContent().build();
     }
 
-    
+    private void checkOperationStatus(int status, Long storeId, Long registerId) {
+        if (status != 1) {
+            throw new NotFoundException("Register with id=" + registerId + " for specified store with id=" + storeId + " not found.");
+        }
+    }
 }

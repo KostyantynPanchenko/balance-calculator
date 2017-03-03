@@ -7,6 +7,7 @@
                         http://www.springframework.org/schema/context
                         http://www.springframework.org/schema/context/spring-context.xsd">
 
+    <!-- STORE  -->
     <bean id="storeResource" class="com.softserveinc.balance.calculator.api.resources.impl.StoreResourceImpl">
         <constructor-arg name="storeService" ref="storeService" />
     </bean>
@@ -19,6 +20,20 @@
         <property name="dataSource" ref="dataSource"></property>
     </bean>
     
+    <!-- REGISTER  -->
+    <bean id="registerResource" class="com.softserveinc.balance.calculator.api.resources.impl.RegisterResourceImpl">
+        <constructor-arg name="registerService" ref="registerService" />
+    </bean>
+    
+    <bean id="registerService" class="com.softserveinc.balance.calculator.service.impl.RegisterServiceImpl">
+        <constructor-arg name="registerDao" ref="registerDao"/>
+    </bean>
+    
+    <bean id="registerDao" class="com.softserveinc.balance.calculator.repository.impl.RegisterDAOImpl">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    
+    <!-- DataSource  -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="${jdbc.driverClassName}"/>
         <property name="url" value="${jdbc.url}"/>

@@ -4,10 +4,10 @@ import com.softserveinc.balance.calculator.domain.Register;
 
 public class RegisterDTO {
 
-    private long id;
-    private long storeId;
+    private Long id;
+    private Long storeId;
     private String name;
-    private String timezome;
+    private String timezone;
     
     public RegisterDTO() { }
 
@@ -15,22 +15,22 @@ public class RegisterDTO {
         this.id = register.getId();
         this.storeId = register.getStoreId();
         this.name = register.getName();
-        this.timezome = register.getTimezome();
+        this.timezone = register.getTimezone();
     }
     
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getStoreId() {
+    public Long getStoreId() {
         return storeId;
     }
 
-    public void setStoreId(long storeId) {
+    public void setStoreId(Long storeId) {
         this.storeId = storeId;
     }
 
@@ -42,11 +42,11 @@ public class RegisterDTO {
         this.name = name;
     }
 
-    public String getTimezome() {
-        return timezome;
+    public String getTimezone() {
+        return timezone;
     }
 
     public void setTimezome(String timezome) {
-        this.timezome = timezome;
+        this.timezone = timezome;
     }
 }

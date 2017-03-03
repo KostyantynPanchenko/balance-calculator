@@ -3,7 +3,9 @@ package com.softserveinc.balance.calculator.api;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.softserveinc.balance.calculator.api.resources.RegisterResource;
 import com.softserveinc.balance.calculator.api.resources.StoreResource;
+import com.softserveinc.balance.calculator.api.resources.impl.RegisterResourceImpl;
 import com.softserveinc.balance.calculator.api.resources.impl.StoreResourceImpl;
 
 import io.dropwizard.Application;
@@ -20,8 +22,10 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
     public void run(BalanceCalculatorConfig config, Environment environment) throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("BalanceCalculator-context.xml");
         StoreResource storeResource = context.getBean(StoreResourceImpl.class);
+        RegisterResource registerResource = context.getBean(RegisterResourceImpl.class);
         
         environment.jersey().register(storeResource);
+        environment.jersey().register(registerResource);
     }
 
     @Override

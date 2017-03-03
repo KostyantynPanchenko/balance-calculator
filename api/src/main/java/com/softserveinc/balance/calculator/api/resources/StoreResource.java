@@ -14,7 +14,6 @@ import javax.ws.rs.core.Response;
 
 import com.softserveinc.balance.calculator.dto.StoreDTO;
 
-
 @Path("/stores")
 @Produces(MediaType.APPLICATION_JSON)
 public interface StoreResource {

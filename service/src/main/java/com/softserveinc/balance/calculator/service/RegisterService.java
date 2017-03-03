@@ -4,11 +4,11 @@ import com.softserveinc.balance.calculator.dto.RegisterDTO;
 
 public interface RegisterService {
 
-    RegisterDTO getRegisterById(Long storeId, Long registerId);
+    RegisterDTO getRegisterById(Long registerId);
 
-    int save(RegisterDTO registerDto);
+    int save(RegisterDTO registerDto, Long storeId);
 
     int update(RegisterDTO registerDto, Long storeId, Long registerId);
 
-    int delete(Long storeId, Long registerId);
+    int delete(Long registerId, Long registerId2);
 }
