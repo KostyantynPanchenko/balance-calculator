@@ -1,5 +1,7 @@
 package com.softserveinc.balance.calculator.api.resources.impl;
 
+import javax.validation.Valid;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -18,30 +20,30 @@ public class StoreResourceImpl implements StoreResource {
 
     public StoreDTO getStoreById(Long id) {
         StoreDTO store = storeService.getStoreById(id);
-        if (store == null) {
-            throw new NotFoundException();
-        }
+        checkOperationResult((store == null) ? 0 : 1, id);
         return store;
     }
 
     public Response save(StoreDTO storeDto) {
         if (storeService.save(storeDto) != 1) {
-            throw new NotFoundException();
+            throw new InternalServerErrorException("Could not save a record in database.");
         }
         return Response.status(Status.CREATED).build();
     }
 
     public Response update(StoreDTO storeDto, Long id) {
-        if (storeService.update(storeDto, id) != 1) {
-            throw new NotFoundException();
-        }
+        checkOperationResult(storeService.update(storeDto, id), id);
         return Response.noContent().build();
     }
 
     public Response delete(Long id) {
-        if (storeService.delete(id) != 1) {
-            throw new NotFoundException();
-        }
+        checkOperationResult(storeService.delete(id), id);
         return Response.noContent().build();
+    }
+    
+    private void checkOperationResult(int result, Long id) {
+        if (result != 1) {
+            throw new NotFoundException("Store record with id=" + id + " not found.");
+        }
     }
 }

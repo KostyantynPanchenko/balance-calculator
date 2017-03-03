@@ -1,5 +1,6 @@
 package com.softserveinc.balance.calculator.api.resources;
 
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -24,7 +25,7 @@ public interface StoreResource {
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    Response save(StoreDTO storeDto);
+    Response save(@Valid StoreDTO storeDto);
     
     @PUT
     @Path("/{store-id}")
