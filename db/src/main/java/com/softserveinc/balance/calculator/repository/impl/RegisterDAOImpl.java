@@ -12,10 +12,11 @@ import com.softserveinc.balance.calculator.repository.RegisterDAO;
 import com.softserveinc.balance.calculator.repository.exception.DataIntegrityViolationRepositoryException;
 import com.softserveinc.balance.calculator.repository.exception.DomainEntityNotFoundException;
 import com.softserveinc.balance.calculator.repository.exception.RepositoryException;
+import com.softserveinc.balance.calculator.repository.imp.mappers.RegisterRowMapper;
 
 public class RegisterDAOImpl implements RegisterDAO {
 
-    private final String GET_BY_ID = "select id, store_id, name, timezone from registers where id = ?";
+    private final String GET = "select id, store_id, name, timezone from registers where store_id = ? and id = ?";
     private final String INSERT = "insert into registers(store_id, name, timezone) values(?, ?, ?)";
     private final String UPDATE = "update registers set name = ?, timezone = ? where id = ?";
     private final String DELETE = "delete from registers where id = ? and store_id = ?";
@@ -25,24 +26,22 @@ public class RegisterDAOImpl implements RegisterDAO {
         this.template = new JdbcTemplate(dataSource);
     }
     
-    public Register getRegisterById(Long registerId) throws RepositoryException {
-        Register register = null;
+    public Register getRegisterById(Long registerId, Long storeId) throws RepositoryException {
         try {
-            register = (Register) template.queryForObject(GET_BY_ID, new Object[]{registerId}, new RegisterRowMapper());
+            return (Register) template.queryForObject(GET, new Object[]{storeId, registerId}, new RegisterRowMapper());
         } catch (EmptyResultDataAccessException empty) {
             throw new DomainEntityNotFoundException();
         } catch (DataAccessException e) {
             throw new RepositoryException(e.getMessage());
         }
-        return register;
     }
 
     public int save(Register register) throws RepositoryException {
         return execute(INSERT, new Object[] {register.getStoreId(), register.getName(), register.getTimezone()});
     }
 
-    public int update(Register register, Long registerId) throws RepositoryException {
-        return execute(UPDATE, new Object[] {register.getName(), register.getTimezone(), registerId});
+    public int update(Register register) throws RepositoryException {
+        return execute(UPDATE, new Object[] {register.getName(), register.getTimezone(), register.getId()});
     }
 
     public int delete(Long storeId, Long registerId) throws RepositoryException {

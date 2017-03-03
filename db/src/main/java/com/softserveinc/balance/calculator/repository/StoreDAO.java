@@ -1,15 +1,16 @@
 package com.softserveinc.balance.calculator.repository;
 
 import com.softserveinc.balance.calculator.domain.Store;
+import com.softserveinc.balance.calculator.repository.exception.RepositoryException;
 
 public interface StoreDAO {
     
-    Store getStoreById(Long id);
+    Store getStoreById(Long id) throws RepositoryException;
     
-    int save(Store store);
+    int save(Store store) throws RepositoryException;
     
-    int update(Store store, Long id);
+    int update(Store store) throws RepositoryException;
     
-    int deleteById(long id);
+    int deleteById(Long id) throws RepositoryException;
 
 }

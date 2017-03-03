@@ -20,7 +20,7 @@ public interface StoreResource {
 
     @GET
     @Path("/{store-id}")
-    StoreDTO getStoreById(@PathParam("store-id") Long id);
+    Response getStoreById(@PathParam("store-id") Long id);
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

@@ -19,9 +19,9 @@ public class RegisterServiceImpl implements RegisterService {
         this.registerDao = registerDao;
     }
     
-    public RegisterDTO getRegisterById(Long registerId) throws ServiceException {
+    public RegisterDTO getRegisterById(Long storeId, Long registerId) throws ServiceException {
         try {
-            return new RegisterDTO(registerDao.getRegisterById(registerId));
+            return new RegisterDTO(registerDao.getRegisterById(storeId, registerId));
         } catch (DomainEntityNotFoundException notFound) {
             throw new EntityNotFoundServiceException();
         } catch (RepositoryException e) {
@@ -29,9 +29,9 @@ public class RegisterServiceImpl implements RegisterService {
         }
     }
 
-    public int save(RegisterDTO registerDto, Long storeId) throws ServiceException {
+    public int save(RegisterDTO registerDto) throws ServiceException {
         try {
-            return registerDao.save(createRegister(registerDto, storeId));
+            return registerDao.save(toRegister(registerDto));
         } catch (DataIntegrityViolationRepositoryException violation) {
             throw new DataIntegrityViolationServiceException(violation.getMessage());
         } catch (RepositoryException e) {
@@ -39,9 +39,9 @@ public class RegisterServiceImpl implements RegisterService {
         }
     }
 
-    public int update(RegisterDTO registerDto, Long storeId, Long registerId) throws ServiceException {
+    public int update(RegisterDTO registerDto) throws ServiceException {
         try {
-            return registerDao.update(createRegister(registerDto, storeId), registerId);
+            return registerDao.update(toRegister(registerDto));
         } catch (DataIntegrityViolationRepositoryException violation) {
             throw new DataIntegrityViolationServiceException(violation.getMessage());
         } catch (RepositoryException e) {
@@ -57,11 +57,12 @@ public class RegisterServiceImpl implements RegisterService {
         }
     }
     
-    private Register createRegister(RegisterDTO registerDto, Long storeId) {
-        return new Register.Builder().setStoreId(storeId)
-                                    .setName(registerDto.getName())
-                                    .setTimezone(registerDto.getTimezone())
-                                    .build();
+    private Register toRegister(RegisterDTO registerDto) {
+        return new Register.Builder()
+                .setStoreId(registerDto.getStoreId())
+                .setName(registerDto.getName())
+                .setTimezone(registerDto.getTimezone())
+                .build();
     }
 
 }

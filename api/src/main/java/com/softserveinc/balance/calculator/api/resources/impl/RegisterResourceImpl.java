@@ -19,25 +19,26 @@ public class RegisterResourceImpl implements RegisterResource {
         this.registerService = registerService;
     }
     
-    public Response getRegisterById(Long registerId) {
+    public Response getRegisterById(Long storeId, Long registerId) {
         RegisterDTO register;
         try {
-            register = registerService.getRegisterById(registerId);
+            register = registerService.getRegisterById(storeId, registerId);
         } catch (EntityNotFoundServiceException notFound) {
-            return Response.status(Status.NOT_FOUND).entity(new ErrorMessage(404, buildMessage(registerId))).build();
+            return Response.status(Status.NOT_FOUND).entity(new ErrorMessage(404, buildMessage(registerId, storeId))).build();
         } catch (ServiceException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(500, e.getMessage())).build();
         }
         return Response.status(Status.OK).entity(register).build();
     }
 
-    private String buildMessage(Long registerId) {
-        return String.format("Register entity with id=%d not found.", registerId);
+    private String buildMessage(Long registerId, Long storeId) {
+        return String.format("Register entity with id=%d for store with id=%d not found.", registerId, storeId);
     }
 
     public Response save(RegisterDTO registerDto, Long storeId) {
+        registerDto.setStoreId(storeId);
         try {
-            registerService.save(registerDto, storeId);
+            registerService.save(registerDto);
         } catch (DataIntegrityViolationServiceException violation) {
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(409, violation.getMessage())).build();
         } catch (ServiceException e) {
@@ -49,8 +50,10 @@ public class RegisterResourceImpl implements RegisterResource {
     }
 
     public Response update(RegisterDTO registerDto, Long storeId, Long registerId) {
+        registerDto.setStoreId(storeId);
+        registerDto.setId(registerId);
         try {
-            registerService.update(registerDto, storeId, registerId);
+            registerService.update(registerDto);
         } catch (DataIntegrityViolationServiceException violation) {
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(409, violation.getMessage())).build();
         } catch (ServiceException e) {

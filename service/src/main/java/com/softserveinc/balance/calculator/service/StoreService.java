@@ -1,14 +1,15 @@
 package com.softserveinc.balance.calculator.service;
 
 import com.softserveinc.balance.calculator.dto.StoreDTO;
+import com.softserveinc.balance.calculator.service.exception.ServiceException;
 
 public interface StoreService {
 
-    StoreDTO getStoreById(Long id);
+    StoreDTO getStoreById(Long id) throws ServiceException;
 
-    int update(StoreDTO storeDto, Long id);
+    int save(StoreDTO storeDto) throws ServiceException;
 
-    int delete(Long id);
+    int update(StoreDTO storeDto) throws ServiceException;
 
-    int save(StoreDTO storeDto);
+    int delete(Long id) throws ServiceException;
 }
