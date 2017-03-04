@@ -7,7 +7,7 @@ public interface RegisterService {
 
     RegisterDTO getRegisterById(Long storeId, Long registerId) throws ServiceException;
 
-    int save(RegisterDTO registerDto) throws ServiceException;
+    Long save(RegisterDTO registerDto) throws ServiceException;
 
     int update(RegisterDTO registerDto) throws ServiceException;
 

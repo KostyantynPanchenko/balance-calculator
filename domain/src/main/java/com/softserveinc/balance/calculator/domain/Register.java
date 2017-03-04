@@ -39,19 +39,19 @@ public class Register {
         }
     }
     
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getStoreId() {
+    public Long getStoreId() {
         return storeId;
     }
 
-    public void setStoreId(long storeId) {
+    public void setStoreId(Long storeId) {
         this.storeId = storeId;
     }
 
@@ -77,7 +77,8 @@ public class Register {
         int result = 1;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((storeId == null) ? 0 : storeId.hashCode());
-        result = prime * result + ((timezone == null) ? 0 : timezone.hashCode());
+        result = prime * result
+                + ((timezone == null) ? 0 : timezone.hashCode());
         return result;
     }
 

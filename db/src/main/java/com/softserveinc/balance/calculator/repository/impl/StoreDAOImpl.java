@@ -1,18 +1,25 @@
 package com.softserveinc.balance.calculator.repository.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import javax.sql.DataSource;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import com.softserveinc.balance.calculator.domain.Store;
 import com.softserveinc.balance.calculator.repository.StoreDAO;
 import com.softserveinc.balance.calculator.repository.exception.DataIntegrityViolationRepositoryException;
 import com.softserveinc.balance.calculator.repository.exception.DomainEntityNotFoundException;
 import com.softserveinc.balance.calculator.repository.exception.RepositoryException;
-import com.softserveinc.balance.calculator.repository.imp.mappers.StoreRowMapper;
+import com.softserveinc.balance.calculator.repository.impl.mappers.StoreRowMapper;
 
 public class StoreDAOImpl implements StoreDAO {
 
@@ -36,8 +43,20 @@ public class StoreDAOImpl implements StoreDAO {
         }
     }
     
-    public int save(Store store) throws RepositoryException {
-        return execute(INSERT, new Object[] {store.getTenantId(), store.getName(), store.getDescription()});
+    public Long save(Store store) throws RepositoryException {        
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        template.update(
+            new PreparedStatementCreator() {
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement ps = connection.prepareStatement(INSERT, new String[] {"id"});
+                    ps.setLong(1, store.getTenantId());
+                    ps.setString(2, store.getName());
+                    ps.setString(3, store.getDescription());
+                    return ps;
+                }
+            },
+            keyHolder);
+        return keyHolder.getKey().longValue();
     }
 
     public int update(Store store) throws RepositoryException {

@@ -29,7 +29,7 @@ public class StoreServiceImpl implements StoreService {
         }
     }
     
-    public int save(StoreDTO storeDto) throws ServiceException {
+    public Long save(StoreDTO storeDto) throws ServiceException {
         try {
             return storeDao.save(toStore(storeDto));
         } catch (DataIntegrityViolationRepositoryException violation) {

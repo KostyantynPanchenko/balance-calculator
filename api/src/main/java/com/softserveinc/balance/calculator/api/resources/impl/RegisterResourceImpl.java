@@ -2,6 +2,7 @@ package com.softserveinc.balance.calculator.api.resources.impl;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 import com.softserveinc.balance.calculator.api.exception.ErrorMessage;
 import com.softserveinc.balance.calculator.api.resources.RegisterResource;
@@ -35,16 +36,17 @@ public class RegisterResourceImpl implements RegisterResource {
         return String.format("Register entity with id=%d for store with id=%d not found.", registerId, storeId);
     }
 
-    public Response save(RegisterDTO registerDto, Long storeId) {
+    public Response save(RegisterDTO registerDto, Long storeId, UriInfo uriInfo) {
         registerDto.setStoreId(storeId);
+        Long key;
         try {
-            registerService.save(registerDto);
+            key = registerService.save(registerDto);
         } catch (DataIntegrityViolationServiceException violation) {
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(409, violation.getMessage())).build();
         } catch (ServiceException e) {
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(500, e.getMessage())).build();
         }
-        registerDto.setStoreId(storeId);
+        registerDto.setId(key);
         return Response.status(Status.CREATED).entity(registerDto).build();
 
     }

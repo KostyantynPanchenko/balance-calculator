@@ -29,7 +29,7 @@ public class RegisterServiceImpl implements RegisterService {
         }
     }
 
-    public int save(RegisterDTO registerDto) throws ServiceException {
+    public Long save(RegisterDTO registerDto) throws ServiceException {
         try {
             return registerDao.save(toRegister(registerDto));
         } catch (DataIntegrityViolationRepositoryException violation) {

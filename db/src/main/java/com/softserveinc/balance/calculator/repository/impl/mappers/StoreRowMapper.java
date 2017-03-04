@@ -1,4 +1,4 @@
-package com.softserveinc.balance.calculator.repository.imp.mappers;
+package com.softserveinc.balance.calculator.repository.impl.mappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -7,7 +7,7 @@ public interface RegisterDAO {
 
     Register getRegisterById(Long storeId, Long registerId) throws RepositoryException;
     
-    int save(Register register) throws RepositoryException;
+    Long save(Register register) throws RepositoryException;
     
     int update(Register register) throws RepositoryException;
     

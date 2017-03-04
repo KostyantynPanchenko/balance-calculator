@@ -7,7 +7,7 @@ public interface StoreService {
 
     StoreDTO getStoreById(Long id) throws ServiceException;
 
-    int save(StoreDTO storeDto) throws ServiceException;
+    Long save(StoreDTO storeDto) throws ServiceException;
 
     int update(StoreDTO storeDto) throws ServiceException;
 

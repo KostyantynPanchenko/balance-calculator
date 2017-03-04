@@ -7,7 +7,7 @@ public interface StoreDAO {
     
     Store getStoreById(Long id) throws RepositoryException;
     
-    int save(Store store) throws RepositoryException;
+    Long save(Store store) throws RepositoryException;
     
     int update(Store store) throws RepositoryException;
     
