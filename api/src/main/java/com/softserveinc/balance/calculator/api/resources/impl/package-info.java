@@ -1,9 +1,8 @@
 /**
+ * JAX-RS classes used to provide RESTful services.
  * 
+ * @author Kostyantyn Panchenko
+ * @version 1.0
+ * @since 05/03/2017
  */
-/**
- * @author kpanchen
- *
- */
-
 package com.softserveinc.balance.calculator.api.resources.impl;

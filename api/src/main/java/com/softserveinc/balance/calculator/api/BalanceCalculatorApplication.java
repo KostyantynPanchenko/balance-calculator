@@ -4,15 +4,20 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.softserveinc.balance.calculator.api.resources.RegisterResource;
 import com.softserveinc.balance.calculator.api.resources.StoreResource;
-import com.softserveinc.balance.calculator.api.resources.TransactionResource;
+import com.softserveinc.balance.calculator.api.resources.ConsumptionTransactionResource;
 import com.softserveinc.balance.calculator.api.resources.impl.RegisterResourceImpl;
 import com.softserveinc.balance.calculator.api.resources.impl.StoreResourceImpl;
-import com.softserveinc.balance.calculator.api.resources.impl.TransactionResourceImpl;
+import com.softserveinc.balance.calculator.api.resources.impl.ConsumptionTransactionResourceImpl;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
+/**
+ * The main class for BalanceCalculator applications.
+ *
+ * @param <BalanceCalculatorConfig> the type of configuration class for this application
+ */
 public class BalanceCalculatorApplication extends Application<BalanceCalculatorConfig> {
     
     public static void main(String[] args) throws Exception {
@@ -24,11 +29,11 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("BalanceCalculator-context.xml");
         StoreResource storeResource = context.getBean(StoreResourceImpl.class);
         RegisterResource registerResource = context.getBean(RegisterResourceImpl.class);
-        TransactionResource transactionResourrce = context.getBean(TransactionResourceImpl.class);
+        ConsumptionTransactionResource consumptionResource = context.getBean(ConsumptionTransactionResourceImpl.class);
         
         environment.jersey().register(storeResource);
         environment.jersey().register(registerResource);
-        environment.jersey().register(transactionResourrce);
+        environment.jersey().register(consumptionResource);
         context.close();
     }
 

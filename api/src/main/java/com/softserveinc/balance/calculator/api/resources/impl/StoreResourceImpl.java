@@ -14,6 +14,14 @@ import com.softserveinc.balance.calculator.service.exception.DataIntegrityViolat
 import com.softserveinc.balance.calculator.service.exception.EntityNotFoundServiceException;
 import com.softserveinc.balance.calculator.service.exception.ServiceException;
 
+/**
+ * Implementation of the <code>StoreResource</code> interface.
+ * 
+ * @author  Kostyantyn Panchenko
+ * @version 1.0
+ * @see     StoreResource
+ * @since   03/05/2017
+ */
 public class StoreResourceImpl implements StoreResource {
 
     private StoreService storeService;

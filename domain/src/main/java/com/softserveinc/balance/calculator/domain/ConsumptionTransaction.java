@@ -13,6 +13,43 @@ public class ConsumptionTransaction {
     
     public ConsumptionTransaction() { }
 
+    public static class Builder {
+        private ConsumptionTransaction transaction;
+        
+        public Builder() {
+            transaction = new ConsumptionTransaction();
+        }
+        
+        public Builder setId(Long id) {
+            transaction.setId(id);
+            return this;
+        }
+        
+        public Builder setRegisterId(Long registerId) {
+            transaction.setRegisterId(registerId);
+            return this;
+        }
+        
+        public Builder setConsumedValue(BigDecimal consumedValue) {
+            transaction.setConsumedValue(consumedValue);
+            return this;
+        }
+        
+        public Builder setCreatedOn(Timestamp createdOn) {
+            transaction.setCreatedOn(createdOn);
+            return this;
+        }
+        
+        public Builder setCreatedBy(String createdBy) {
+            transaction.setCreatedBy(createdBy);
+            return this;
+        }
+        
+        public ConsumptionTransaction build() {
+            return transaction;
+        }
+    }
+    
     public Long getId() {
         return id;
     }
