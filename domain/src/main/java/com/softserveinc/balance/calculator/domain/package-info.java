@@ -1,9 +1,6 @@
 /**
+ * Domain classes used to represent BalanceCalculator application entities.
  * 
+ * @author Kostyantyn Panchenko
  */
-/**
- * @author kpanchen
- *
- */
-
 package com.softserveinc.balance.calculator.domain;

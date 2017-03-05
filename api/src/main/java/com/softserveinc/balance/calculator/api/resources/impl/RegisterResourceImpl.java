@@ -80,4 +80,5 @@ public class RegisterResourceImpl implements RegisterResource {
         }
         return Response.noContent().build();
     }
+    
 }

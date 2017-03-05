@@ -33,6 +33,7 @@ public class StoreDAOImpl implements StoreDAO {
         this.template = new JdbcTemplate(dataSource);
     }
 
+    @Override
     public Store getStoreById(final Long id) throws RepositoryException {
         try {
             return (Store) template.queryForObject(GET_BY_ID, new Object[]{id}, new StoreRowMapper());
@@ -43,6 +44,7 @@ public class StoreDAOImpl implements StoreDAO {
         }
     }
     
+    @Override
     public Long save(Store store) throws RepositoryException {        
         KeyHolder keyHolder = new GeneratedKeyHolder();
         template.update(
@@ -59,14 +61,26 @@ public class StoreDAOImpl implements StoreDAO {
         return keyHolder.getKey().longValue();
     }
 
+    @Override
     public int update(Store store) throws RepositoryException {
         return execute(UPDATE, new Object[] {store.getTenantId(), store.getName(), store.getDescription(), store.getId()});
     }
 
+    @Override
     public int deleteById(Long id) throws RepositoryException {
         return execute(DELETE, new Object[] {id});
     }
     
+    /**
+     * Executes create/update/delete query based on given input.
+     * Delegated call to JdbcTemplate#update(String sql, Object... args)
+     * 
+     * @param SQL       query to be executed
+     * @param params    parameters for PreparedStatement placeholders substitution
+     * @return          number of modified rows
+     * @throws RepositoryException if could nod execute given query
+     * @see             JdbcTemplate#update(String sql, Object... args)
+     */
     private int execute(String SQL, Object[] params) throws RepositoryException {
         try {
             return template.update(SQL, params);

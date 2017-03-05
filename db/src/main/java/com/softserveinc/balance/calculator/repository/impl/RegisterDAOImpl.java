@@ -18,6 +18,13 @@ import com.softserveinc.balance.calculator.repository.exception.DomainEntityNotF
 import com.softserveinc.balance.calculator.repository.exception.RepositoryException;
 import com.softserveinc.balance.calculator.repository.impl.mappers.RegisterRowMapper;
 
+/**
+ * Implementation of <code>RegisterRepository</code> interface.
+ * 
+ * @author Kostyantyn Panchenko
+ * @version 1.0
+ * @since 05/03/2017
+ */
 public class RegisterDAOImpl implements RegisterDAO {
 
     private final String GET = "select id, store_id, name, timezone from registers where store_id = ? and id = ?";
@@ -62,6 +69,16 @@ public class RegisterDAOImpl implements RegisterDAO {
         return execute(DELETE, new Object[] { registerId, storeId });
     }
 
+    /**
+     * Executes create/update/delete query based on given input.
+     * Delegated call to JdbcTemplate#update(String sql, Object... args)
+     * 
+     * @param SQL       query to be executed
+     * @param params    parameters for PreparedStatement placeholders substitution
+     * @return          number of modified rows
+     * @throws RepositoryException if could nod execute given query
+     * @see             JdbcTemplate#update(String sql, Object... args)
+     */
     private int execute(String SQL, Object[] params) throws RepositoryException {
         try {
             return template.update(SQL, params);
