@@ -22,6 +22,7 @@ public class StoreResourceImpl implements StoreResource {
         this.storeService = storeService;
     }
 
+    @Override
     public Response getStoreById(Long id) {
         try {
             return Response.status(Status.OK).entity(storeService.getStoreById(id)).build();
@@ -36,6 +37,7 @@ public class StoreResourceImpl implements StoreResource {
         return String.format("Register entity with id=%d not found.", registerId);
     }
 
+    @Override
     public Response save(StoreDTO storeDto, UriInfo uriInfo) {
         Long key;
         try {
@@ -53,6 +55,7 @@ public class StoreResourceImpl implements StoreResource {
         return uriInfo.getAbsolutePathBuilder().path(key.toString()).build();
     }
 
+    @Override
     public Response update(StoreDTO storeDto, Long id) {
         try {
             storeDto.setId(id);
@@ -65,6 +68,7 @@ public class StoreResourceImpl implements StoreResource {
         return Response.ok(storeDto).build();
     }
 
+    @Override
     public Response delete(Long id) {
         try {
             storeService.delete(id);

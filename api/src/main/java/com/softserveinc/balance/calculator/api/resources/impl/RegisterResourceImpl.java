@@ -20,6 +20,7 @@ public class RegisterResourceImpl implements RegisterResource {
         this.registerService = registerService;
     }
     
+    @Override
     public Response getRegisterById(Long storeId, Long registerId) {
         RegisterDTO register;
         try {
@@ -36,6 +37,7 @@ public class RegisterResourceImpl implements RegisterResource {
         return String.format("Register entity with id=%d for store with id=%d not found.", registerId, storeId);
     }
 
+    @Override
     public Response save(RegisterDTO registerDto, Long storeId, UriInfo uriInfo) {
         registerDto.setStoreId(storeId);
         Long key;
@@ -51,6 +53,7 @@ public class RegisterResourceImpl implements RegisterResource {
 
     }
 
+    @Override
     public Response update(RegisterDTO registerDto, Long storeId, Long registerId) {
         registerDto.setStoreId(storeId);
         registerDto.setId(registerId);
@@ -66,6 +69,7 @@ public class RegisterResourceImpl implements RegisterResource {
         return Response.ok(registerDto).build();
     }
 
+    @Override
     public Response delete(Long storeId, Long registerId) {
         try {
             registerService.delete(storeId, registerId);

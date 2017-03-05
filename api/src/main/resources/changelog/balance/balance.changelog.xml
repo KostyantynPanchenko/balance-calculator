@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd"> 
+  
+  <changeSet author="Kostyantyn Panchenko" id="changelog-4.0">
+    <createTable tableName="balance">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="register_id" type="BIGINT">
+        <constraints nullable="false" references="registers(id)" foreignKeyName="registers_balance_pk_fk"/>
+      </column>
+      <column name="created_on" type="TIMESTAMP" defaultValueDate="CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="VARCHAR"/>
+      <column name="total_allocated_contribution_amount" type="DECIMAL(12,2)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="total_allocated_consumption_amount" type="DECIMAL(12,2)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="total_unallocated_contribution_amount" type="DECIMAL(12,2)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="total_unallocated_consumption_amount" type="DECIMAL(12,2)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+</databaseChangeLog>

@@ -5,27 +5,27 @@ import java.sql.Timestamp;
 
 public class ContributionTransaction {
 
-    private long id;
-    private long registerId;
+    private Long id;
+    private Long registerId;
     private BigDecimal orderGrantedValue;
     private Timestamp createdOn;
     private String createdBy;
     
     public ContributionTransaction() { }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getRegisterId() {
+    public Long getRegisterId() {
         return registerId;
     }
 
-    public void setRegisterId(long registerId) {
+    public void setRegisterId(Long registerId) {
         this.registerId = registerId;
     }
 
@@ -57,10 +57,14 @@ public class ContributionTransaction {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
-        result = prime * result + ((createdOn == null) ? 0 : createdOn.hashCode());
-        result = prime * result + ((orderGrantedValue == null) ? 0 : orderGrantedValue.hashCode());
-        result = prime * result + (int) (registerId ^ (registerId >>> 32));
+        result = prime * result
+                + ((createdBy == null) ? 0 : createdBy.hashCode());
+        result = prime * result
+                + ((createdOn == null) ? 0 : createdOn.hashCode());
+        result = prime * result + ((orderGrantedValue == null) ? 0
+                : orderGrantedValue.hashCode());
+        result = prime * result
+                + ((registerId == null) ? 0 : registerId.hashCode());
         return result;
     }
 
@@ -88,7 +92,10 @@ public class ContributionTransaction {
                 return false;
         } else if (!orderGrantedValue.equals(other.orderGrantedValue))
             return false;
-        if (registerId != other.registerId)
+        if (registerId == null) {
+            if (other.registerId != null)
+                return false;
+        } else if (!registerId.equals(other.registerId))
             return false;
         return true;
     }

@@ -5,8 +5,8 @@ import java.sql.Timestamp;
 
 public class Balance {
 
-    private long id;
-    private long registerId;
+    private Long id;
+    private Long registerId;
     private Timestamp createdOn;
     private String createdBy;
     private BigDecimal totalAllocatedContributionAmount;
@@ -16,19 +16,42 @@ public class Balance {
     
     public Balance() {}
 
-    public long getId() {
+    public static class Builder {
+        private Balance balance;
+        
+        public Builder() {
+            balance = new Balance();
+        }
+        
+        Builder setId(Long id) {
+            balance.setId(id);
+            return this;
+        }
+        
+        Builder setRegisterId(Long registerId) {
+            balance.setRegisterId(registerId);
+            return this;
+        }
+        
+        Builder setCreatedOn(Timestamp createdOn) {
+            balance.setCreatedOn(createdOn);
+            return this;
+        }
+    }
+    
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getRegisterId() {
+    public Long getRegisterId() {
         return registerId;
     }
 
-    public void setRegisterId(long registerId) {
+    public void setRegisterId(Long registerId) {
         this.registerId = registerId;
     }
 
@@ -84,17 +107,20 @@ public class Balance {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
-        result = prime * result + ((createdOn == null) ? 0 : createdOn.hashCode());
-        result = prime * result + (int) (registerId ^ (registerId >>> 32));
         result = prime * result
-                + ((totalAllocatedConsumptionAmount == null) ? 0 : totalAllocatedConsumptionAmount.hashCode());
+                + ((createdBy == null) ? 0 : createdBy.hashCode());
         result = prime * result
-                + ((totalAllocatedContributionAmount == null) ? 0 : totalAllocatedContributionAmount.hashCode());
+                + ((createdOn == null) ? 0 : createdOn.hashCode());
         result = prime * result
-                + ((totalUnallocatedConsumptionAmount == null) ? 0 : totalUnallocatedConsumptionAmount.hashCode());
-        result = prime * result
-                + ((totalUnallocatedContributionAmount == null) ? 0 : totalUnallocatedContributionAmount.hashCode());
+                + ((registerId == null) ? 0 : registerId.hashCode());
+        result = prime * result + ((totalAllocatedConsumptionAmount == null) ? 0
+                : totalAllocatedConsumptionAmount.hashCode());
+        result = prime * result + ((totalAllocatedContributionAmount == null)
+                ? 0 : totalAllocatedContributionAmount.hashCode());
+        result = prime * result + ((totalUnallocatedConsumptionAmount == null)
+                ? 0 : totalUnallocatedConsumptionAmount.hashCode());
+        result = prime * result + ((totalUnallocatedContributionAmount == null)
+                ? 0 : totalUnallocatedContributionAmount.hashCode());
         return result;
     }
 
@@ -117,27 +143,34 @@ public class Balance {
                 return false;
         } else if (!createdOn.equals(other.createdOn))
             return false;
-        if (registerId != other.registerId)
+        if (registerId == null) {
+            if (other.registerId != null)
+                return false;
+        } else if (!registerId.equals(other.registerId))
             return false;
         if (totalAllocatedConsumptionAmount == null) {
             if (other.totalAllocatedConsumptionAmount != null)
                 return false;
-        } else if (!totalAllocatedConsumptionAmount.equals(other.totalAllocatedConsumptionAmount))
+        } else if (!totalAllocatedConsumptionAmount
+                .equals(other.totalAllocatedConsumptionAmount))
             return false;
         if (totalAllocatedContributionAmount == null) {
             if (other.totalAllocatedContributionAmount != null)
                 return false;
-        } else if (!totalAllocatedContributionAmount.equals(other.totalAllocatedContributionAmount))
+        } else if (!totalAllocatedContributionAmount
+                .equals(other.totalAllocatedContributionAmount))
             return false;
         if (totalUnallocatedConsumptionAmount == null) {
             if (other.totalUnallocatedConsumptionAmount != null)
                 return false;
-        } else if (!totalUnallocatedConsumptionAmount.equals(other.totalUnallocatedConsumptionAmount))
+        } else if (!totalUnallocatedConsumptionAmount
+                .equals(other.totalUnallocatedConsumptionAmount))
             return false;
         if (totalUnallocatedContributionAmount == null) {
             if (other.totalUnallocatedContributionAmount != null)
                 return false;
-        } else if (!totalUnallocatedContributionAmount.equals(other.totalUnallocatedContributionAmount))
+        } else if (!totalUnallocatedContributionAmount
+                .equals(other.totalUnallocatedContributionAmount))
             return false;
         return true;
     }

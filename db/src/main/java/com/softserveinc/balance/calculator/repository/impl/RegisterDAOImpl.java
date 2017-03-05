@@ -52,8 +52,6 @@ public class RegisterDAOImpl implements RegisterDAO {
             return ps;
         }, keyHolder);
         return keyHolder.getKey().longValue();
-        // return execute(INSERT, new Object[] {register.getStoreId(),
-        // register.getName(), register.getTimezone()});
     }
 
     public int update(Register register) throws RepositoryException {
