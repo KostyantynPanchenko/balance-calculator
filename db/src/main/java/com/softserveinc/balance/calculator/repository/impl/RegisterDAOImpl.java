@@ -1,21 +1,19 @@
 package com.softserveinc.balance.calculator.repository.impl;
 
-import java.sql.PreparedStatement;
-
-import javax.sql.DataSource;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 
 import com.softserveinc.balance.calculator.domain.Register;
+import com.softserveinc.balance.calculator.repository.AbstractDAO;
 import com.softserveinc.balance.calculator.repository.RegisterDAO;
 import com.softserveinc.balance.calculator.repository.exception.DataIntegrityViolationRepositoryException;
 import com.softserveinc.balance.calculator.repository.exception.DomainEntityNotFoundException;
 import com.softserveinc.balance.calculator.repository.exception.RepositoryException;
+import com.softserveinc.balance.calculator.repository.impl.mappers.RegisterPreparedStatementCreator;
 import com.softserveinc.balance.calculator.repository.impl.mappers.RegisterRowMapper;
 
 /**
@@ -25,66 +23,67 @@ import com.softserveinc.balance.calculator.repository.impl.mappers.RegisterRowMa
  * @version 1.0
  * @since 05/03/2017
  */
-public class RegisterDAOImpl implements RegisterDAO {
+public class RegisterDAOImpl extends AbstractDAO<Register> implements RegisterDAO {
 
-    private final String GET = "select id, store_id, name, timezone from registers where store_id = ? and id = ?";
-    private final String INSERT = "insert into registers(store_id, name, timezone) values(?, ?, ?)";
+    private final static Logger LOGGER = LoggerFactory.getLogger(RegisterDAOImpl.class);
+    private final static RegisterRowMapper MAPPER = new RegisterRowMapper();
+    private final String GET_BY_ID = "select id, store_id, name, timezone from registers where store_id = ? and id = ?";
     private final String UPDATE = "update registers set name = ?, timezone = ? where store_id = ? and id = ?";
     private final String DELETE = "delete from registers where id = ? and store_id = ?";
-    private JdbcTemplate template;
 
-    public void setDataSource(DataSource dataSource) {
-        this.template = new JdbcTemplate(dataSource);
+    public RegisterDAOImpl(JdbcTemplate jdbcTemplate) {
+        super(jdbcTemplate);
     }
 
+    @Override
     public Register getRegisterById(Long registerId, Long storeId) throws RepositoryException {
         try {
-            return (Register) template.queryForObject(GET,
-                    new Object[] { storeId, registerId },
-                    new RegisterRowMapper());
-        } catch (EmptyResultDataAccessException empty) {
+            System.out.println("storeId=" + storeId.toString() + ", registerId=" + registerId.toString());
+            return getById(GET_BY_ID, new Object[] {storeId, registerId}, MAPPER);
+        } catch (EmptyResultDataAccessException notFound) {
+            LOGGER.error(notFound.getMessage(), notFound);
             throw new DomainEntityNotFoundException();
         } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new RepositoryException(e.getMessage());
         }
     }
 
-    public Long save(Register register) throws RepositoryException {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        template.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(INSERT, new String[] { "id" });
-            ps.setLong(1, register.getStoreId());
-            ps.setString(2, register.getName());
-            ps.setString(3, register.getTimezone());
-            return ps;
-        }, keyHolder);
-        return keyHolder.getKey().longValue();
-    }
-
-    public int update(Register register) throws RepositoryException {
-        return execute(UPDATE, new Object[] { register.getName(), register.getTimezone(), register.getId() });
-    }
-
-    public int delete(Long storeId, Long registerId) throws RepositoryException {
-        return execute(DELETE, new Object[] { registerId, storeId });
-    }
-
-    /**
-     * Executes create/update/delete query based on given input.
-     * Delegated call to JdbcTemplate#update(String sql, Object... args)
-     * 
-     * @param SQL       query to be executed
-     * @param params    parameters for PreparedStatement placeholders substitution
-     * @return          number of modified rows
-     * @throws RepositoryException if could nod execute given query
-     * @see             JdbcTemplate#update(String sql, Object... args)
-     */
-    private int execute(String SQL, Object[] params) throws RepositoryException {
+    @Override
+    public Long insert(Register register) throws RepositoryException {
         try {
-            return template.update(SQL, params);
+            return create(new RegisterPreparedStatementCreator(register));
         } catch (DataIntegrityViolationException violation) {
+            LOGGER.error(violation.getMessage(), violation);
             throw new DataIntegrityViolationRepositoryException(violation.getMessage());
         } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new RepositoryException(e.getMessage());
+        }
+    }
+
+    @Override
+    public int update(Register register) throws RepositoryException {
+        try {
+            return execute(UPDATE, new Object[] { register.getName(), register.getTimezone(), register.getId() });
+        } catch (DataIntegrityViolationException violation) {
+            LOGGER.error(violation.getMessage(), violation);
+            throw new DataIntegrityViolationRepositoryException(violation.getMessage());
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new RepositoryException(e.getMessage());
+        }
+    }
+
+    @Override
+    public int delete(Long storeId, Long registerId) throws RepositoryException {
+        try {
+            return execute(DELETE, new Object[] { registerId, storeId });
+        } catch (DataIntegrityViolationException violation) {
+            LOGGER.error(violation.getMessage(), violation);
+            throw new DataIntegrityViolationRepositoryException(violation.getMessage());
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new RepositoryException(e.getMessage());
         }
     }

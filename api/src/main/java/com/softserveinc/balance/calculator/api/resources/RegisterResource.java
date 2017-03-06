@@ -42,8 +42,7 @@ public interface RegisterResource {
      */
     @GET
     @Path("/{register-id}")
-    Response getRegisterById(@PathParam("store-id") Long storeId,
-            @PathParam("register-id") Long registerId);
+    Response getRegisterById(@PathParam("store-id") Long storeId, @PathParam("register-id") Long registerId);
 
     /**
      * Creates a new <code>Register</code> entity with fields values specified
@@ -64,8 +63,7 @@ public interface RegisterResource {
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    Response save(RegisterDTO registerDto, @PathParam("store-id") Long storeId,
-            @Context UriInfo uriInfo);
+    Response save(RegisterDTO registerDto, @PathParam("store-id") Long storeId, @Context UriInfo uriInfo);
 
     /**
      * Updates <code>Register</code> entity with values provided in request
@@ -85,9 +83,7 @@ public interface RegisterResource {
     @PUT
     @Path("/{register-id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    Response update(RegisterDTO registerDto,
-            @PathParam("store-id") Long storeId,
-            @PathParam("register-id") Long registerId);
+    Response update(RegisterDTO registerDto, @PathParam("store-id") Long storeId, @PathParam("register-id") Long registerId);
 
     /**
      * Deletes <code>Register</code> entity with specified id if it belongs to
@@ -102,7 +98,6 @@ public interface RegisterResource {
      */
     @DELETE
     @Path("/{register-id}")
-    Response delete(@PathParam("store-id") Long storeId,
-            @PathParam("register-id") Long registerId);
+    Response delete(@PathParam("store-id") Long storeId, @PathParam("register-id") Long registerId);
 
 }

@@ -12,6 +12,8 @@
     <postresql.version>9.4.1211</postresql.version>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <slf4j.version>1.7.7</slf4j.version>
+    <logback.version>1.1.7</logback.version>
   </properties>
   
   <dependencies>
@@ -31,9 +33,24 @@
         <version>${postresql.version}</version>
     </dependency>
     <dependency>
-    	<groupId>org.liquibase</groupId>
-    	<artifactId>liquibase-core</artifactId>
-    	<version>3.5.3</version>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-core</artifactId>
+        <version>3.5.3</version>
+    </dependency>
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${logback.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-core</artifactId>
+        <version>${logback.version}</version>
     </dependency>
   </dependencies>
   

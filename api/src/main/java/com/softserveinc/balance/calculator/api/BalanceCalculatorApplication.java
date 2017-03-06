@@ -1,5 +1,7 @@
 package com.softserveinc.balance.calculator.api;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.softserveinc.balance.calculator.api.resources.RegisterResource;
@@ -20,7 +22,10 @@ import io.dropwizard.setup.Environment;
  */
 public class BalanceCalculatorApplication extends Application<BalanceCalculatorConfig> {
     
+    public final static Logger LOGGER = LoggerFactory.getLogger(BalanceCalculatorApplication.class);
+    
     public static void main(String[] args) throws Exception {
+        LOGGER.info("Starting application.");
         new BalanceCalculatorApplication().run(args);
     }
     

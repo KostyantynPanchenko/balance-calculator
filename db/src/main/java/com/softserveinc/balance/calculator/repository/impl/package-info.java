@@ -1,9 +1,6 @@
 /**
+ * Collection of implementation classes for CRUD operations on domain classes.
  * 
+ * @author Kostyantyn Panchenko
  */
-/**
- * @author kpanchen
- *
- */
-
 package com.softserveinc.balance.calculator.repository.impl;

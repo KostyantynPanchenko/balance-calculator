@@ -32,7 +32,7 @@ public interface RegisterDAO {
      * @return          auto generated key of created entity
      * @throws RepositoryException if could not save entity
      */
-    Long save(Register register) throws RepositoryException;
+    Long insert(Register register) throws RepositoryException;
     
     /**
      * Updates given <code>Register</code> entity.

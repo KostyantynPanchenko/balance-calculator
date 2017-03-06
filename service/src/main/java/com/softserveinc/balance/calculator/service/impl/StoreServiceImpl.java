@@ -52,6 +52,8 @@ public class StoreServiceImpl implements StoreService {
     public int delete(Long id) throws ServiceException {
         try {
             return storeDao.deleteById(id);
+        } catch (DataIntegrityViolationRepositoryException violation) {
+            throw new DataIntegrityViolationServiceException(violation.getMessage());
         } catch (RepositoryException e) {
             throw new ServiceException(e.getMessage());
         }

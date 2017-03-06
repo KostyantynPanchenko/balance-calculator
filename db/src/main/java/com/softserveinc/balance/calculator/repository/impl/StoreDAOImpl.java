@@ -1,94 +1,106 @@
 package com.softserveinc.balance.calculator.repository.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
-import javax.sql.DataSource;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 
 import com.softserveinc.balance.calculator.domain.Store;
+import com.softserveinc.balance.calculator.repository.AbstractDAO;
 import com.softserveinc.balance.calculator.repository.StoreDAO;
 import com.softserveinc.balance.calculator.repository.exception.DataIntegrityViolationRepositoryException;
 import com.softserveinc.balance.calculator.repository.exception.DomainEntityNotFoundException;
 import com.softserveinc.balance.calculator.repository.exception.RepositoryException;
+import com.softserveinc.balance.calculator.repository.impl.mappers.StoreNamespace;
+import com.softserveinc.balance.calculator.repository.impl.mappers.StorePreparedStatementCreator;
 import com.softserveinc.balance.calculator.repository.impl.mappers.StoreRowMapper;
 
-public class StoreDAOImpl implements StoreDAO {
+/**
+ * Implementation of <code>StoreRepository</code> interface.
+ * 
+ * @author Kostyantyn Panchenko
+ * @version 1.0
+ * @since 05/03/2017
+ */
+public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
 
-    private final String GET_BY_ID = "select id, tenant_id, name, description from stores where id = ?";
-    private final String INSERT = "insert into stores(tenant_id, name, description) values(?, ?, ?)";
-    private final String UPDATE = "update stores set tenant_id = ?, name = ?, description = ? where id = ?";
-    private final String DELETE = "delete from stores where id = ?"; 
-    private JdbcTemplate template;
+    private final static Logger LOGGER = LoggerFactory.getLogger(StoreDAOImpl.class);
+    private final static StoreRowMapper MAPPER = new StoreRowMapper();
+//    private final String GET_BY_ID = "select id, tenant_id, name, description from stores where id = ?";
+//    private final String UPDATE = "update stores set tenant_id = ?, name = ?, description = ? where id = ?";
+//    private final String DELETE = "delete from stores where id = ?"; 
     
-    public void setDataSource(DataSource dataSource) {
-        this.template = new JdbcTemplate(dataSource);
+    public StoreDAOImpl(JdbcTemplate jdbcTemplate) {
+        super(jdbcTemplate);
     }
 
     @Override
     public Store getStoreById(final Long id) throws RepositoryException {
+        final String GET = String.format("select %s, %s, %s, %s from %s where %s = ?", 
+                StoreNamespace.ID_COLUMN_NAME,
+                StoreNamespace.TENANT_ID_COLUMN_NAME,
+                StoreNamespace.NAME_COLUMN_NAME,
+                StoreNamespace.DESCRIPTION_COLUMN_NAME,
+                StoreNamespace.TABLE_NAME,
+                StoreNamespace.ID_COLUMN_NAME);
         try {
-            return (Store) template.queryForObject(GET_BY_ID, new Object[]{id}, new StoreRowMapper());
+            return getById(GET, new Object[] {id}, MAPPER);
         } catch (EmptyResultDataAccessException empty) {
             throw new DomainEntityNotFoundException();
         } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new RepositoryException(e.getMessage());
         }
     }
     
     @Override
-    public Long save(Store store) throws RepositoryException {        
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        template.update(
-            new PreparedStatementCreator() {
-                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(INSERT, new String[] {"id"});
-                    ps.setLong(1, store.getTenantId());
-                    ps.setString(2, store.getName());
-                    ps.setString(3, store.getDescription());
-                    return ps;
-                }
-            },
-            keyHolder);
-        return keyHolder.getKey().longValue();
+    public Long save(Store store) throws RepositoryException {
+        try {
+            return create(new StorePreparedStatementCreator(store));
+        } catch (DataIntegrityViolationException violation) {
+            LOGGER.error(violation.getMessage(), violation);
+            throw new DataIntegrityViolationRepositoryException(violation.getMessage());
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new RepositoryException(e.getMessage());
+        }
     }
 
     @Override
     public int update(Store store) throws RepositoryException {
-        return execute(UPDATE, new Object[] {store.getTenantId(), store.getName(), store.getDescription(), store.getId()});
+        final String UPDATE = String.format("update %s set %s = ?, %s = ?, %s = ? where %s = ?",
+                StoreNamespace.TABLE_NAME,
+                StoreNamespace.TENANT_ID_COLUMN_NAME,
+                StoreNamespace.NAME_COLUMN_NAME,
+                StoreNamespace.DESCRIPTION_COLUMN_NAME,
+                StoreNamespace.ID_COLUMN_NAME);
+        try {
+            return execute(UPDATE, new Object[] {store.getTenantId(), store.getName(), store.getDescription(), store.getId()});
+        } catch (DataIntegrityViolationException violation) {
+            LOGGER.error(violation.getMessage(), violation);
+            throw new DataIntegrityViolationRepositoryException(violation.getMessage());
+        } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new RepositoryException(e.getMessage());
+        }
     }
 
     @Override
     public int deleteById(Long id) throws RepositoryException {
-        return execute(DELETE, new Object[] {id});
-    }
-    
-    /**
-     * Executes create/update/delete query based on given input.
-     * Delegated call to JdbcTemplate#update(String sql, Object... args)
-     * 
-     * @param SQL       query to be executed
-     * @param params    parameters for PreparedStatement placeholders substitution
-     * @return          number of modified rows
-     * @throws RepositoryException if could nod execute given query
-     * @see             JdbcTemplate#update(String sql, Object... args)
-     */
-    private int execute(String SQL, Object[] params) throws RepositoryException {
+        final String DELETE  = String.format("delete from %s where %s = ?", 
+                StoreNamespace.TABLE_NAME,
+                StoreNamespace.ID_COLUMN_NAME);
         try {
-            return template.update(SQL, params);
+            return execute(DELETE, new Object[] {id});
         } catch (DataIntegrityViolationException violation) {
+            LOGGER.error(violation.getMessage(), violation);
             throw new DataIntegrityViolationRepositoryException(violation.getMessage());
         } catch (DataAccessException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new RepositoryException(e.getMessage());
         }
     }
-}
 
+}

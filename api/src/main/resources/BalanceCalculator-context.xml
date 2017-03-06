@@ -17,7 +17,7 @@
     </bean>
     
     <bean id="storeDao" class="com.softserveinc.balance.calculator.repository.impl.StoreDAOImpl">
-        <property name="dataSource" ref="dataSource"></property>
+        <constructor-arg name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
     
     <!-- REGISTER  -->
@@ -30,7 +30,7 @@
     </bean>
     
     <bean id="registerDao" class="com.softserveinc.balance.calculator.repository.impl.RegisterDAOImpl">
-        <property name="dataSource" ref="dataSource"></property>
+        <constructor-arg name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
     
     <!-- TRANSACTIONS -->

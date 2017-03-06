@@ -4,6 +4,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.softserveinc.balance.calculator.api.exception.ErrorMessage;
 import com.softserveinc.balance.calculator.api.resources.RegisterResource;
 import com.softserveinc.balance.calculator.dto.RegisterDTO;
@@ -14,6 +17,7 @@ import com.softserveinc.balance.calculator.service.exception.ServiceException;
 
 public class RegisterResourceImpl implements RegisterResource {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(RegisterResourceImpl.class);
     private RegisterService registerService;
     
     public RegisterResourceImpl(RegisterService registerService) {
@@ -22,12 +26,15 @@ public class RegisterResourceImpl implements RegisterResource {
     
     @Override
     public Response getRegisterById(Long storeId, Long registerId) {
+        System.out.println("storeId=" + storeId.toString() + ", registerId=" + registerId.toString());
         RegisterDTO register;
         try {
             register = registerService.getRegisterById(storeId, registerId);
         } catch (EntityNotFoundServiceException notFound) {
+            LOGGER.warn(notFound.getMessage(), notFound);
             return Response.status(Status.NOT_FOUND).entity(new ErrorMessage(404, buildMessage(registerId, storeId))).build();
         } catch (ServiceException e) {
+            LOGGER.error(e.getMessage(), e);
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(500, e.getMessage())).build();
         }
         return Response.status(Status.OK).entity(register).build();
@@ -39,13 +46,16 @@ public class RegisterResourceImpl implements RegisterResource {
 
     @Override
     public Response save(RegisterDTO registerDto, Long storeId, UriInfo uriInfo) {
+        System.out.println("storeId=" + storeId.toString());
         registerDto.setStoreId(storeId);
         Long key;
         try {
             key = registerService.save(registerDto);
         } catch (DataIntegrityViolationServiceException violation) {
+            LOGGER.warn(violation.getMessage(), violation);
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(409, violation.getMessage())).build();
         } catch (ServiceException e) {
+            LOGGER.error(e.getMessage(), e);
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(500, e.getMessage())).build();
         }
         registerDto.setId(key);
@@ -55,13 +65,16 @@ public class RegisterResourceImpl implements RegisterResource {
 
     @Override
     public Response update(RegisterDTO registerDto, Long storeId, Long registerId) {
+        System.out.println("storeId=" + storeId.toString() + ", registerId=" + registerId.toString());
         registerDto.setStoreId(storeId);
         registerDto.setId(registerId);
         try {
             registerService.update(registerDto);
         } catch (DataIntegrityViolationServiceException violation) {
+            LOGGER.warn(violation.getMessage(), violation);
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(409, violation.getMessage())).build();
         } catch (ServiceException e) {
+            LOGGER.error(e.getMessage(), e);
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(500, e.getMessage())).build();
         }
         registerDto.setId(registerId);
@@ -71,11 +84,20 @@ public class RegisterResourceImpl implements RegisterResource {
 
     @Override
     public Response delete(Long storeId, Long registerId) {
+        System.out.println("storeId=" + storeId.toString() + ", registerId=" + registerId.toString());
         try {
-            registerService.delete(storeId, registerId);
+            if (registerService.delete(storeId, registerId) != 1) {
+                String message = "Could not delete entity with id=" + registerId;
+                LOGGER.error(message);
+                return Response.status(Status.BAD_REQUEST)
+                        .entity(new ErrorMessage(400, message + " Check if it exists."))
+                        .build();
+            }
         } catch (DataIntegrityViolationServiceException violation) {
+            LOGGER.warn(violation.getMessage(), violation);
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(409, violation.getMessage())).build();
         } catch (ServiceException e) {
+            LOGGER.error(e.getMessage(), e);
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(500, e.getMessage())).build();
         }
         return Response.noContent().build();
