@@ -7,11 +7,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
+import com.softserveinc.balance.calculator.api.filters.AuthenticationFilter;
 import com.softserveinc.balance.calculator.api.health.BalanceCalculatorDatabaseHealthCheck;
+import com.softserveinc.balance.calculator.api.resources.BalanceResource;
 import com.softserveinc.balance.calculator.api.resources.ConsumptionTransactionResource;
 import com.softserveinc.balance.calculator.api.resources.ContributionTransactionResource;
 import com.softserveinc.balance.calculator.api.resources.RegisterResource;
 import com.softserveinc.balance.calculator.api.resources.StoreResource;
+import com.softserveinc.balance.calculator.api.resources.impl.BalanceResourceImpl;
 import com.softserveinc.balance.calculator.api.resources.impl.ConsumptionTransactionResourceImpl;
 import com.softserveinc.balance.calculator.api.resources.impl.ContributionTransactionResourceImpl;
 import com.softserveinc.balance.calculator.api.resources.impl.RegisterResourceImpl;
@@ -39,20 +42,23 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
     public void run(BalanceCalculatorConfig config, Environment environment) throws Exception {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("BalanceCalculator-context.xml");
         
-        StoreResource storeResource = context.getBean(StoreResourceImpl.class);
-        RegisterResource registerResource = context.getBean(RegisterResourceImpl.class);
-        ConsumptionTransactionResource consumptionResource = context.getBean(ConsumptionTransactionResourceImpl.class);
-        ContributionTransactionResource contributionResource = context.getBean(ContributionTransactionResourceImpl.class);
-        DataSource dataSource = (DataSource) context.getBean(DriverManagerDataSource.class);
-        
-        final BalanceCalculatorDatabaseHealthCheck healthCheck = new BalanceCalculatorDatabaseHealthCheck(dataSource);
-        environment.healthChecks().register("BalanceCalculator App", healthCheck);
+        final StoreResource storeResource = context.getBean(StoreResourceImpl.class);
+        final RegisterResource registerResource = context.getBean(RegisterResourceImpl.class);
+        final ConsumptionTransactionResource consumptionResource = context.getBean(ConsumptionTransactionResourceImpl.class);
+        final ContributionTransactionResource contributionResource = context.getBean(ContributionTransactionResourceImpl.class);
+        final DataSource dataSource = (DataSource) context.getBean(DriverManagerDataSource.class);
+        final BalanceResource balanceResource = context.getBean(BalanceResourceImpl.class);
         
         environment.jersey().register(storeResource);
         environment.jersey().register(registerResource);
         environment.jersey().register(consumptionResource);
         environment.jersey().register(contributionResource);
-        
+        environment.jersey().register(balanceResource);
+
+        final BalanceCalculatorDatabaseHealthCheck healthCheck = new BalanceCalculatorDatabaseHealthCheck(dataSource);
+        environment.healthChecks().register("BalanceCalculator App", healthCheck);
+
+        environment.jersey().register(new AuthenticationFilter());
         context.close();
     }
 
