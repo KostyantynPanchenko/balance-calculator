@@ -4,12 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.softserveinc.balance.calculator.api.resources.ConsumptionTransactionResource;
+import com.softserveinc.balance.calculator.api.resources.ContributionTransactionResource;
 import com.softserveinc.balance.calculator.api.resources.RegisterResource;
 import com.softserveinc.balance.calculator.api.resources.StoreResource;
-import com.softserveinc.balance.calculator.api.resources.ConsumptionTransactionResource;
+import com.softserveinc.balance.calculator.api.resources.impl.ConsumptionTransactionResourceImpl;
+import com.softserveinc.balance.calculator.api.resources.impl.ContributionTransactionResourceImpl;
 import com.softserveinc.balance.calculator.api.resources.impl.RegisterResourceImpl;
 import com.softserveinc.balance.calculator.api.resources.impl.StoreResourceImpl;
-import com.softserveinc.balance.calculator.api.resources.impl.ConsumptionTransactionResourceImpl;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -35,10 +37,12 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
         StoreResource storeResource = context.getBean(StoreResourceImpl.class);
         RegisterResource registerResource = context.getBean(RegisterResourceImpl.class);
         ConsumptionTransactionResource consumptionResource = context.getBean(ConsumptionTransactionResourceImpl.class);
+        ContributionTransactionResource contributionResource = context.getBean(ContributionTransactionResourceImpl.class);
         
         environment.jersey().register(storeResource);
         environment.jersey().register(registerResource);
         environment.jersey().register(consumptionResource);
+        environment.jersey().register(contributionResource);
         context.close();
     }
 

@@ -6,7 +6,9 @@ import java.util.List;
 import com.softserveinc.balance.calculator.domain.ConsumptionTransaction;
 import com.softserveinc.balance.calculator.dto.ConsumptionTransactionDTO;
 import com.softserveinc.balance.calculator.repository.ConsumptionTransactionDAO;
+import com.softserveinc.balance.calculator.repository.exception.RepositoryException;
 import com.softserveinc.balance.calculator.service.ConsumptionTransactionService;
+import com.softserveinc.balance.calculator.service.exception.ServiceException;
 
 public class ConsumptionTransactionServiceImpl implements ConsumptionTransactionService {
 
@@ -17,10 +19,14 @@ public class ConsumptionTransactionServiceImpl implements ConsumptionTransaction
     }
 
     @Override
-    public int[] saveAll(List<ConsumptionTransactionDTO> consumptions) {
+    public int[] saveAll(List<ConsumptionTransactionDTO> consumptions) throws ServiceException {
         List<ConsumptionTransaction> input = new ArrayList<>(consumptions.size());
         consumptions.forEach(consumption -> input.add(newTransaction(consumption)));
-        return consumptionDao.saveAll(input);
+        try {
+            return consumptionDao.saveAll(input);
+        } catch (RepositoryException e) {
+            throw new ServiceException(e.getMessage());
+        }
     }
 
     private ConsumptionTransaction newTransaction(ConsumptionTransactionDTO consumption) {

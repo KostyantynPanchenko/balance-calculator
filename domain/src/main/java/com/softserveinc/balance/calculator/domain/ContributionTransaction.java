@@ -3,30 +3,47 @@ package com.softserveinc.balance.calculator.domain;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-public class ContributionTransaction {
+public class ContributionTransaction extends Transaction {
 
-    private Long id;
-    private Long registerId;
     private BigDecimal orderGrantedValue;
-    private Timestamp createdOn;
-    private String createdBy;
     
     public ContributionTransaction() { }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getRegisterId() {
-        return registerId;
-    }
-
-    public void setRegisterId(Long registerId) {
-        this.registerId = registerId;
+    
+    public static class Builder {
+        private ContributionTransaction transaction;
+        
+        public Builder() {
+            transaction = new ContributionTransaction();
+        }
+        
+        public Builder setId(Long id) {
+            transaction.setId(id);
+            return this;
+        }
+        
+        public Builder setRegisterId(Long registerId) {
+            transaction.setRegisterId(registerId);
+            return this;
+        }
+        
+        public Builder setOrderGrantedValue(BigDecimal orderGrantedValue) {
+            transaction.setOrderGrantedValue(orderGrantedValue);
+            return this;
+        }
+        
+        public Builder setCreatedOn(Timestamp createdOn) {
+            transaction.setCreatedOn(createdOn);
+            return this;
+        }
+        
+        public Builder setCreatedBy(String createdBy) {
+            transaction.setCreatedBy(createdBy);
+            return this;
+        }
+        
+        public ContributionTransaction build() {
+            return transaction;
+        }
     }
 
     public BigDecimal getOrderGrantedValue() {
@@ -35,22 +52,6 @@ public class ContributionTransaction {
 
     public void setOrderGrantedValue(BigDecimal orderGrantedValue) {
         this.orderGrantedValue = orderGrantedValue;
-    }
-
-    public Timestamp getCreatedOn() {
-        return createdOn;
-    }
-
-    public void setCreatedOn(Timestamp createdOn) {
-        this.createdOn = createdOn;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
     }
 
     @Override

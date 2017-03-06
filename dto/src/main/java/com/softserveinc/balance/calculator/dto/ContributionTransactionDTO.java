@@ -6,29 +6,29 @@ import java.sql.Timestamp;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import com.softserveinc.balance.calculator.domain.ConsumptionTransaction;
+import com.softserveinc.balance.calculator.domain.ContributionTransaction;
 
-public class ConsumptionTransactionDTO extends AbstractTransactionDTO {
+public class ContributionTransactionDTO extends AbstractTransactionDTO {
 
     @NotNull
     @Min(0)
-    private BigDecimal consumedValue;
+    private BigDecimal orderGrantedValue;
     
-    public ConsumptionTransactionDTO() { }
+    public ContributionTransactionDTO() { }
     
-    public ConsumptionTransactionDTO(ConsumptionTransaction transaction) {
+    public ContributionTransactionDTO(ContributionTransaction transaction) {
         id = transaction.getId();
         registerId = transaction.getRegisterId();
-        consumedValue = transaction.getConsumedValue();
+        orderGrantedValue = transaction.getOrderGrantedValue();
         createdOn = transaction.getCreatedOn();
         createdBy = transaction.getCreatedBy();
     }
 
     public static class Builder {
-        private ConsumptionTransactionDTO dto;
+        private ContributionTransactionDTO dto;
         
         public Builder() {
-            dto = new ConsumptionTransactionDTO();
+            dto = new ContributionTransactionDTO();
         }
         
         public Builder setId(Long id) {
@@ -41,8 +41,8 @@ public class ConsumptionTransactionDTO extends AbstractTransactionDTO {
             return this;
         }
         
-        public Builder setConsumedValue(BigDecimal consumedValue) {
-            dto.setConsumedValue(consumedValue);
+        public Builder setOrderGrantedValue(BigDecimal orderGrantedValue) {
+            dto.setOrderGrantedValue(orderGrantedValue);
             return this;
         }
         
@@ -56,17 +56,16 @@ public class ConsumptionTransactionDTO extends AbstractTransactionDTO {
             return this;
         }
         
-        public ConsumptionTransactionDTO build() {
+        public ContributionTransactionDTO build() {
             return dto;
         }
     }
 
-    public BigDecimal getConsumedValue() {
-        return consumedValue;
+    public BigDecimal getOrderGrantedValue() {
+        return orderGrantedValue;
     }
 
-    public void setConsumedValue(BigDecimal consumedValue) {
-        this.consumedValue = consumedValue;
+    public void setOrderGrantedValue(BigDecimal orderGrantedValue) {
+        this.orderGrantedValue = orderGrantedValue;
     }
-    
 }

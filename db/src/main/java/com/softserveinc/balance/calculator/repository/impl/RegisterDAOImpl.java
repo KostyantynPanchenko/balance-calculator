@@ -42,7 +42,7 @@ public class RegisterDAOImpl extends AbstractDAO<Register> implements RegisterDA
             return getById(GET_BY_ID, new Object[] {storeId, registerId}, MAPPER);
         } catch (EmptyResultDataAccessException notFound) {
             LOGGER.error(notFound.getMessage(), notFound);
-            throw new DomainEntityNotFoundException();
+            throw new DomainEntityNotFoundException(notFound.getMessage());
         } catch (DataAccessException e) {
             LOGGER.error(e.getMessage(), e);
             throw new RepositoryException(e.getMessage());

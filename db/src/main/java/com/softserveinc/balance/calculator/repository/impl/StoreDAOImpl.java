@@ -13,9 +13,9 @@ import com.softserveinc.balance.calculator.repository.StoreDAO;
 import com.softserveinc.balance.calculator.repository.exception.DataIntegrityViolationRepositoryException;
 import com.softserveinc.balance.calculator.repository.exception.DomainEntityNotFoundException;
 import com.softserveinc.balance.calculator.repository.exception.RepositoryException;
-import com.softserveinc.balance.calculator.repository.impl.mappers.StoreNamespace;
 import com.softserveinc.balance.calculator.repository.impl.mappers.StorePreparedStatementCreator;
 import com.softserveinc.balance.calculator.repository.impl.mappers.StoreRowMapper;
+import com.softserveinc.balance.calculator.repository.impl.namespaces.StoreNamespace;
 
 /**
  * Implementation of <code>StoreRepository</code> interface.
@@ -28,9 +28,6 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(StoreDAOImpl.class);
     private final static StoreRowMapper MAPPER = new StoreRowMapper();
-//    private final String GET_BY_ID = "select id, tenant_id, name, description from stores where id = ?";
-//    private final String UPDATE = "update stores set tenant_id = ?, name = ?, description = ? where id = ?";
-//    private final String DELETE = "delete from stores where id = ?"; 
     
     public StoreDAOImpl(JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate);
@@ -48,7 +45,7 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
         try {
             return getById(GET, new Object[] {id}, MAPPER);
         } catch (EmptyResultDataAccessException empty) {
-            throw new DomainEntityNotFoundException();
+            throw new DomainEntityNotFoundException(empty.getMessage());
         } catch (DataAccessException e) {
             LOGGER.error(e.getMessage(), e);
             throw new RepositoryException(e.getMessage());

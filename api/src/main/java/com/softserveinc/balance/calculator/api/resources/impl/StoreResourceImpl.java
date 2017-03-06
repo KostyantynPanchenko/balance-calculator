@@ -36,6 +36,7 @@ public class StoreResourceImpl implements StoreResource {
 
     @Override
     public Response getStoreById(Long id) {
+        LOGGER.info(String.format("Retrieving store No%d.", id));
         try {
             return Response.status(Status.OK).entity(storeService.getStoreById(id)).build();
         } catch (EntityNotFoundServiceException notFound) {
@@ -53,6 +54,7 @@ public class StoreResourceImpl implements StoreResource {
 
     @Override
     public Response save(StoreDTO storeDto, UriInfo uriInfo) {
+        LOGGER.info("Creating new store.");
         Long key;
         try {
             key = storeService.save(storeDto);
@@ -73,6 +75,7 @@ public class StoreResourceImpl implements StoreResource {
 
     @Override
     public Response update(StoreDTO storeDto, Long id) {
+        LOGGER.info(String.format("Updating Store No%d.", id));
         try {
             storeDto.setId(id);
             storeService.update(storeDto);
@@ -88,6 +91,7 @@ public class StoreResourceImpl implements StoreResource {
 
     @Override
     public Response delete(Long id) {
+        LOGGER.info(String.format("Deleting store No%d.", id));
         try {
             if (storeService.delete(id) != 1) {
                 String message = "Could not delete entity with id=" + id;

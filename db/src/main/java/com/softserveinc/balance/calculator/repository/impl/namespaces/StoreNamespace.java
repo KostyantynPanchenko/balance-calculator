@@ -1,4 +1,4 @@
-package com.softserveinc.balance.calculator.repository.impl.mappers;
+package com.softserveinc.balance.calculator.repository.impl.namespaces;
 
 /**
  * <code>Store</code> entity fields to database table column names mapper class.

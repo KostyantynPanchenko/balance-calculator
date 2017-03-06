@@ -43,7 +43,20 @@
     </bean>
     
     <bean id="consumptionDao" class="com.softserveinc.balance.calculator.repository.impl.ConsumptionTransactionDAOImpl">
-        <property name="jdbcTemplate" ref="jdbcTemplate"></property>
+        <constructor-arg name="jdbcTemplate" ref="jdbcTemplate"/>
+    </bean>
+    
+    <!-- CONTRIBUTION TRANSACTIONS -->
+    <bean id="contributionResource" class="com.softserveinc.balance.calculator.api.resources.impl.ContributionTransactionResourceImpl">
+        <constructor-arg name="contributionService" ref="contributionService"/>
+    </bean>
+    
+    <bean id="contributionService" class="com.softserveinc.balance.calculator.service.impl.ContributionTransactionServiceImpl">
+        <constructor-arg name="contributionDao" ref="contributionDao"/>
+    </bean>
+    
+    <bean id="contributionDao" class="com.softserveinc.balance.calculator.repository.impl.ContributionTransactionDAOImpl">
+        <constructor-arg name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
     
     <!-- DataSource  -->

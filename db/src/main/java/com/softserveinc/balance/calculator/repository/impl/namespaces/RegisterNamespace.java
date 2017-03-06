@@ -1,4 +1,4 @@
-package com.softserveinc.balance.calculator.repository.impl.mappers;
+package com.softserveinc.balance.calculator.repository.impl.namespaces;
 
 /**
  * <code>Register</code> domain class fields to database table column names mapper.

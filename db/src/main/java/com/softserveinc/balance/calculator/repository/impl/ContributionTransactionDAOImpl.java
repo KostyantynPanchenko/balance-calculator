@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.softserveinc.balance.calculator.domain.ConsumptionTransaction;
-import com.softserveinc.balance.calculator.repository.ConsumptionTransactionDAO;
+import com.softserveinc.balance.calculator.domain.ContributionTransaction;
+import com.softserveinc.balance.calculator.repository.ContributionTransactionDAO;
 import com.softserveinc.balance.calculator.repository.exception.RepositoryException;
 import com.softserveinc.balance.calculator.repository.impl.namespaces.TransactionNamespace;
 
@@ -19,23 +19,23 @@ import com.softserveinc.balance.calculator.repository.impl.namespaces.Transactio
  * @since 06/03/2017
  *
  */
-public class ConsumptionTransactionDAOImpl implements ConsumptionTransactionDAO {
+public class ContributionTransactionDAOImpl implements ContributionTransactionDAO {
     
     private final String INSERT;
     private JdbcTemplate jdbcTemplate;
     
-    protected ConsumptionTransactionDAOImpl(JdbcTemplate jdbcTemplate) {
-        INSERT = String.format("insert into %s(%s, %s, %s) values(?, ?, ?)", TransactionNamespace.CONSUMPTION_TABLE_NAME,
+    protected ContributionTransactionDAOImpl(JdbcTemplate jdbcTemplate) {
+        INSERT = String.format("insert into %s(%s, %s, %s) values(?, ?, ?)", TransactionNamespace.CONTRIBUTION_TABLE_NAME,
                 TransactionNamespace.REGISTER_ID_COLUMN_NAME,
-                TransactionNamespace.CONSUMED_VALUE_COLUMN_NAME,
+                TransactionNamespace.ORDER_GRANTED_VALUE_COLUMN_NAME,
                 TransactionNamespace.CREATED_BY_COLUMN_NAME);
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public int[] saveAll(List<ConsumptionTransaction> consumptions) throws RepositoryException {
+    public int[] saveAll(List<ContributionTransaction> contributions) throws RepositoryException {
         List<Object[]> batch = new LinkedList<>();
-        consumptions.forEach(consumption -> batch.add(getBatchValues(consumption)));
+        contributions.forEach(contribution -> batch.add(getBatchValues(contribution)));
         try {
             return jdbcTemplate.batchUpdate(INSERT, batch);
         } catch (DataAccessException e) {
@@ -46,14 +46,14 @@ public class ConsumptionTransactionDAOImpl implements ConsumptionTransactionDAO 
     /**
      * Prepares arguments for batch processing.
      * 
-     * @param consumption <code>ConsumptionTransaction</code> object
+     * @param contribution <code>ContributionTransaction</code> object
      * @return an object holding values for batch processing
      */
-    private Object[] getBatchValues(ConsumptionTransaction consumption) {
+    private Object[] getBatchValues(ContributionTransaction contribution) {
         return new Object[] {
-                consumption.getRegisterId(),
-                consumption.getConsumedValue(),
-                consumption.getCreatedBy()
+                contribution.getRegisterId(),
+                contribution.getOrderGrantedValue(),
+                contribution.getCreatedBy()
         };
     }
 

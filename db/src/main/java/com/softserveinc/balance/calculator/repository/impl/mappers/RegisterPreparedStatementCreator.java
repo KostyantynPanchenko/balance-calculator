@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 
 import com.softserveinc.balance.calculator.domain.Register;
+import com.softserveinc.balance.calculator.repository.impl.namespaces.RegisterNamespace;
 
 /**
  * PreparedStatementCreator implementation for <code>Register</code> domain class.

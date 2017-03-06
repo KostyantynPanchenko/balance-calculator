@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.softserveinc.balance.calculator.domain.Register;
+import com.softserveinc.balance.calculator.repository.impl.namespaces.RegisterNamespace;
 
 /**
  * RowMapper implementation for <code>Register</code> domain class.

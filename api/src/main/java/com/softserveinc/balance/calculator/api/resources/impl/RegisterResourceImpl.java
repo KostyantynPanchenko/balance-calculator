@@ -26,7 +26,7 @@ public class RegisterResourceImpl implements RegisterResource {
     
     @Override
     public Response getRegisterById(Long storeId, Long registerId) {
-        System.out.println("storeId=" + storeId.toString() + ", registerId=" + registerId.toString());
+        LOGGER.info(String.format("Retrieving Register with id=%d for store No%d", registerId, storeId));
         RegisterDTO register;
         try {
             register = registerService.getRegisterById(storeId, registerId);
@@ -46,7 +46,7 @@ public class RegisterResourceImpl implements RegisterResource {
 
     @Override
     public Response save(RegisterDTO registerDto, Long storeId, UriInfo uriInfo) {
-        System.out.println("storeId=" + storeId.toString());
+        LOGGER.info(String.format("Creating new Register for store No%d", storeId));
         registerDto.setStoreId(storeId);
         Long key;
         try {
@@ -65,7 +65,7 @@ public class RegisterResourceImpl implements RegisterResource {
 
     @Override
     public Response update(RegisterDTO registerDto, Long storeId, Long registerId) {
-        System.out.println("storeId=" + storeId.toString() + ", registerId=" + registerId.toString());
+        LOGGER.info(String.format("Updating Register with id=%d for store No%d", registerId, storeId));
         registerDto.setStoreId(storeId);
         registerDto.setId(registerId);
         try {
@@ -84,7 +84,7 @@ public class RegisterResourceImpl implements RegisterResource {
 
     @Override
     public Response delete(Long storeId, Long registerId) {
-        System.out.println("storeId=" + storeId.toString() + ", registerId=" + registerId.toString());
+        LOGGER.info(String.format("Deleting Register with id=%d for store No%d", registerId, storeId));
         try {
             if (registerService.delete(storeId, registerId) != 1) {
                 String message = "Could not delete entity with id=" + registerId;

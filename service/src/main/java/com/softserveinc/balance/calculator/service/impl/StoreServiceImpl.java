@@ -23,7 +23,7 @@ public class StoreServiceImpl implements StoreService {
         try {
             return new StoreDTO(storeDao.getStoreById(id));
         } catch (DomainEntityNotFoundException empty) {
-            throw new EntityNotFoundServiceException();
+            throw new EntityNotFoundServiceException(empty.getMessage());
         } catch (RepositoryException e) {
             throw new ServiceException(e.getMessage());
         }

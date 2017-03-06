@@ -23,7 +23,7 @@ public class RegisterServiceImpl implements RegisterService {
         try {
             return new RegisterDTO(registerDao.getRegisterById(storeId, registerId));
         } catch (DomainEntityNotFoundException notFound) {
-            throw new EntityNotFoundServiceException();
+            throw new EntityNotFoundServiceException(notFound.getMessage());
         } catch (RepositoryException e) {
             throw new ServiceException(e.getMessage());
         }

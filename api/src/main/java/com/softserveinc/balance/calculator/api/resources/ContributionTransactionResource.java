@@ -9,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.softserveinc.balance.calculator.domain.ContributionTransaction;
+import com.softserveinc.balance.calculator.dto.ContributionTransactionDTO;
 
 @Path("/stores/{store-id}/register/{register-id}")
 @Produces(MediaType.APPLICATION_JSON)
@@ -18,6 +18,6 @@ public interface ContributionTransactionResource {
     @POST
     @Path("/contribution")
     @Consumes(MediaType.APPLICATION_JSON)
-    Response saveContributions(List<ContributionTransaction> contributions);
+    Response saveContributions(List<ContributionTransactionDTO> contributions);
     
 }
