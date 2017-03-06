@@ -2,14 +2,14 @@ package com.softserveinc.balance.calculator.dto;
 
 import java.sql.Timestamp;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public abstract class AbstractTransactionDTO {
 
     protected Long id;
-    @NotNull
     protected Long registerId;
     protected Timestamp createdOn;
+    @Size(min = 2, max = 50)
     protected String createdBy;
     
     protected AbstractTransactionDTO() { }

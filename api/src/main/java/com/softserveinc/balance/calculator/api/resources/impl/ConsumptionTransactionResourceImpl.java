@@ -14,6 +14,14 @@ import com.softserveinc.balance.calculator.dto.ConsumptionTransactionDTO;
 import com.softserveinc.balance.calculator.service.ConsumptionTransactionService;
 import com.softserveinc.balance.calculator.service.exception.ServiceException;
 
+/**
+ * Implementation of <code>ContributionTransactionResource</code> interface.
+ *  
+ * @author Kostyantyn Panchenko
+ * @version 1.0
+ * @see ConsumptionTransactionResource
+ * @since 06/03/2017
+ */
 public class ConsumptionTransactionResourceImpl implements ConsumptionTransactionResource {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ConsumptionTransactionResourceImpl.class);

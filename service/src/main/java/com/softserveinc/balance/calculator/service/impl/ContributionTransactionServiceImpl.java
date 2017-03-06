@@ -10,6 +10,14 @@ import com.softserveinc.balance.calculator.repository.exception.RepositoryExcept
 import com.softserveinc.balance.calculator.service.ContributionTransactionService;
 import com.softserveinc.balance.calculator.service.exception.ServiceException;
 
+/**
+ * Implementation of <code>ContributionTransactionService</code>.
+ * 
+ * @author Kostyantyn Panchenko
+ * @version 1.0
+ * @see ContributionTransactionService
+ * @since 06/03/2017 * 
+ */
 public class ContributionTransactionServiceImpl implements ContributionTransactionService {
 
     private ContributionTransactionDAO contributionDao;

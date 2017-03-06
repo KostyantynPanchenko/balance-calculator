@@ -11,10 +11,23 @@ import javax.ws.rs.core.Response;
 
 import com.softserveinc.balance.calculator.dto.ConsumptionTransactionDTO;
 
+/**
+ * Exposes create endpoint for <code>ConsumptionTransaction</code> batch processing.
+ * 
+ * @author Kostyantyn Panchenko
+ * @version 1.0
+ * @since 06/03/2017
+ */
 @Path("/stores/{store-id}/register/{register-id}")
 @Produces(MediaType.APPLICATION_JSON)
 public interface ConsumptionTransactionResource {
 
+    /**
+     * This is a create endpoint for batch processing received <code>ConsumptionTransaction</code> entities.
+     * 
+     * @param consumptions a list of <code>ConsumptionTransactionDTO</code> entities
+     * @return <code>Response</code> object
+     */
     @POST
     @Path("/consumption")
     @Consumes(MediaType.APPLICATION_JSON)

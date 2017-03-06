@@ -1,12 +1,16 @@
 package com.softserveinc.balance.calculator.dto;
 
+import javax.validation.constraints.Size;
+
 import com.softserveinc.balance.calculator.domain.Register;
 
 public class RegisterDTO {
 
     private Long id;
     private Long storeId;
+    @Size(min = 2, max = 50)
     private String name;
+    @Size(min = 2, max = 30)
     private String timezone;
     
     public RegisterDTO() { }

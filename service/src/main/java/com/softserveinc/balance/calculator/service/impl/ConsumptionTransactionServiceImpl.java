@@ -10,6 +10,14 @@ import com.softserveinc.balance.calculator.repository.exception.RepositoryExcept
 import com.softserveinc.balance.calculator.service.ConsumptionTransactionService;
 import com.softserveinc.balance.calculator.service.exception.ServiceException;
 
+/**
+ * Implementation of <code>ConsumptionTransactionService</code>.
+ * 
+ * @author Kostyantyn Panchenko
+ * @version 1.0
+ * @see ConsumptionTransactionService
+ * @since 06/03/2017
+ */
 public class ConsumptionTransactionServiceImpl implements ConsumptionTransactionService {
 
     private ConsumptionTransactionDAO consumptionDao;

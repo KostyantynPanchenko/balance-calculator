@@ -14,6 +14,14 @@ import com.softserveinc.balance.calculator.dto.ContributionTransactionDTO;
 import com.softserveinc.balance.calculator.service.ContributionTransactionService;
 import com.softserveinc.balance.calculator.service.exception.ServiceException;
 
+/**
+ * Implementation of <code>ContributionTransactionResource</code> interface.
+ *  
+ * @author Kostyantyn Panchenko
+ * @version 1.0
+ * @see ContributionTransactionResource
+ * @since 06/03/2017
+ */
 public class ContributionTransactionResourceImpl implements ContributionTransactionResource {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ContributionTransactionResourceImpl.class);

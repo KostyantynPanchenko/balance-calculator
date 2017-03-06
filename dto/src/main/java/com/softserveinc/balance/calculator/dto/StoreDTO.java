@@ -7,12 +7,13 @@ import javax.validation.constraints.Size;
 import com.softserveinc.balance.calculator.domain.Store;
 
 public class StoreDTO {
+    
     private Long id;
     @NotNull
     private Long tenantId;
     @Size(min = 2, max = 50)
     private String name;
-    @Size(min = 2, max = 50)
+    @Size(min = 2, max = 400)
     private String description;
 
     public StoreDTO() {

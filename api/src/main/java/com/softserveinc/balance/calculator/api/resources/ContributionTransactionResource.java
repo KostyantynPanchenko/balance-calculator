@@ -11,10 +11,23 @@ import javax.ws.rs.core.Response;
 
 import com.softserveinc.balance.calculator.dto.ContributionTransactionDTO;
 
+/**
+ * Exposes create endpoint for <code>ContributionTransaction</code> batch processing.
+ * 
+ * @author Kostyantyn Panchenko
+ * @version 1.0
+ * @since 06/03/2017
+ */
 @Path("/stores/{store-id}/register/{register-id}")
 @Produces(MediaType.APPLICATION_JSON)
 public interface ContributionTransactionResource {
     
+    /**
+     * This is a create endpoint for batch processing received <code>ContributionTransaction</code> entities.
+     * 
+     * @param contributions a list of <code>ContributionTransactionDTO</code> entities
+     * @return <code>Response</code> object
+     */
     @POST
     @Path("/contribution")
     @Consumes(MediaType.APPLICATION_JSON)
