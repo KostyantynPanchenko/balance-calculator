@@ -18,7 +18,7 @@ import com.softserveinc.balance.calculator.dto.ContributionTransactionDTO;
  * @version 1.0
  * @since 06/03/2017
  */
-@Path("/stores/{store_id}/register/{register_id}")
+@Path("/stores/{store_id}/register/{register_id}/contribution")
 @Produces(MediaType.APPLICATION_JSON)
 public interface ContributionTransactionResource {
     
@@ -29,7 +29,6 @@ public interface ContributionTransactionResource {
      * @return <code>Response</code> object
      */
     @POST
-    @Path("/contribution")
     @Consumes(MediaType.APPLICATION_JSON)
     Response saveContributions(List<ContributionTransactionDTO> contributions);
     

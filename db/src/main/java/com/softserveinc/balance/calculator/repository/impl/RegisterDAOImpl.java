@@ -36,7 +36,7 @@ public class RegisterDAOImpl extends AbstractDAO<Register> implements RegisterDA
     }
 
     @Override
-    public Register getRegisterById(Long registerId, Long storeId) throws RepositoryException {
+    public Register getRegisterById(Long storeId, Long registerId) throws RepositoryException {
         try {
             System.out.println("storeId=" + storeId.toString() + ", registerId=" + registerId.toString());
             return getById(GET_BY_ID, new Object[] {storeId, registerId}, MAPPER);

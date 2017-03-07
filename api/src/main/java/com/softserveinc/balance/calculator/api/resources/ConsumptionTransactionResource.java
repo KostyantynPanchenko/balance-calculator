@@ -18,7 +18,7 @@ import com.softserveinc.balance.calculator.dto.ConsumptionTransactionDTO;
  * @version 1.0
  * @since 06/03/2017
  */
-@Path("/stores/{store_id}/register/{register_id}")
+@Path("/stores/{store_id}/register/{register_id}/consumption")
 @Produces(MediaType.APPLICATION_JSON)
 public interface ConsumptionTransactionResource {
 
@@ -29,7 +29,6 @@ public interface ConsumptionTransactionResource {
      * @return <code>Response</code> object
      */
     @POST
-    @Path("/consumption")
     @Consumes(MediaType.APPLICATION_JSON)
     Response saveConsumptions(List<ConsumptionTransactionDTO> consumptions);
     
