@@ -30,7 +30,7 @@ import com.softserveinc.balance.calculator.dto.RegisterDTO;
 public interface RegisterResource {
 
     /**
-     * Retrieves a <code>Register</code> entity with given id.
+     * GET endpoint for <code>Register</code> entity with given id.
      * 
      * @param storeId       <code>Store</code> entity id to which <code>Register</code>
      *                      relates
@@ -43,8 +43,7 @@ public interface RegisterResource {
     Response getRegisterById(@PathParam("store_id") Long storeId, @PathParam("register_id") Long registerId);
 
     /**
-     * Creates a new <code>Register</code> entity with fields values specified
-     * in request's payload.
+     * Creates endpoint for <code>Register</code> entity.
      * 
      * @param registerDto   <code>Register</code> data transfer object to which request
      *                      payload will be mapped to
@@ -61,8 +60,7 @@ public interface RegisterResource {
     Response save(RegisterDTO registerDto, @PathParam("store_id") Long storeId, @Context UriInfo uriInfo);
 
     /**
-     * Updates <code>Register</code> entity with values provided in request
-     * payload.
+     * Update endpoint for <code>Register</code> entity.
      * 
      * @param registerDto   <code>Register</code> data transfer object to which request
      *                      payload data will be mapped to
@@ -78,8 +76,7 @@ public interface RegisterResource {
     Response update(RegisterDTO registerDto, @PathParam("store_id") Long storeId, @PathParam("register_id") Long registerId);
 
     /**
-     * Deletes <code>Register</code> entity with specified id if it belongs to
-     * <code>Store</code> entity with specified id.
+     * Delete endpoint for  <code>Register</code> entity.
      * 
      * @param storeId       <code>Store</code> id to which <code>Register</code> entity
      *                      belongs to

@@ -1,7 +1,5 @@
 package com.softserveinc.balance.calculator.repository.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -25,7 +23,6 @@ import com.softserveinc.balance.calculator.repository.impl.mappers.RegisterRowMa
  */
 public class RegisterDAOImpl extends AbstractDAO<Register> implements RegisterDAO {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(RegisterDAOImpl.class);
     private final static RegisterRowMapper MAPPER = new RegisterRowMapper();
     private final String GET_BY_ID = "select id, store_id, name, timezone from registers where store_id = ? and id = ?";
     private final String UPDATE = "update registers set name = ?, timezone = ? where store_id = ? and id = ?";
@@ -41,10 +38,8 @@ public class RegisterDAOImpl extends AbstractDAO<Register> implements RegisterDA
             System.out.println("storeId=" + storeId.toString() + ", registerId=" + registerId.toString());
             return getById(GET_BY_ID, new Object[] {storeId, registerId}, MAPPER);
         } catch (EmptyResultDataAccessException notFound) {
-            LOGGER.error(notFound.getMessage(), notFound);
             throw new DomainEntityNotFoundException(notFound.getMessage());
         } catch (DataAccessException e) {
-            LOGGER.error(e.getMessage(), e);
             throw new RepositoryException(e.getMessage());
         }
     }
@@ -54,10 +49,8 @@ public class RegisterDAOImpl extends AbstractDAO<Register> implements RegisterDA
         try {
             return create(new RegisterPreparedStatementCreator(register));
         } catch (DataIntegrityViolationException violation) {
-            LOGGER.error(violation.getMessage(), violation);
             throw new DataIntegrityViolationRepositoryException(violation.getMessage());
         } catch (DataAccessException e) {
-            LOGGER.error(e.getMessage(), e);
             throw new RepositoryException(e.getMessage());
         }
     }
@@ -67,10 +60,8 @@ public class RegisterDAOImpl extends AbstractDAO<Register> implements RegisterDA
         try {
             return execute(UPDATE, new Object[] { register.getName(), register.getTimezone(), register.getId() });
         } catch (DataIntegrityViolationException violation) {
-            LOGGER.error(violation.getMessage(), violation);
             throw new DataIntegrityViolationRepositoryException(violation.getMessage());
         } catch (DataAccessException e) {
-            LOGGER.error(e.getMessage(), e);
             throw new RepositoryException(e.getMessage());
         }
     }
@@ -80,10 +71,8 @@ public class RegisterDAOImpl extends AbstractDAO<Register> implements RegisterDA
         try {
             return execute(DELETE, new Object[] { registerId, storeId });
         } catch (DataIntegrityViolationException violation) {
-            LOGGER.error(violation.getMessage(), violation);
             throw new DataIntegrityViolationRepositoryException(violation.getMessage());
         } catch (DataAccessException e) {
-            LOGGER.error(e.getMessage(), e);
             throw new RepositoryException(e.getMessage());
         }
     }

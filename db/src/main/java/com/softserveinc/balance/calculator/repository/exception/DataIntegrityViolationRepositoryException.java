@@ -17,4 +17,8 @@ public class DataIntegrityViolationRepositoryException extends RepositoryExcepti
         super(message);
     }
 
+    public DataIntegrityViolationRepositoryException(String message, Throwable cause) {
+        super(message, cause);
+    }
+    
 }

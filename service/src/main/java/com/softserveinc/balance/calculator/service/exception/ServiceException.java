@@ -8,15 +8,15 @@ package com.softserveinc.balance.calculator.service.exception;
 public class ServiceException extends Exception {
 
     private static final long serialVersionUID = 1L;
-    private String message;
     
     public ServiceException() { }
     
     public ServiceException(String message) {
-         this.message = message;
+         super(message);
     }
+    
+    public ServiceException(String message, Throwable cause) {
+        super(message, cause);
+   }
 
-    public String getMessage() {
-        return message;
-    }
 }

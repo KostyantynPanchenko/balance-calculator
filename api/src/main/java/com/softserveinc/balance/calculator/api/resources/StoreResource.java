@@ -57,7 +57,7 @@ public interface StoreResource {
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    Response save(@Valid @NotNull StoreDTO storeDto, @Context UriInfo uriInfo);
+    Response create(@Valid @NotNull StoreDTO storeDto, @Context UriInfo uriInfo);
     
     /**
      * Updates <code>Store</code> entity with values provided in request payload.

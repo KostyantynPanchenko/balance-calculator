@@ -16,6 +16,14 @@ import com.softserveinc.balance.calculator.service.exception.ServiceException;
 
 import io.dropwizard.jersey.errors.ErrorMessage;
 
+/**
+ * Implementation of the <code>RegisterResource</code> interface.
+ * 
+ * @author  Kostyantyn Panchenko
+ * @version 1.0
+ * @see     RegisterResource
+ * @since   03/05/2017
+ */
 public class RegisterResourceImpl implements RegisterResource {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(RegisterResourceImpl.class);

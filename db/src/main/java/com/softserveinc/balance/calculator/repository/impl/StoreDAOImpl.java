@@ -1,7 +1,5 @@
 package com.softserveinc.balance.calculator.repository.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -26,7 +24,6 @@ import com.softserveinc.balance.calculator.repository.impl.namespaces.StoreNames
  */
 public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(StoreDAOImpl.class);
     private final static StoreRowMapper MAPPER = new StoreRowMapper();
     
     public StoreDAOImpl(JdbcTemplate jdbcTemplate) {
@@ -47,7 +44,6 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
         } catch (EmptyResultDataAccessException empty) {
             throw new DomainEntityNotFoundException(empty.getMessage());
         } catch (DataAccessException e) {
-            LOGGER.error(e.getMessage(), e);
             throw new RepositoryException(e.getMessage());
         }
     }
@@ -57,10 +53,8 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
         try {
             return create(new StorePreparedStatementCreator(store));
         } catch (DataIntegrityViolationException violation) {
-            LOGGER.error(violation.getMessage(), violation);
             throw new DataIntegrityViolationRepositoryException(violation.getMessage());
         } catch (DataAccessException e) {
-            LOGGER.error(e.getMessage(), e);
             throw new RepositoryException(e.getMessage());
         }
     }
@@ -76,10 +70,8 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
         try {
             return execute(UPDATE, new Object[] {store.getTenantId(), store.getName(), store.getDescription(), store.getId()});
         } catch (DataIntegrityViolationException violation) {
-            LOGGER.error(violation.getMessage(), violation);
             throw new DataIntegrityViolationRepositoryException(violation.getMessage());
         } catch (DataAccessException e) {
-            LOGGER.error(e.getMessage(), e);
             throw new RepositoryException(e.getMessage());
         }
     }
@@ -92,10 +84,8 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
         try {
             return execute(DELETE, new Object[] {id});
         } catch (DataIntegrityViolationException violation) {
-            LOGGER.error(violation.getMessage(), violation);
             throw new DataIntegrityViolationRepositoryException(violation.getMessage());
         } catch (DataAccessException e) {
-            LOGGER.error(e.getMessage(), e);
             throw new RepositoryException(e.getMessage());
         }
     }

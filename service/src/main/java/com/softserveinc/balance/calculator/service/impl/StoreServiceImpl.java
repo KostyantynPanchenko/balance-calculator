@@ -67,10 +67,4 @@ public class StoreServiceImpl implements StoreService {
                 .setDescription(storeDto.getDescription()).build();
     }
 
-    @Override
-    public boolean matchTenantId(Long storeId, Long tenantId) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
 }

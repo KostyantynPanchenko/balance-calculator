@@ -10,7 +10,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
-import org.eclipse.jetty.http.HttpMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +29,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AuthorizationFilter.class);
     private final int STORE_ID_PATH_POSITION = 1;
-    private final StoreService storeService;    
+    private final StoreService storeService;
     private final String KEY = "GodSaveTheQuin";
     private final String DELIMITER = " ";
     private final String CHARSET_NAME = "UTF-8";
@@ -45,76 +44,102 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        if (!isPostMethod(requestContext)) {
+        try {
             Long jwtTenantId = getTenantIdFromJwt(getJwt(requestContext));
             Long pathStoreId = getStoreIdFromPath(requestContext);
             
             try {
                 if (!isAuthorized(getTenantId(pathStoreId), jwtTenantId)) {
-                    LOGGER.error(String.format(UNAUTHORIZED, pathStoreId, jwtTenantId), pathStoreId, jwtTenantId);
-                    requestContext.abortWith(Response.status(Status.UNAUTHORIZED).entity(new ErrorMessage(401, String.format(UNAUTHORIZED, pathStoreId, jwtTenantId))).build());
+                    logAndAbort(requestContext, UNAUTHORIZED, new Object[] {pathStoreId, jwtTenantId});
                 }
             } catch (EntityNotFoundServiceException notFound) {
-                LOGGER.error(String.format(NOT_FOUND, pathStoreId));
-                requestContext.abortWith(Response.status(Status.NOT_FOUND).entity(new ErrorMessage(404, String.format(NOT_FOUND, pathStoreId))).build());
+                logAndAbort(requestContext, NOT_FOUND, new Object[] {pathStoreId});
             } catch (ServiceException e) {
-                LOGGER.error(String.format(SERVER_ERROR, pathStoreId), e.getMessage());
+                logAndAbort(requestContext, SERVER_ERROR, new Object[] {pathStoreId});
             }
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException 
+                | UnsupportedEncodingException | IllegalArgumentException jwtEx) {
+            LOGGER.error(jwtEx.getMessage(), jwtEx);
+            requestContext.abortWith(Response.status(Status.BAD_REQUEST).entity(new ErrorMessage(404, jwtEx.getMessage())).build());
         }
-        
     }
 
-    private Long getTenantId(Long pathStoreId) throws ServiceException {
-        return storeService.getStoreById(pathStoreId).getTenantId();
-    }
-
-    private boolean isAuthorized(Long tenantId, Long tenantId2) {
-        return tenantId.equals(tenantId2);
-    }
-    
-    private boolean isPostMethod(ContainerRequestContext requestContext) {
-        return requestContext.getMethod().equals(HttpMethod.POST);
-    }
-
-    private Long getStoreIdFromPath(ContainerRequestContext requestContext) {
-        return Long.valueOf(requestContext.getUriInfo().getPathSegments().get(STORE_ID_PATH_POSITION).toString());
-    }
-
+    /**
+     * Extracts <code>String</code> representation of JWT from Authorization header.
+     * 
+     * @param requestContext current <code>ContainerRequestContext</code>
+     * @return <code>String</code> representation of JWT
+     */
     private String getJwt(ContainerRequestContext requestContext) {
         String header = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
         return header.substring(header.indexOf(DELIMITER) + 1);
     }
+
+    /**
+     * Extracts store id from request URI.
+     * 
+     * @param requestContext current <code>ContainerRequestContext</code>
+     * @return <code>Long</code> value of store id
+     */
+    private Long getStoreIdFromPath(ContainerRequestContext requestContext) {
+        return Long.valueOf(requestContext.getUriInfo().getPathSegments().get(STORE_ID_PATH_POSITION).toString());
+    }
     
-    private Long getTenantIdFromJwt(String jwt) {
-        try {
-            return Long.valueOf(getTenantIdClaim(jwt));
-        } catch (ExpiredJwtException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (UnsupportedJwtException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (MalformedJwtException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SignatureException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            LOGGER.error("Could not parse tenantId claim.", e);
-        } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
+    /**
+     * Retrieves tenant id for specified store id.
+     * 
+     * @param pathStoreId store id extracted from request URI
+     * @return <code>Long</code> value of tenant id 
+     * @throws ServiceException if <code>Store</code> entity with specified id was not found
+     */
+    private Long getTenantId(Long pathStoreId) throws ServiceException {
+        return storeService.getStoreById(pathStoreId).getTenantId();
     }
 
-    private String getTenantIdClaim(String jwt) throws UnsupportedEncodingException {
-        return (String) Jwts.parser()
+    /**
+     * Checks if tenant id extracted from JWT matches tenant id extracted from <code>Store</code>
+     * entity with id specified in request URI.
+     * 
+     * @param tenantId tenant id extracted from <code>Store</code> entity
+     * @param jwtTenantId tenant id extracted from JWT
+     * @return true if tenant id specified in JWT matches tenant id in store with specified id; false otherwise
+     */
+    private boolean isAuthorized(Long tenantId, Long jwtTenantId) {
+        return tenantId.equals(jwtTenantId);
+    }
+    
+    /**
+     * Retrieves tenant id from JWT.
+     * 
+     * @param jwt string representation of JWT
+     * @return tenant id
+     * @throws ExpiredJwtException if JWT expired
+     * @throws UnsupportedJwtException if JWT is not supported
+     * @throws MalformedJwtException in case of malformed JWT
+     * @throws SignatureException if JWT signature not correct
+     * @throws IllegalArgumentException if could not parse long value string
+     * @throws UnsupportedEncodingException if JWT encrypted with unsupported algorithm
+     */
+    private Long getTenantIdFromJwt(String jwt) throws ExpiredJwtException, UnsupportedJwtException,
+    MalformedJwtException, SignatureException, IllegalArgumentException, UnsupportedEncodingException {
+        return Long.valueOf((String) Jwts.parser()
                 .setSigningKey(KEY.getBytes(CHARSET_NAME))
                 .parseClaimsJws(jwt)
                 .getBody()
-                .get(TENANT_ID);
+                .get(TENANT_ID));
+    }
+    
+    /**
+     * Performs logging and abort request by sending <code>Response</code> entity.
+     * 
+     * @param requestContext current <code>ContainerRequestContext</code>
+     * @param message message for logging and response
+     * @param args arguments for message composing
+     */
+    private void logAndAbort(ContainerRequestContext requestContext, String message, Object[] args) {
+        LOGGER.error(String.format(message, args));
+        requestContext.abortWith(Response.status(Status.UNAUTHORIZED)
+                .entity(new ErrorMessage(401, String.format(message, args))).build());
     }
 
 }

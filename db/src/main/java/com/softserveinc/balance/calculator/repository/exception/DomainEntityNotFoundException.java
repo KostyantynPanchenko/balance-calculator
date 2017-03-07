@@ -15,4 +15,9 @@ public class DomainEntityNotFoundException extends RepositoryException {
     public DomainEntityNotFoundException(String message) {
         super(message);
     }
+    
+    public DomainEntityNotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
+    
 }

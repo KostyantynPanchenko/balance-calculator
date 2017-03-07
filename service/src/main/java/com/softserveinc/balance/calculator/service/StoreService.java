@@ -68,5 +68,4 @@ public interface StoreService {
      */
     int delete(Long id) throws ServiceException;
     
-    boolean matchTenantId(Long storeId, Long tenantId);
 }
