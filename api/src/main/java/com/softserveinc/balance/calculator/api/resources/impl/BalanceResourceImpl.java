@@ -6,8 +6,9 @@ import java.time.format.DateTimeFormatter;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.softserveinc.balance.calculator.api.exception.ErrorMessage;
 import com.softserveinc.balance.calculator.api.resources.BalanceResource;
+
+import io.dropwizard.jersey.errors.ErrorMessage;
 
 public class BalanceResourceImpl implements BalanceResource {
 

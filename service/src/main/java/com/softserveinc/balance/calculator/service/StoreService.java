@@ -67,4 +67,6 @@ public interface StoreService {
      * @throws ServiceException if could not execute delete
      */
     int delete(Long id) throws ServiceException;
+    
+    boolean matchTenantId(Long storeId, Long tenantId);
 }

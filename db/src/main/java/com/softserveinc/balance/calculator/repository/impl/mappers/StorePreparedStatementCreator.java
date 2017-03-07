@@ -24,7 +24,7 @@ public class StorePreparedStatementCreator implements PreparedStatementCreator {
     
     @Override
     public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-        final String INSERT = String.format("insert into %s(%s, %s, %s) values(?, ?, ?)",
+        final String INSERT = String.format(StoreNamespace.INSERT,
                 StoreNamespace.TABLE_NAME,
                 StoreNamespace.TENANT_ID_COLUMN_NAME,
                 StoreNamespace.NAME_COLUMN_NAME,

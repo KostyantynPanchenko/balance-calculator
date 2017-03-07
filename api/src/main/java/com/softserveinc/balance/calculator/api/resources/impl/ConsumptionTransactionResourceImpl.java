@@ -8,11 +8,12 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.softserveinc.balance.calculator.api.exception.ErrorMessage;
 import com.softserveinc.balance.calculator.api.resources.ConsumptionTransactionResource;
 import com.softserveinc.balance.calculator.dto.ConsumptionTransactionDTO;
 import com.softserveinc.balance.calculator.service.ConsumptionTransactionService;
 import com.softserveinc.balance.calculator.service.exception.ServiceException;
+
+import io.dropwizard.jersey.errors.ErrorMessage;
 
 /**
  * Implementation of <code>ContributionTransactionResource</code> interface.

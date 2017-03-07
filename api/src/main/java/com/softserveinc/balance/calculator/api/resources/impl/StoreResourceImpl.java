@@ -9,13 +9,14 @@ import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.softserveinc.balance.calculator.api.exception.ErrorMessage;
 import com.softserveinc.balance.calculator.api.resources.StoreResource;
 import com.softserveinc.balance.calculator.dto.StoreDTO;
 import com.softserveinc.balance.calculator.service.StoreService;
 import com.softserveinc.balance.calculator.service.exception.DataIntegrityViolationServiceException;
 import com.softserveinc.balance.calculator.service.exception.EntityNotFoundServiceException;
 import com.softserveinc.balance.calculator.service.exception.ServiceException;
+
+import io.dropwizard.jersey.errors.ErrorMessage;
 
 /**
  * Implementation of the <code>StoreResource</code> interface.

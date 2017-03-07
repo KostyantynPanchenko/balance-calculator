@@ -35,7 +35,7 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
 
     @Override
     public Store getStoreById(final Long id) throws RepositoryException {
-        final String GET = String.format("select %s, %s, %s, %s from %s where %s = ?", 
+        final String GET = String.format(StoreNamespace.SELECT, 
                 StoreNamespace.ID_COLUMN_NAME,
                 StoreNamespace.TENANT_ID_COLUMN_NAME,
                 StoreNamespace.NAME_COLUMN_NAME,
@@ -67,7 +67,7 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
 
     @Override
     public int update(Store store) throws RepositoryException {
-        final String UPDATE = String.format("update %s set %s = ?, %s = ?, %s = ? where %s = ?",
+        final String UPDATE = String.format(StoreNamespace.UPDATE,
                 StoreNamespace.TABLE_NAME,
                 StoreNamespace.TENANT_ID_COLUMN_NAME,
                 StoreNamespace.NAME_COLUMN_NAME,
@@ -86,7 +86,7 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
 
     @Override
     public int deleteById(Long id) throws RepositoryException {
-        final String DELETE  = String.format("delete from %s where %s = ?", 
+        final String DELETE  = String.format(StoreNamespace.DELETE, 
                 StoreNamespace.TABLE_NAME,
                 StoreNamespace.ID_COLUMN_NAME);
         try {

@@ -7,13 +7,14 @@ import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.softserveinc.balance.calculator.api.exception.ErrorMessage;
 import com.softserveinc.balance.calculator.api.resources.RegisterResource;
 import com.softserveinc.balance.calculator.dto.RegisterDTO;
 import com.softserveinc.balance.calculator.service.RegisterService;
 import com.softserveinc.balance.calculator.service.exception.DataIntegrityViolationServiceException;
 import com.softserveinc.balance.calculator.service.exception.EntityNotFoundServiceException;
 import com.softserveinc.balance.calculator.service.exception.ServiceException;
+
+import io.dropwizard.jersey.errors.ErrorMessage;
 
 public class RegisterResourceImpl implements RegisterResource {
 
@@ -32,7 +33,7 @@ public class RegisterResourceImpl implements RegisterResource {
             register = registerService.getRegisterById(storeId, registerId);
         } catch (EntityNotFoundServiceException notFound) {
             LOGGER.warn(notFound.getMessage(), notFound);
-            return Response.status(Status.NOT_FOUND).entity(new ErrorMessage(404, buildMessage(registerId, storeId))).build();
+            return Response.status(Status.NOT_FOUND).entity(new io.dropwizard.jersey.errors.ErrorMessage(404, buildMessage(registerId, storeId))).build();
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(500, e.getMessage())).build();
