@@ -1,6 +1,7 @@
 package com.softserveinc.balance.calculator.api.resources;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -39,8 +40,8 @@ public interface StoreResource {
      *              of <code>Store</code> entity
      */
     @GET
-    @Path("/{store-id}")
-    Response getStoreById(@PathParam("store-id") Long id);
+    @Path("/{store_id}")
+    Response getStoreById(@PathParam("store_id") Long id);
     
     /**
      * Creates a new <code>Store</code> entity with fields values 
@@ -56,7 +57,7 @@ public interface StoreResource {
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    Response save(@Valid StoreDTO storeDto, @Context UriInfo uriInfo);
+    Response save(@Valid @NotNull StoreDTO storeDto, @Context UriInfo uriInfo);
     
     /**
      * Updates <code>Store</code> entity with values provided in request payload.
@@ -69,9 +70,9 @@ public interface StoreResource {
      *                  entity and response status code
      */
     @PUT
-    @Path("/{store-id}")
+    @Path("/{store_id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    Response update(StoreDTO storeDto, @PathParam("store-id") Long id);
+    Response update(@Valid @NotNull StoreDTO storeDto, @PathParam("store_id") Long id);
     
     
     /**
@@ -82,7 +83,7 @@ public interface StoreResource {
      *                  response status code
      */
     @DELETE
-    @Path("/{store-id}")
-    Response delete(@PathParam("store-id") Long id);
+    @Path("/{store_id}")
+    Response delete(@PathParam("store_id") Long id);
     
 }

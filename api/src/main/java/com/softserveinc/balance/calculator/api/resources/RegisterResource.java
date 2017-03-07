@@ -25,8 +25,8 @@ import com.softserveinc.balance.calculator.dto.RegisterDTO;
  * @version 1.0
  * @since 03/05/2017
  */
-@Path("/stores/{store-id}/register")
 @Produces(MediaType.APPLICATION_JSON)
+@Path("/stores/{store_id}/register")
 public interface RegisterResource {
 
     /**
@@ -39,8 +39,8 @@ public interface RegisterResource {
      *                      code and representation of <code>Register</code> entity
      */
     @GET
-    @Path("/{register-id}")
-    Response getRegisterById(@PathParam("store-id") Long storeId, @PathParam("register-id") Long registerId);
+    @Path("/{register_id}")
+    Response getRegisterById(@PathParam("store_id") Long storeId, @PathParam("register_id") Long registerId);
 
     /**
      * Creates a new <code>Register</code> entity with fields values specified
@@ -58,7 +58,7 @@ public interface RegisterResource {
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    Response save(RegisterDTO registerDto, @PathParam("store-id") Long storeId, @Context UriInfo uriInfo);
+    Response save(RegisterDTO registerDto, @PathParam("store_id") Long storeId, @Context UriInfo uriInfo);
 
     /**
      * Updates <code>Register</code> entity with values provided in request
@@ -73,9 +73,9 @@ public interface RegisterResource {
      *                      updated <code>Store</code> entity and response status code
      */
     @PUT
-    @Path("/{register-id}")
+    @Path("/{register_id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    Response update(RegisterDTO registerDto, @PathParam("store-id") Long storeId, @PathParam("register-id") Long registerId);
+    Response update(RegisterDTO registerDto, @PathParam("store_id") Long storeId, @PathParam("register_id") Long registerId);
 
     /**
      * Deletes <code>Register</code> entity with specified id if it belongs to
@@ -87,7 +87,7 @@ public interface RegisterResource {
      * @return              <code>Response</code> object containing response status code
      */
     @DELETE
-    @Path("/{register-id}")
-    Response delete(@PathParam("store-id") Long storeId, @PathParam("register-id") Long registerId);
+    @Path("/{register_id}")
+    Response delete(@PathParam("store_id") Long storeId, @PathParam("register_id") Long registerId);
 
 }

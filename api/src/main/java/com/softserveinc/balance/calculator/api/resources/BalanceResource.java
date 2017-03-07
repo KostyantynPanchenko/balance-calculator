@@ -7,7 +7,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/stores/{store-id}/register/{register-id}/balance")
+@Path("/stores/{store_id}/register/{register_id}/balance")
 @Produces(MediaType.APPLICATION_JSON)
 public interface BalanceResource {
 

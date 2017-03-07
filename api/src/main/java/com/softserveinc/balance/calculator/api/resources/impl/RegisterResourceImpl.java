@@ -59,13 +59,14 @@ public class RegisterResourceImpl implements RegisterResource {
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(500, e.getMessage())).build();
         }
         registerDto.setId(key);
+        LOGGER.info(String.format("Successfully created new Register with id=%d for store No%d", key, storeId));
         return Response.status(Status.CREATED).entity(registerDto).build();
 
     }
 
     @Override
     public Response update(RegisterDTO registerDto, Long storeId, Long registerId) {
-        LOGGER.info(String.format("Updating Register with id=%d for store No%d", registerId, storeId));
+        LOGGER.info(String.format("Updating Register with id=%d for store No%d.", registerId, storeId));
         registerDto.setStoreId(storeId);
         registerDto.setId(registerId);
         try {
@@ -87,7 +88,7 @@ public class RegisterResourceImpl implements RegisterResource {
         LOGGER.info(String.format("Deleting Register with id=%d for store No%d", registerId, storeId));
         try {
             if (registerService.delete(storeId, registerId) != 1) {
-                String message = "Could not delete entity with id=" + registerId;
+                String message = String.format("Could not delete entity with id=%d.", registerId);
                 LOGGER.error(message);
                 return Response.status(Status.BAD_REQUEST)
                         .entity(new ErrorMessage(400, message + " Check if it exists."))
@@ -100,6 +101,7 @@ public class RegisterResourceImpl implements RegisterResource {
             LOGGER.error(e.getMessage(), e);
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(500, e.getMessage())).build();
         }
+        LOGGER.info(String.format("Register with id=%d for store No%d was successfully deleted.", registerId, storeId));
         return Response.noContent().build();
     }
     

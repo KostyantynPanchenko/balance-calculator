@@ -1,13 +1,15 @@
 package com.softserveinc.balance.calculator.api;
 
 import javax.sql.DataSource;
+import javax.ws.rs.container.ContainerRequestFilter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-import com.softserveinc.balance.calculator.api.filters.AuthenticationFilter;
+import com.softserveinc.balance.calculator.api.filters.AuthorizationFilter;
 import com.softserveinc.balance.calculator.api.health.BalanceCalculatorDatabaseHealthCheck;
 import com.softserveinc.balance.calculator.api.resources.BalanceResource;
 import com.softserveinc.balance.calculator.api.resources.ConsumptionTransactionResource;
@@ -32,6 +34,8 @@ import io.dropwizard.setup.Environment;
 public class BalanceCalculatorApplication extends Application<BalanceCalculatorConfig> {
     
     public final static Logger LOGGER = LoggerFactory.getLogger(BalanceCalculatorApplication.class);
+    private final String XML_CONFIG_LOCATION = "classpath:BalanceCalculator-context.xml";
+    private final String HEALTHCHECK_NAME = "BalanceCalculator App";
     
     public static void main(String[] args) throws Exception {
         LOGGER.info("Starting application.");
@@ -40,7 +44,9 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
     
     @Override
     public void run(BalanceCalculatorConfig config, Environment environment) throws Exception {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("BalanceCalculator-context.xml");
+
+        @SuppressWarnings("resource")
+        ApplicationContext context = new ClassPathXmlApplicationContext(XML_CONFIG_LOCATION);
         
         final StoreResource storeResource = context.getBean(StoreResourceImpl.class);
         final RegisterResource registerResource = context.getBean(RegisterResourceImpl.class);
@@ -48,18 +54,17 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
         final ContributionTransactionResource contributionResource = context.getBean(ContributionTransactionResourceImpl.class);
         final DataSource dataSource = (DataSource) context.getBean(DriverManagerDataSource.class);
         final BalanceResource balanceResource = context.getBean(BalanceResourceImpl.class);
+        final ContainerRequestFilter filter = context.getBean(AuthorizationFilter.class);
         
         environment.jersey().register(storeResource);
         environment.jersey().register(registerResource);
         environment.jersey().register(consumptionResource);
         environment.jersey().register(contributionResource);
         environment.jersey().register(balanceResource);
-
+        environment.jersey().register(filter);
+        
         final BalanceCalculatorDatabaseHealthCheck healthCheck = new BalanceCalculatorDatabaseHealthCheck(dataSource);
-        environment.healthChecks().register("BalanceCalculator App", healthCheck);
-
-        environment.jersey().register(new AuthenticationFilter());
-        context.close();
+        environment.healthChecks().register(HEALTHCHECK_NAME, healthCheck);
     }
 
     @Override

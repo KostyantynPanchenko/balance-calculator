@@ -81,6 +81,8 @@
       <property name="contexts" value="test, production" />
     </bean>
 
+    <bean id="authorizationFilter" class="com.softserveinc.balance.calculator.api.filters.AuthorizationFilter"/>
+    
     <context:property-placeholder location="jdbc.properties" />
 
 </beans>

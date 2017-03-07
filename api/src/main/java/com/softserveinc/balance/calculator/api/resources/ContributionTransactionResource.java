@@ -18,7 +18,7 @@ import com.softserveinc.balance.calculator.dto.ContributionTransactionDTO;
  * @version 1.0
  * @since 06/03/2017
  */
-@Path("/stores/{store-id}/register/{register-id}")
+@Path("/stores/{store_id}/register/{register_id}")
 @Produces(MediaType.APPLICATION_JSON)
 public interface ContributionTransactionResource {
     

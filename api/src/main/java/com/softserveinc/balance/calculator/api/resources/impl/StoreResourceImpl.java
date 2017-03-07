@@ -36,7 +36,7 @@ public class StoreResourceImpl implements StoreResource {
 
     @Override
     public Response getStoreById(Long id) {
-        LOGGER.info(String.format("Retrieving store No%d.", id));
+        LOGGER.info(String.format("Retrieving store with id=%d.", id));
         try {
             return Response.status(Status.OK).entity(storeService.getStoreById(id)).build();
         } catch (EntityNotFoundServiceException notFound) {
@@ -49,12 +49,12 @@ public class StoreResourceImpl implements StoreResource {
     }
     
     private String buildMessage(Long registerId) {
-        return String.format("Register entity with id=%d not found.", registerId);
+        return String.format("Store with id=%d not found.", registerId);
     }
 
     @Override
     public Response save(StoreDTO storeDto, UriInfo uriInfo) {
-        LOGGER.info("Creating new store.");
+        LOGGER.info("Creating new store record.");
         Long key;
         try {
             key = storeService.save(storeDto);
@@ -66,6 +66,7 @@ public class StoreResourceImpl implements StoreResource {
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(500, e.getMessage())).build();
         }
         storeDto.setId(key);
+        LOGGER.info(String.format("Successfully created new store with id=%d.", key));
         return Response.created(buildUri(uriInfo, key)).status(Status.CREATED).entity(storeDto).build();
     }
 
@@ -75,7 +76,7 @@ public class StoreResourceImpl implements StoreResource {
 
     @Override
     public Response update(StoreDTO storeDto, Long id) {
-        LOGGER.info(String.format("Updating Store No%d.", id));
+        LOGGER.info(String.format("Updating store with id=%d.", id));
         try {
             storeDto.setId(id);
             storeService.update(storeDto);
@@ -86,18 +87,19 @@ public class StoreResourceImpl implements StoreResource {
             LOGGER.error(e.getMessage(), e);
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(500, e.getMessage())).build();
         }
+        LOGGER.info(String.format("Successfully updated store with id=%d.", id));
         return Response.ok(storeDto).build();
     }
 
     @Override
     public Response delete(Long id) {
-        LOGGER.info(String.format("Deleting store No%d.", id));
+        LOGGER.info(String.format("Deleting store with id=%d.", id));
         try {
             if (storeService.delete(id) != 1) {
-                String message = "Could not delete entity with id=" + id;
+                String message = String.format("Could not delete store with id=%d", id);
                 LOGGER.error(message);
                 return Response.status(Status.BAD_REQUEST)
-                        .entity(new ErrorMessage(400, message + " Check if it exists."))
+                        .entity(new ErrorMessage(400, message))
                         .build();
             }
         } catch (DataIntegrityViolationServiceException violation) {
@@ -107,6 +109,7 @@ public class StoreResourceImpl implements StoreResource {
             LOGGER.error(e.getMessage(), e);
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(500, e.getMessage())).build();
         }
+        LOGGER.info(String.format("Succesfully deleted store with id=%d.", id));
         return Response.noContent().build();
     }
 }
