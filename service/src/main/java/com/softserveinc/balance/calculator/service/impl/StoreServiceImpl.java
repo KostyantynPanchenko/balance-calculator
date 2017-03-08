@@ -19,7 +19,7 @@ public class StoreServiceImpl implements StoreService {
         this.storeDao = storeDao;
     }
 
-    public StoreDTO getStoreById(Long id) throws ServiceException {
+    public StoreDTO getStoreById(Long id) throws EntityNotFoundServiceException, ServiceException {
         try {
             return new StoreDTO(storeDao.getStoreById(id));
         } catch (DomainEntityNotFoundException empty) {
@@ -29,7 +29,7 @@ public class StoreServiceImpl implements StoreService {
         }
     }
     
-    public Long save(StoreDTO storeDto) throws ServiceException {
+    public Long save(StoreDTO storeDto) throws DataIntegrityViolationServiceException, ServiceException {
         try {
             return storeDao.save(toStore(storeDto));
         } catch (DataIntegrityViolationRepositoryException violation) {
@@ -39,7 +39,7 @@ public class StoreServiceImpl implements StoreService {
         }
     }
     
-    public int update(StoreDTO storeDto) throws ServiceException {
+    public int update(StoreDTO storeDto) throws DataIntegrityViolationServiceException, ServiceException {
         try {
             return storeDao.update(toStore(storeDto));
         } catch (DataIntegrityViolationRepositoryException violation) {
@@ -49,7 +49,7 @@ public class StoreServiceImpl implements StoreService {
         }
     }
 
-    public int delete(Long id) throws ServiceException {
+    public int delete(Long id) throws DataIntegrityViolationServiceException, ServiceException {
         try {
             return storeDao.deleteById(id);
         } catch (DataIntegrityViolationRepositoryException violation) {

@@ -17,6 +17,7 @@ import com.softserveinc.balance.calculator.repository.impl.namespaces.RegisterNa
  */
 public class RegisterRowMapper implements RowMapper<Register> {
 
+    @Override
     public Register mapRow(ResultSet rs, int rowNum) throws SQLException {
         return new Register.Builder().setId(rs.getLong(RegisterNamespace.ID_COLUMN_NAME))
                                     .setStoreId(rs.getLong(RegisterNamespace.STORE_ID_COLUMN_NAME))

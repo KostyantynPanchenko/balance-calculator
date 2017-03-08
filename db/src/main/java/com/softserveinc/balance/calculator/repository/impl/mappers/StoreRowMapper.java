@@ -17,6 +17,7 @@ import com.softserveinc.balance.calculator.repository.impl.namespaces.StoreNames
  */
 public class StoreRowMapper implements RowMapper<Store> {
 
+    @Override
     public Store mapRow(ResultSet rs, int numRows) throws SQLException {
         Store store = new Store();
         store.setId(rs.getLong(StoreNamespace.ID_COLUMN_NAME));

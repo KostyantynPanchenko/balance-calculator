@@ -1,6 +1,6 @@
 package com.softserveinc.balance.calculator.domain;
 
-public class Register {    
+public class Register {
     private Long id;
     private Long storeId;
     private String name;
@@ -113,6 +113,5 @@ public class Register {
     public String toString() {
         return "Register [id=" + id + ", storeId=" + storeId + ", name=" + name + ", timezone=" + timezone + "]";
     }
-    
     
 }

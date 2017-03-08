@@ -1,5 +1,10 @@
 package com.softserveinc.balance.calculator.repository.impl.namespaces;
 
+/**
+ * <code>BAlance</code> domain class fields to database table column names mapper.
+ * 
+ * @author Kostyantyn Panchenko
+ */
 public class BalanceNamespace {
 
     public final static String TABLE_NAME = "balance";

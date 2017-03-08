@@ -17,6 +17,7 @@ import com.softserveinc.balance.calculator.repository.impl.namespaces.BalanceNam
  */
 public class BalanceRowMapper implements RowMapper<Balance> {
 
+    @Override
     public Balance mapRow(ResultSet rs, int numRows) throws SQLException {
         Balance balance = new Balance();
         balance.setId(rs.getLong(BalanceNamespace.ID_COLUMN_NAME));

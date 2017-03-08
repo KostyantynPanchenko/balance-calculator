@@ -100,5 +100,12 @@ public class ContributionTransaction extends Transaction {
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "ContributionTransaction [id=" + id + ", registerId=" + registerId + "orderGrantedValue=" 
+                + orderGrantedValue + ", createdOn=" + createdOn + ", createdBy=" + createdBy + "]";
+    }
+    
     
 }

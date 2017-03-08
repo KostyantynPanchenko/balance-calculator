@@ -23,15 +23,13 @@ import com.softserveinc.balance.calculator.repository.impl.namespaces.StoreNames
  * @since 05/03/2017
  */
 public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
-
-    private final static StoreRowMapper MAPPER = new StoreRowMapper();
     
     public StoreDAOImpl(JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate);
     }
 
     @Override
-    public Store getStoreById(final Long id) throws RepositoryException {
+    public Store getStoreById(final Long id) throws DomainEntityNotFoundException, RepositoryException {
         final String GET = String.format(StoreNamespace.SELECT, 
                 StoreNamespace.ID_COLUMN_NAME,
                 StoreNamespace.TENANT_ID_COLUMN_NAME,
@@ -40,7 +38,7 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
                 StoreNamespace.TABLE_NAME,
                 StoreNamespace.ID_COLUMN_NAME);
         try {
-            return getById(GET, new Object[] {id}, MAPPER);
+            return getById(GET, new Object[] {id}, new StoreRowMapper());
         } catch (EmptyResultDataAccessException empty) {
             throw new DomainEntityNotFoundException(empty);
         } catch (DataAccessException e) {
@@ -49,7 +47,7 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
     }
     
     @Override
-    public Long save(Store store) throws RepositoryException {
+    public Long save(Store store) throws DataIntegrityViolationRepositoryException, RepositoryException {
         try {
             return create(new StorePreparedStatementCreator(store));
         } catch (DataIntegrityViolationException violation) {
@@ -60,7 +58,7 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
     }
 
     @Override
-    public int update(Store store) throws RepositoryException {
+    public int update(Store store) throws DataIntegrityViolationRepositoryException, RepositoryException {
         final String UPDATE = String.format(StoreNamespace.UPDATE,
                 StoreNamespace.TABLE_NAME,
                 StoreNamespace.TENANT_ID_COLUMN_NAME,
@@ -77,7 +75,7 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
     }
 
     @Override
-    public int deleteById(Long id) throws RepositoryException {
+    public int deleteById(Long id) throws DataIntegrityViolationRepositoryException, RepositoryException {
         final String DELETE  = String.format(StoreNamespace.DELETE, 
                 StoreNamespace.TABLE_NAME,
                 StoreNamespace.ID_COLUMN_NAME);

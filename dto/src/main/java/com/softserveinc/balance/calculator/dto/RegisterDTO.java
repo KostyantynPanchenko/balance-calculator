@@ -53,4 +53,10 @@ public class RegisterDTO {
     public void setTimezome(String timezome) {
         this.timezone = timezome;
     }
+
+    @Override
+    public String toString() {
+        return "RegisterDTO [id=" + id + ", storeId=" + storeId + ", name=" + name + ", timezone=" + timezone + "]";
+    }
+    
 }

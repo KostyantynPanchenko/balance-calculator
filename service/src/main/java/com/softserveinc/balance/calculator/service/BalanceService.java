@@ -22,8 +22,8 @@ public interface BalanceService {
      * 
      * @param registerId id of <code>Register</code> for which balance should be retrieved
      * @return <code>DalanceDTO</code> object
-     * @throws ServiceException 
-     * @throws EntityNotFoundServiceException 
+     * @throws ServiceException when could not execute SQL query
+     * @throws EntityNotFoundServiceException when balance was not found
      */
     BalanceDTO getCurrentBalance(Long registerId) throws EntityNotFoundServiceException, ServiceException;
 
@@ -33,8 +33,8 @@ public interface BalanceService {
      * @param registerId id of <code>Register</code> for which balance should be retrieved
      * @param date date for which balance should be retrieved
      * @return <code>BalanceDTO</code> object
-     * @throws ServiceException 
-     * @throws EntityNotFoundServiceException 
+     * @throws ServiceException when could not execute SQL query
+     * @throws EntityNotFoundServiceException when balance was not found
      */
     BalanceDTO getBalanceForDate(Long registerId, LocalDate date) throws EntityNotFoundServiceException, ServiceException;
 

@@ -1,6 +1,8 @@
 package com.softserveinc.balance.calculator.service;
 
 import com.softserveinc.balance.calculator.dto.RegisterDTO;
+import com.softserveinc.balance.calculator.service.exception.DataIntegrityViolationServiceException;
+import com.softserveinc.balance.calculator.service.exception.EntityNotFoundServiceException;
 import com.softserveinc.balance.calculator.service.exception.ServiceException;
 
 /**
@@ -26,10 +28,11 @@ public interface RegisterService {
      * @param registerId        id of requested <code>Register</code> entity
      * @return                  <code>RegisterDTO</code> object representing 
      *                          <code>Register</code> object
-     * @throws ServiceException if <code>Register</code> entity with 
-     *                          specified id was not found
+     * @throws EntityNotFoundServiceException when <code>Register</code> entity 
+     *                          with specified id was not found
+     * @throws ServiceException when could not execute SQL query
      */
-    RegisterDTO getRegisterById(Long storeId, Long registerId) throws ServiceException;
+    RegisterDTO getRegisterById(Long storeId, Long registerId) throws EntityNotFoundServiceException, ServiceException;
 
     /**
      * Processes request to create <code>Register</code> entity with 
@@ -43,9 +46,11 @@ public interface RegisterService {
      *                          info for creating appropriate <code>Register</code>
      *                          entity
      * @return                  auto generated primary key of created entity
-     * @throws ServiceException if could not save given object
+     * @throws DataIntegrityViolationServiceException  when an attempt 
+     * to insert or update data results in violation of an integrity constraint
+     * @throws ServiceException when could not execute SQL query
      */
-    Long save(RegisterDTO registerDto) throws ServiceException;
+    Long save(RegisterDTO registerDto) throws DataIntegrityViolationServiceException, ServiceException;
 
     /**
      * Processes request to update <code>Register</code> entity with
@@ -59,9 +64,11 @@ public interface RegisterService {
      *                          info for updating appropriate <code>Register</code>
      *                          entity
      * @return                  number of modified rows
-     * @throws ServiceException if could not execute update
+     * @throws DataIntegrityViolationServiceException  when an attempt 
+     * to insert or update data results in violation of an integrity constraint
+     * @throws ServiceException when could not execute SQL query
      */
-    int update(RegisterDTO registerDto) throws ServiceException;
+    int update(RegisterDTO registerDto) throws DataIntegrityViolationServiceException, ServiceException;
 
     /**
      * 
@@ -70,7 +77,9 @@ public interface RegisterService {
      *                          relates to
      * @param registerId        id of <code>Register</code> entity to be deleted
      * @return                  number of modified rows
-     * @throws ServiceException if could not execute delete
+     * @throws DataIntegrityViolationServiceException  when an attempt 
+     * to insert or update data results in violation of an integrity constraint
+     * @throws ServiceException when could not execute SQL query
      */
-    int delete(Long storerId, Long registerId) throws ServiceException;
+    int delete(Long storerId, Long registerId) throws DataIntegrityViolationServiceException, ServiceException;
 }

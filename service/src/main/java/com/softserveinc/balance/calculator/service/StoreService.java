@@ -1,6 +1,8 @@
 package com.softserveinc.balance.calculator.service;
 
 import com.softserveinc.balance.calculator.dto.StoreDTO;
+import com.softserveinc.balance.calculator.service.exception.DataIntegrityViolationServiceException;
+import com.softserveinc.balance.calculator.service.exception.EntityNotFoundServiceException;
 import com.softserveinc.balance.calculator.service.exception.ServiceException;
 
 /**
@@ -24,8 +26,9 @@ public interface StoreService {
      * @param id                id of requested <code>Store</code> entity
      * @return                  <code>StoreDTO</code> object representing 
      *                          <code>Store</code> object
-     * @throws ServiceException if <code>Store</code> entity with 
-     *              specified id was not found
+     * @throws EntityNotFoundServiceException when <code>Store</code> entity 
+     *                          with specified id was not found
+     * @throws ServiceException when could not execute SQL query
      */
     StoreDTO getStoreById(Long id) throws ServiceException;
 
@@ -40,9 +43,11 @@ public interface StoreService {
      * @param storeDto  <code>StoreDTO</code> object extracted from 
      *                  request
      * @return          auto generated primary key of created entity
-     * @throws ServiceException if could not save given object
+     * @throws DataIntegrityViolationServiceException  when an attempt 
+     * to insert or update data results in violation of an integrity constraint
+     * @throws ServiceException when could not execute SQL query
      */
-    Long save(StoreDTO storeDto) throws ServiceException;
+    Long save(StoreDTO storeDto) throws DataIntegrityViolationServiceException, ServiceException;
 
     /**
      * Processes request to update <code>Store</code> entity with 
@@ -55,17 +60,21 @@ public interface StoreService {
      * @param storeDto  <code>StoreDTO</code> object extracted from 
      *                  request
      * @return          number of modified rows
-     * @throws ServiceException if could not execute update
+     * @throws DataIntegrityViolationServiceException  when an attempt 
+     * to insert or update data results in violation of an integrity constraint
+     * @throws ServiceException when could not execute SQL query
      */
-    int update(StoreDTO storeDto) throws ServiceException;
+    int update(StoreDTO storeDto) throws DataIntegrityViolationServiceException, ServiceException;
 
     /**
      * Processes request to delete <code>Store</code> entity with given id.
      * 
      * @param id        id of <code>Store</code> entity to be deleted
      * @return          number of modified rows
-     * @throws ServiceException if could not execute delete
+     * @throws DataIntegrityViolationServiceException  when an attempt 
+     * to insert or update data results in violation of an integrity constraint
+     * @throws ServiceException when could not execute SQL query
      */
-    int delete(Long id) throws ServiceException;
+    int delete(Long id) throws DataIntegrityViolationServiceException, ServiceException;
     
 }

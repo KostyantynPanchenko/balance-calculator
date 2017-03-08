@@ -19,7 +19,7 @@ public class RegisterServiceImpl implements RegisterService {
         this.registerDao = registerDao;
     }
     
-    public RegisterDTO getRegisterById(Long storeId, Long registerId) throws ServiceException {
+    public RegisterDTO getRegisterById(Long storeId, Long registerId) throws EntityNotFoundServiceException, ServiceException {
         try {
             return new RegisterDTO(registerDao.getRegisterById(storeId, registerId));
         } catch (DomainEntityNotFoundException notFound) {
@@ -29,7 +29,7 @@ public class RegisterServiceImpl implements RegisterService {
         }
     }
 
-    public Long save(RegisterDTO registerDto) throws ServiceException {
+    public Long save(RegisterDTO registerDto) throws DataIntegrityViolationServiceException, ServiceException {
         try {
             return registerDao.insert(toRegister(registerDto));
         } catch (DataIntegrityViolationRepositoryException violation) {
@@ -39,7 +39,7 @@ public class RegisterServiceImpl implements RegisterService {
         }
     }
 
-    public int update(RegisterDTO registerDto) throws ServiceException {
+    public int update(RegisterDTO registerDto) throws DataIntegrityViolationServiceException, ServiceException {
         try {
             return registerDao.update(toRegister(registerDto));
         } catch (DataIntegrityViolationRepositoryException violation) {
@@ -49,7 +49,7 @@ public class RegisterServiceImpl implements RegisterService {
         }
     }
 
-    public int delete(Long storeId, Long registerId) throws ServiceException {
+    public int delete(Long storeId, Long registerId) throws DataIntegrityViolationServiceException, ServiceException {
         try {
             return registerDao.delete(storeId, registerId);
         } catch (RepositoryException e) {

@@ -100,4 +100,12 @@ public class ConsumptionTransaction extends Transaction {
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "ConsumptionTransaction [id=" + id + ", registerId=" + registerId + "consumedValue=" + consumedValue
+                + ", createdOn=" + createdOn + ", createdBy=" + createdBy + "]";
+    }
+    
+    
 }

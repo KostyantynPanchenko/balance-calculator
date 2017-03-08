@@ -23,7 +23,7 @@ import com.softserveinc.balance.calculator.dto.ConsumptionTransactionDTO;
 public interface ConsumptionTransactionResource {
 
     /**
-     * This is a create endpoint for batch processing received <code>ConsumptionTransaction</code> entities.
+     * TPerforms batch processing of received <code>ConsumptionTransaction</code> entities.
      * 
      * @param consumptions a list of <code>ConsumptionTransactionDTO</code> entities
      * @return <code>Response</code> object

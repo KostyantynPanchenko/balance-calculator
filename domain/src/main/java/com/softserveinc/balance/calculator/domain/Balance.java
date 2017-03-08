@@ -151,5 +151,15 @@ public class Balance {
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "Balance [id=" + id + ", registerId=" + registerId + ", createdOn=" + createdOn + ", createdBy="
+                + createdBy + ", totalAllocatedContributionAmount=" + totalAllocatedContributionAmount
+                + ", totalAllocatedConsumptionAmount=" + totalAllocatedConsumptionAmount
+                + ", totalUnallocatedContributionAmount=" + totalUnallocatedContributionAmount
+                + ", totalUnallocatedConsumptionAmount=" + totalUnallocatedConsumptionAmount + "]";
+    }
+    
     
 }

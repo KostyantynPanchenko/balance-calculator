@@ -1,7 +1,8 @@
 package com.softserveinc.balance.calculator.repository.impl.namespaces;
 
 /**
- * Consumption transaction and contribution transaction tables columns names definitions.
+ * <code>ConsumptionTransaction</code> and <code>ContributionTransaction</code>
+ * tables columns names definitions.
  * 
  * @author Kostyantyn Panchenko
  * @version 1.0

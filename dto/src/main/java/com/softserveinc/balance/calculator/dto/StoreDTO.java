@@ -57,4 +57,11 @@ public class StoreDTO {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "StoreDTO [id=" + id + ", tenantId=" + tenantId + ", name=" + name + ", description=" + description + "]";
+    }
+    
+    
 }

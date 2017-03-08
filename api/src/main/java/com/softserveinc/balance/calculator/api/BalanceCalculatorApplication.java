@@ -34,11 +34,12 @@ import io.dropwizard.setup.Environment;
 public class BalanceCalculatorApplication extends Application<BalanceCalculatorConfig> {
     
     public final static Logger LOGGER = LoggerFactory.getLogger(BalanceCalculatorApplication.class);
+    private final static String STARTING = "Starting application...";
     private final String XML_CONFIG_LOCATION = "classpath:BalanceCalculator-context.xml";
-    private final String HEALTHCHECK_NAME = "BalanceCalculator App";
+    private final String HEALTH_CHECK_NAME = "BalanceCalculator App";
     
     public static void main(String[] args) throws Exception {
-        LOGGER.info("Starting application.");
+        LOGGER.info(STARTING);
         new BalanceCalculatorApplication().run(args);
     }
     
@@ -64,7 +65,7 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
         environment.jersey().register(filter);
         
         final BalanceCalculatorDatabaseHealthCheck healthCheck = new BalanceCalculatorDatabaseHealthCheck(dataSource);
-        environment.healthChecks().register(HEALTHCHECK_NAME, healthCheck);
+        environment.healthChecks().register(HEALTH_CHECK_NAME, healthCheck);
     }
 
     @Override

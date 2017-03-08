@@ -109,4 +109,10 @@ public class Store {
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "Store [id=" + id + ", tenantId=" + tenantId + ", name=" + name + ", description=" + description + "]";
+    }
+    
 }

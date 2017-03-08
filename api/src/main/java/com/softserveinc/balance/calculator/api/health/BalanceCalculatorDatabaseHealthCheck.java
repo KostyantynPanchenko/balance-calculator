@@ -5,7 +5,7 @@ import javax.sql.DataSource;
 import com.codahale.metrics.health.HealthCheck;
 
 /**
- * Healthcheck for database connection.
+ * Health check for database connection.
  * 
  * @author Kostyantyn Panchenko
  * @version 1.0

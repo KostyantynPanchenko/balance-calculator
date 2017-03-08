@@ -203,5 +203,15 @@ public class BalanceDTO {
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "BalanceDTO [id=" + id + ", registerId=" + registerId + ", createdOn=" + createdOn + ", createdBy="
+                + createdBy + ", totalAllocatedContributionAmount=" + totalAllocatedContributionAmount
+                + ", totalAllocatedConsumptionAmount=" + totalAllocatedConsumptionAmount
+                + ", totalUnallocatedContributionAmount=" + totalUnallocatedContributionAmount
+                + ", totalUnallocatedConsumptionAmount=" + totalUnallocatedConsumptionAmount + "]";
+    }
+    
     
 }

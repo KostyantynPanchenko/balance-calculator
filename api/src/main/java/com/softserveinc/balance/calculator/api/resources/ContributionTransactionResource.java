@@ -23,7 +23,7 @@ import com.softserveinc.balance.calculator.dto.ContributionTransactionDTO;
 public interface ContributionTransactionResource {
     
     /**
-     * This is a create endpoint for batch processing received <code>ContributionTransaction</code> entities.
+     * Performs batch processing of received <code>ContributionTransaction</code> entities.
      * 
      * @param contributions a list of <code>ContributionTransactionDTO</code> entities
      * @return <code>Response</code> object

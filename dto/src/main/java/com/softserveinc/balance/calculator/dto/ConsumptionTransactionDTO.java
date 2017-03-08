@@ -68,5 +68,11 @@ public class ConsumptionTransactionDTO extends AbstractTransactionDTO {
     public void setConsumedValue(BigDecimal consumedValue) {
         this.consumedValue = consumedValue;
     }
+
+    @Override
+    public String toString() {
+        return "ConsumptionTransactionDTO [id=" + id + ", registerId=" + registerId + "consumedValue="
+                + consumedValue + ", createdOn=" + createdOn + ", createdBy=" + createdBy + "]";
+    }
     
 }

@@ -68,4 +68,12 @@ public class ContributionTransactionDTO extends AbstractTransactionDTO {
     public void setOrderGrantedValue(BigDecimal orderGrantedValue) {
         this.orderGrantedValue = orderGrantedValue;
     }
+
+    @Override
+    public String toString() {
+        return "ContributionTransactionDTO [id=" + id + ", registerId=" + registerId + "orderGrantedValue="
+                + orderGrantedValue + ", createdOn=" + createdOn + ", createdBy=" + createdBy + "]";
+    }
+    
+    
 }
