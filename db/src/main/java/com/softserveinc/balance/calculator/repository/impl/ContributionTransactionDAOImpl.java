@@ -25,7 +25,7 @@ public class ContributionTransactionDAOImpl implements ContributionTransactionDA
     private JdbcTemplate jdbcTemplate;
     
     protected ContributionTransactionDAOImpl(JdbcTemplate jdbcTemplate) {
-        INSERT = String.format("insert into %s(%s, %s, %s) values(?, ?, ?)", TransactionNamespace.CONTRIBUTION_TABLE_NAME,
+        INSERT = String.format(TransactionNamespace.CONTRIBUTION_BATCH, TransactionNamespace.CONTRIBUTION_TABLE_NAME,
                 TransactionNamespace.REGISTER_ID_COLUMN_NAME,
                 TransactionNamespace.ORDER_GRANTED_VALUE_COLUMN_NAME,
                 TransactionNamespace.CREATED_BY_COLUMN_NAME);
@@ -39,7 +39,7 @@ public class ContributionTransactionDAOImpl implements ContributionTransactionDA
         try {
             return jdbcTemplate.batchUpdate(INSERT, batch);
         } catch (DataAccessException e) {
-            throw new RepositoryException(e.getMessage());
+            throw new RepositoryException(e.getMessage(), e);
         }
     }
 

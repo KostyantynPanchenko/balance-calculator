@@ -64,13 +64,20 @@ public class StoreResourceImpl implements StoreResource {
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(409, violation.getMessage())).build();
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
-            return Response.status(Status.CONFLICT).entity(new ErrorMessage(500, e.getMessage())).build();
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(500, e.getMessage())).build();
         }
         storeDto.setId(key);
         LOGGER.info(String.format("Successfully created new store with id=%d.", key));
-        return Response.created(buildUri(uriInfo, key)).status(Status.CREATED).entity(storeDto).build();
+        return Response.created(buildUri(uriInfo, key)).entity(storeDto).build();
     }
 
+    /**
+     * Constructs URI to created resource.
+     * 
+     * @param uriInfo <code>UriInfo</code> object
+     * @param key auto generated key of newly created record
+     * @return created URI
+     */
     private URI buildUri(UriInfo uriInfo, Long key) {
         return uriInfo.getAbsolutePathBuilder().path(key.toString()).build();
     }
@@ -86,7 +93,7 @@ public class StoreResourceImpl implements StoreResource {
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(409, violation.getMessage())).build();
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
-            return Response.status(Status.CONFLICT).entity(new ErrorMessage(500, e.getMessage())).build();
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(500, e.getMessage())).build();
         }
         LOGGER.info(String.format("Successfully updated store with id=%d.", id));
         return Response.ok(storeDto).build();
@@ -96,21 +103,23 @@ public class StoreResourceImpl implements StoreResource {
     public Response delete(Long id) {
         LOGGER.info(String.format("Deleting store with id=%d.", id));
         try {
-            if (storeService.delete(id) != 1) {
+            if (!oneRowModified(id)) {
                 String message = String.format("Could not delete store with id=%d", id);
                 LOGGER.error(message);
-                return Response.status(Status.BAD_REQUEST)
-                        .entity(new ErrorMessage(400, message))
-                        .build();
+                return Response.status(Status.BAD_REQUEST).entity(new ErrorMessage(400, message)).build();
             }
         } catch (DataIntegrityViolationServiceException violation) {
             LOGGER.error(violation.getMessage(), violation);
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(409, violation.getMessage())).build();
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
-            return Response.status(Status.CONFLICT).entity(new ErrorMessage(500, e.getMessage())).build();
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(500, e.getMessage())).build();
         }
         LOGGER.info(String.format("Succesfully deleted store with id=%d.", id));
         return Response.noContent().build();
+    }
+
+    private boolean oneRowModified(Long id) throws ServiceException {
+        return storeService.delete(id) == 1;
     }
 }

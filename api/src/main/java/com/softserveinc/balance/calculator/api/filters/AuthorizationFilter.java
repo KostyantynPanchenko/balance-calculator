@@ -3,6 +3,7 @@ package com.softserveinc.balance.calculator.api.filters;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.HttpHeaders;
@@ -24,6 +25,14 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 
+/**
+ * Authorization filter. Checks if request contain JWT and tenant can access requested store.
+ * 
+ * @author Kostyantyn Panchenko
+ * @version 1.0
+ * @since 07/03/2017
+ *
+ */
 @Provider
 public class AuthorizationFilter implements ContainerRequestFilter {
 
@@ -44,24 +53,59 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        try {
-            Long jwtTenantId = getTenantIdFromJwt(getJwt(requestContext));
-            Long pathStoreId = getStoreIdFromPath(requestContext);
-            
+        if (!isStorePostRequest(requestContext)) {
             try {
-                if (!isAuthorized(getTenantId(pathStoreId), jwtTenantId)) {
-                    logAndAbort(requestContext, UNAUTHORIZED, new Object[] {pathStoreId, jwtTenantId});
+                Long pathStoreId = getStoreIdFromPath(requestContext);
+                Long jwtTenantId = getTenantIdFromJwt(getJwt(requestContext));
+                
+                try {
+                    if (!isAuthorized(getTenantId(pathStoreId), jwtTenantId)) {
+                        logAndAbort(requestContext, UNAUTHORIZED, new Object[] {pathStoreId, jwtTenantId});
+                    }
+                } catch (EntityNotFoundServiceException notFound) {
+                    logAndAbort(requestContext, NOT_FOUND, new Object[] {pathStoreId});
+                } catch (ServiceException e) {
+                    logAndAbort(requestContext, SERVER_ERROR, new Object[] {pathStoreId});
                 }
-            } catch (EntityNotFoundServiceException notFound) {
-                logAndAbort(requestContext, NOT_FOUND, new Object[] {pathStoreId});
-            } catch (ServiceException e) {
-                logAndAbort(requestContext, SERVER_ERROR, new Object[] {pathStoreId});
+            } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException 
+                    | UnsupportedEncodingException | IllegalArgumentException jwtEx) {
+                LOGGER.error(jwtEx.getMessage(), jwtEx);
+                requestContext.abortWith(Response.status(Status.BAD_REQUEST).entity(new ErrorMessage(404, jwtEx.getMessage())).build());
             }
-        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException 
-                | UnsupportedEncodingException | IllegalArgumentException jwtEx) {
-            LOGGER.error(jwtEx.getMessage(), jwtEx);
-            requestContext.abortWith(Response.status(Status.BAD_REQUEST).entity(new ErrorMessage(404, jwtEx.getMessage())).build());
         }
+    }
+    
+    /**
+     * Checks if current request is POST request to create new <code>Store</code>.
+     * 
+     * @param requestContext current <code>ContainerRequestContext</code>     * 
+     * @param segments list of current request path segments 
+     * @return true if current request is POST request to create new <code>Store</code>
+     */
+    private boolean isStorePostRequest(ContainerRequestContext requestContext) {
+        return requestContext.getMethod().equals(HttpMethod.POST) && requestContext.getUriInfo().getPathSegments().size() == 1;
+    }
+
+    /**
+     * Extracts store id from request URI.
+     * 
+     * @param requestContext current <code>ContainerRequestContext</code>
+     * @return <code>Long</code> value of store id or <code>null</code> if POST request
+     * to create new <code>Store</code>
+     */
+    private Long getStoreIdFromPath(ContainerRequestContext requestContext) {
+        return Long.valueOf(requestContext.getUriInfo().getPathSegments().get(STORE_ID_PATH_POSITION).toString());
+    }
+
+    /**
+     * Retrieves tenant id for specified store id.
+     * 
+     * @param pathStoreId store id extracted from request URI
+     * @return <code>Long</code> value of tenant id 
+     * @throws ServiceException if <code>Store</code> entity with specified id was not found
+     */
+    private Long getTenantId(Long pathStoreId) throws ServiceException {
+        return storeService.getStoreById(pathStoreId).getTenantId();
     }
 
     /**
@@ -73,27 +117,6 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     private String getJwt(ContainerRequestContext requestContext) {
         String header = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
         return header.substring(header.indexOf(DELIMITER) + 1);
-    }
-
-    /**
-     * Extracts store id from request URI.
-     * 
-     * @param requestContext current <code>ContainerRequestContext</code>
-     * @return <code>Long</code> value of store id
-     */
-    private Long getStoreIdFromPath(ContainerRequestContext requestContext) {
-        return Long.valueOf(requestContext.getUriInfo().getPathSegments().get(STORE_ID_PATH_POSITION).toString());
-    }
-    
-    /**
-     * Retrieves tenant id for specified store id.
-     * 
-     * @param pathStoreId store id extracted from request URI
-     * @return <code>Long</code> value of tenant id 
-     * @throws ServiceException if <code>Store</code> entity with specified id was not found
-     */
-    private Long getTenantId(Long pathStoreId) throws ServiceException {
-        return storeService.getStoreById(pathStoreId).getTenantId();
     }
 
     /**

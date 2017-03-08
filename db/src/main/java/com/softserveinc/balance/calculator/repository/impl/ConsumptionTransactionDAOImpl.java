@@ -25,7 +25,7 @@ public class ConsumptionTransactionDAOImpl implements ConsumptionTransactionDAO 
     private JdbcTemplate jdbcTemplate;
     
     protected ConsumptionTransactionDAOImpl(JdbcTemplate jdbcTemplate) {
-        INSERT = String.format("insert into %s(%s, %s, %s) values(?, ?, ?)", TransactionNamespace.CONSUMPTION_TABLE_NAME,
+        INSERT = String.format(TransactionNamespace.CONSUMPTION_BATCH, TransactionNamespace.CONSUMPTION_TABLE_NAME,
                 TransactionNamespace.REGISTER_ID_COLUMN_NAME,
                 TransactionNamespace.CONSUMED_VALUE_COLUMN_NAME,
                 TransactionNamespace.CREATED_BY_COLUMN_NAME);
@@ -39,7 +39,7 @@ public class ConsumptionTransactionDAOImpl implements ConsumptionTransactionDAO 
         try {
             return jdbcTemplate.batchUpdate(INSERT, batch);
         } catch (DataAccessException e) {
-            throw new RepositoryException(e.getMessage());
+            throw new RepositoryException(e.getMessage(), e);
         }
     }
 

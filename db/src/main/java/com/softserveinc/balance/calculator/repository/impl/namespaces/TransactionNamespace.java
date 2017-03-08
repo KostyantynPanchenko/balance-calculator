@@ -17,5 +17,7 @@ public class TransactionNamespace {
     public final static String CREATED_ON_COLUMN_NAME = "created_on";
     public final static String CONSUMED_VALUE_COLUMN_NAME = "consumed_value";
     public final static String ORDER_GRANTED_VALUE_COLUMN_NAME = "order_granted_value";
+    public final static String CONSUMPTION_BATCH = "insert into %s(%s, %s, %s) values(?, ?, ?";
+    public final static String CONTRIBUTION_BATCH = "insert into %s(%s, %s, %s) values(?, ?, ?)";
     
 }

@@ -16,7 +16,7 @@ import com.softserveinc.balance.calculator.service.exception.ServiceException;
 import io.dropwizard.jersey.errors.ErrorMessage;
 
 /**
- * Implementation of <code>ContributionTransactionResource</code> interface.
+ * Implementation of <code>ConsumptionTransactionResource</code> interface.
  *  
  * @author Kostyantyn Panchenko
  * @version 1.0

@@ -42,9 +42,9 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
         try {
             return getById(GET, new Object[] {id}, MAPPER);
         } catch (EmptyResultDataAccessException empty) {
-            throw new DomainEntityNotFoundException(empty.getMessage());
+            throw new DomainEntityNotFoundException(empty.getMessage(), empty);
         } catch (DataAccessException e) {
-            throw new RepositoryException(e.getMessage());
+            throw new RepositoryException(e.getMessage(), e);
         }
     }
     
@@ -53,9 +53,9 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
         try {
             return create(new StorePreparedStatementCreator(store));
         } catch (DataIntegrityViolationException violation) {
-            throw new DataIntegrityViolationRepositoryException(violation.getMessage());
+            throw new DataIntegrityViolationRepositoryException(violation.getMessage(), violation);
         } catch (DataAccessException e) {
-            throw new RepositoryException(e.getMessage());
+            throw new RepositoryException(e.getMessage(), e);
         }
     }
 
@@ -70,9 +70,9 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
         try {
             return execute(UPDATE, new Object[] {store.getTenantId(), store.getName(), store.getDescription(), store.getId()});
         } catch (DataIntegrityViolationException violation) {
-            throw new DataIntegrityViolationRepositoryException(violation.getMessage());
+            throw new DataIntegrityViolationRepositoryException(violation.getMessage(), violation);
         } catch (DataAccessException e) {
-            throw new RepositoryException(e.getMessage());
+            throw new RepositoryException(e.getMessage(), e);
         }
     }
 
@@ -84,9 +84,9 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
         try {
             return execute(DELETE, new Object[] {id});
         } catch (DataIntegrityViolationException violation) {
-            throw new DataIntegrityViolationRepositoryException(violation.getMessage());
+            throw new DataIntegrityViolationRepositoryException(violation.getMessage(), violation);
         } catch (DataAccessException e) {
-            throw new RepositoryException(e.getMessage());
+            throw new RepositoryException(e.getMessage(), e);
         }
     }
 

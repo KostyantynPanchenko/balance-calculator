@@ -38,9 +38,9 @@ public class RegisterDAOImpl extends AbstractDAO<Register> implements RegisterDA
             System.out.println("storeId=" + storeId.toString() + ", registerId=" + registerId.toString());
             return getById(GET_BY_ID, new Object[] {storeId, registerId}, MAPPER);
         } catch (EmptyResultDataAccessException notFound) {
-            throw new DomainEntityNotFoundException(notFound.getMessage());
+            throw new DomainEntityNotFoundException(notFound.getMessage(), notFound);
         } catch (DataAccessException e) {
-            throw new RepositoryException(e.getMessage());
+            throw new RepositoryException(e.getMessage(), e);
         }
     }
 
@@ -49,9 +49,9 @@ public class RegisterDAOImpl extends AbstractDAO<Register> implements RegisterDA
         try {
             return create(new RegisterPreparedStatementCreator(register));
         } catch (DataIntegrityViolationException violation) {
-            throw new DataIntegrityViolationRepositoryException(violation.getMessage());
+            throw new DataIntegrityViolationRepositoryException(violation.getMessage(), violation);
         } catch (DataAccessException e) {
-            throw new RepositoryException(e.getMessage());
+            throw new RepositoryException(e.getMessage(), e);
         }
     }
 
@@ -60,9 +60,9 @@ public class RegisterDAOImpl extends AbstractDAO<Register> implements RegisterDA
         try {
             return execute(UPDATE, new Object[] { register.getName(), register.getTimezone(), register.getId() });
         } catch (DataIntegrityViolationException violation) {
-            throw new DataIntegrityViolationRepositoryException(violation.getMessage());
+            throw new DataIntegrityViolationRepositoryException(violation.getMessage(), violation);
         } catch (DataAccessException e) {
-            throw new RepositoryException(e.getMessage());
+            throw new RepositoryException(e.getMessage(), e);
         }
     }
 
@@ -71,9 +71,9 @@ public class RegisterDAOImpl extends AbstractDAO<Register> implements RegisterDA
         try {
             return execute(DELETE, new Object[] { registerId, storeId });
         } catch (DataIntegrityViolationException violation) {
-            throw new DataIntegrityViolationRepositoryException(violation.getMessage());
+            throw new DataIntegrityViolationRepositoryException(violation.getMessage(), violation);
         } catch (DataAccessException e) {
-            throw new RepositoryException(e.getMessage());
+            throw new RepositoryException(e.getMessage(), e);
         }
     }
 

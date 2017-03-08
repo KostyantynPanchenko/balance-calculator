@@ -33,7 +33,7 @@ public class ConsumptionTransactionServiceImpl implements ConsumptionTransaction
         try {
             return consumptionDao.saveAll(input);
         } catch (RepositoryException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(e.getMessage(), e);
         }
     }
 

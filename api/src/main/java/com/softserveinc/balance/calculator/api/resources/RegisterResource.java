@@ -1,5 +1,7 @@
 package com.softserveinc.balance.calculator.api.resources;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -57,7 +59,7 @@ public interface RegisterResource {
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    Response save(RegisterDTO registerDto, @PathParam("store_id") Long storeId, @Context UriInfo uriInfo);
+    Response create(@Valid @NotNull RegisterDTO registerDto, @PathParam("store_id") Long storeId, @Context UriInfo uriInfo);
 
     /**
      * Update endpoint for <code>Register</code> entity.
@@ -73,7 +75,7 @@ public interface RegisterResource {
     @PUT
     @Path("/{register_id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    Response update(RegisterDTO registerDto, @PathParam("store_id") Long storeId, @PathParam("register_id") Long registerId);
+    Response update(@Valid @NotNull RegisterDTO registerDto, @PathParam("store_id") Long storeId, @PathParam("register_id") Long registerId);
 
     /**
      * Delete endpoint for  <code>Register</code> entity.
