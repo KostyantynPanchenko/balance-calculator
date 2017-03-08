@@ -3,7 +3,11 @@ package com.softserveinc.balance.calculator.api.filters;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.HttpMethod;
+import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.HttpHeaders;
@@ -46,6 +50,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     private final String UNAUTHORIZED = "Unauthorized request to store id=%d by tenantId=%d!";
     private final String NOT_FOUND = "Store with id=%d not found.";
     private final String SERVER_ERROR = "Error occurred while trying to retrieve store with id=%d.";
+    private final String NO_AUTHORIZATION_HEADER = "Authorization header not found.";
     
     public AuthorizationFilter(StoreService storeService) {
         this.storeService = storeService;
@@ -60,17 +65,24 @@ public class AuthorizationFilter implements ContainerRequestFilter {
                 
                 try {
                     if (!isAuthorized(getTenantId(pathStoreId), jwtTenantId)) {
-                        logAndAbort(requestContext, UNAUTHORIZED, new Object[] {pathStoreId, jwtTenantId});
+                        String message = String.format(UNAUTHORIZED, new Object[] {pathStoreId, jwtTenantId});
+                        LOGGER.error(message);
+                        throw new NotAuthorizedException(message, Response.status(Status.UNAUTHORIZED));
                     }
                 } catch (EntityNotFoundServiceException notFound) {
-                    logAndAbort(requestContext, NOT_FOUND, new Object[] {pathStoreId});
+                    String message = String.format(NOT_FOUND, pathStoreId);
+                    LOGGER.error(message);
+                    throw new NotFoundException(message);
                 } catch (ServiceException e) {
-                    logAndAbort(requestContext, SERVER_ERROR, new Object[] {pathStoreId});
+                    String message = String.format(SERVER_ERROR, pathStoreId);
+                    LOGGER.error(message);
+                    throw new ServerErrorException(message, Status.INTERNAL_SERVER_ERROR, e);
                 }
             } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException 
                     | UnsupportedEncodingException | IllegalArgumentException jwtEx) {
-                LOGGER.error(jwtEx.getMessage(), jwtEx);
-                requestContext.abortWith(Response.status(Status.BAD_REQUEST).entity(new ErrorMessage(404, jwtEx.getMessage())).build());
+                String message = jwtEx.getMessage();
+                LOGGER.error(message, jwtEx);
+                throw new BadRequestException(message);
             }
         }
     }
@@ -116,6 +128,10 @@ public class AuthorizationFilter implements ContainerRequestFilter {
      */
     private String getJwt(ContainerRequestContext requestContext) {
         String header = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+        if (header == null) {
+            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED)
+                    .entity(new ErrorMessage(401, NO_AUTHORIZATION_HEADER)).build());
+        }
         return header.substring(header.indexOf(DELIMITER) + 1);
     }
 
@@ -150,19 +166,6 @@ public class AuthorizationFilter implements ContainerRequestFilter {
                 .parseClaimsJws(jwt)
                 .getBody()
                 .get(TENANT_ID));
-    }
-    
-    /**
-     * Performs logging and abort request by sending <code>Response</code> entity.
-     * 
-     * @param requestContext current <code>ContainerRequestContext</code>
-     * @param message message for logging and response
-     * @param args arguments for message composing
-     */
-    private void logAndAbort(ContainerRequestContext requestContext, String message, Object[] args) {
-        LOGGER.error(String.format(message, args));
-        requestContext.abortWith(Response.status(Status.UNAUTHORIZED)
-                .entity(new ErrorMessage(401, String.format(message, args))).build());
     }
 
 }
