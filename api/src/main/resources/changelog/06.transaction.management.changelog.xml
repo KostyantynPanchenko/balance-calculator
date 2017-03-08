@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd"> 
+  
+  <changeSet author="Kostyantyn Panchenko" id="changelog-6.0">
+  <!-- CONTRIBUTION ALLOCATION -->
+    <createTable tableName="contribution_allocation">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="contribution_id" type="BIGINT">
+        <constraints nullable="false" references="consumption_transactions(id)" foreignKeyName="consumptions_contributions_pk_fk"/>
+      </column>
+      <column name="consumption_id" type="BIGINT">
+        <constraints nullable="false" references="contribution_transactions(id)" foreignKeyName="contributions_consumptions_pk_fk"/>
+      </column>
+      <column name="consumption_amount" type="DECIMAL(12,2)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <!-- CONTRIBUTION ALLOCATION COMPLETE-->
+    <createTable tableName="contribution_allocation_complete">
+      <column name="contribution_id" type="BIGINT">
+        <constraints nullable="false" references="contribution_transactions(id)" foreignKeyName="contribution_transactions(id)"/>
+      </column>
+      <column name="completion_date" type="TIMESTAMP" defaultValueDate="CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <!-- CONSUMPTION ALLOCATION -->
+    <createTable tableName="consumption_allocation">
+      <column name="consumption_id" type="BIGINT">
+        <constraints nullable="false" references="consumption_transactions(id)" foreignKeyName="consumptions_contributions_pk_fk"/>
+      </column>
+      <column name="consumption_amount" type="DECIMAL(12,2)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <!-- CONSUMPTION ALLOCATION COMPLETE -->
+    <createTable tableName="consumption_allocation_complete">
+      <column name="consumption_id" type="BIGINT">
+        <constraints nullable="false" references="contribution_transactions(id)" foreignKeyName="contribution_transactions(id)"/>
+      </column>
+      <column name="completion_date" type="TIMESTAMP" defaultValueDate="CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+</databaseChangeLog>

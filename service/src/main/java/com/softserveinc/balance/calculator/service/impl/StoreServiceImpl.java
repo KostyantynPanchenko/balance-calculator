@@ -23,9 +23,9 @@ public class StoreServiceImpl implements StoreService {
         try {
             return new StoreDTO(storeDao.getStoreById(id));
         } catch (DomainEntityNotFoundException empty) {
-            throw new EntityNotFoundServiceException(empty.getMessage(), empty);
+            throw new EntityNotFoundServiceException(empty);
         } catch (RepositoryException e) {
-            throw new ServiceException(e.getMessage(), e);
+            throw new ServiceException(e);
         }
     }
     
@@ -33,9 +33,9 @@ public class StoreServiceImpl implements StoreService {
         try {
             return storeDao.save(toStore(storeDto));
         } catch (DataIntegrityViolationRepositoryException violation) {
-            throw new DataIntegrityViolationServiceException(violation.getMessage(), violation);
+            throw new DataIntegrityViolationServiceException(violation);
         } catch (RepositoryException e) {
-            throw new ServiceException(e.getMessage(), e);
+            throw new ServiceException(e);
         }
     }
     
@@ -43,9 +43,9 @@ public class StoreServiceImpl implements StoreService {
         try {
             return storeDao.update(toStore(storeDto));
         } catch (DataIntegrityViolationRepositoryException violation) {
-            throw new DataIntegrityViolationServiceException(violation.getMessage(), violation);
+            throw new DataIntegrityViolationServiceException(violation);
         } catch (RepositoryException e) {
-            throw new ServiceException(e.getMessage(), e);
+            throw new ServiceException(e);
         }
     }
 
@@ -53,9 +53,9 @@ public class StoreServiceImpl implements StoreService {
         try {
             return storeDao.deleteById(id);
         } catch (DataIntegrityViolationRepositoryException violation) {
-            throw new DataIntegrityViolationServiceException(violation.getMessage(), violation);
+            throw new DataIntegrityViolationServiceException(violation);
         } catch (RepositoryException e) {
-            throw new ServiceException(e.getMessage(), e);
+            throw new ServiceException(e);
         }
     }
 

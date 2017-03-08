@@ -42,9 +42,9 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
         try {
             return getById(GET, new Object[] {id}, MAPPER);
         } catch (EmptyResultDataAccessException empty) {
-            throw new DomainEntityNotFoundException(empty.getMessage(), empty);
+            throw new DomainEntityNotFoundException(empty);
         } catch (DataAccessException e) {
-            throw new RepositoryException(e.getMessage(), e);
+            throw new RepositoryException(e);
         }
     }
     
@@ -55,7 +55,7 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
         } catch (DataIntegrityViolationException violation) {
             throw new DataIntegrityViolationRepositoryException(violation.getMessage(), violation);
         } catch (DataAccessException e) {
-            throw new RepositoryException(e.getMessage(), e);
+            throw new RepositoryException(e);
         }
     }
 
@@ -70,9 +70,9 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
         try {
             return execute(UPDATE, new Object[] {store.getTenantId(), store.getName(), store.getDescription(), store.getId()});
         } catch (DataIntegrityViolationException violation) {
-            throw new DataIntegrityViolationRepositoryException(violation.getMessage(), violation);
+            throw new DataIntegrityViolationRepositoryException(violation);
         } catch (DataAccessException e) {
-            throw new RepositoryException(e.getMessage(), e);
+            throw new RepositoryException(e);
         }
     }
 

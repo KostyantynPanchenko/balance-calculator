@@ -23,9 +23,9 @@ public class RegisterServiceImpl implements RegisterService {
         try {
             return new RegisterDTO(registerDao.getRegisterById(storeId, registerId));
         } catch (DomainEntityNotFoundException notFound) {
-            throw new EntityNotFoundServiceException(notFound.getMessage(), notFound);
+            throw new EntityNotFoundServiceException(notFound);
         } catch (RepositoryException e) {
-            throw new ServiceException(e.getMessage(), e);
+            throw new ServiceException(e);
         }
     }
 
@@ -33,9 +33,9 @@ public class RegisterServiceImpl implements RegisterService {
         try {
             return registerDao.insert(toRegister(registerDto));
         } catch (DataIntegrityViolationRepositoryException violation) {
-            throw new DataIntegrityViolationServiceException(violation.getMessage(), violation);
+            throw new DataIntegrityViolationServiceException(violation);
         } catch (RepositoryException e) {
-            throw new ServiceException(e.getMessage(), e);
+            throw new ServiceException(e);
         }
     }
 
@@ -43,9 +43,9 @@ public class RegisterServiceImpl implements RegisterService {
         try {
             return registerDao.update(toRegister(registerDto));
         } catch (DataIntegrityViolationRepositoryException violation) {
-            throw new DataIntegrityViolationServiceException(violation.getMessage(), violation);
+            throw new DataIntegrityViolationServiceException(violation);
         } catch (RepositoryException e) {
-            throw new ServiceException(e.getMessage(), e);
+            throw new ServiceException(e);
         }
     }
 
@@ -53,7 +53,7 @@ public class RegisterServiceImpl implements RegisterService {
         try {
             return registerDao.delete(storeId, registerId);
         } catch (RepositoryException e) {
-            throw new ServiceException(e.getMessage(), e);
+            throw new ServiceException(e);
         }
     }
     

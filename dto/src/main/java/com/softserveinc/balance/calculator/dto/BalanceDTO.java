@@ -1,9 +1,9 @@
-package com.softserveinc.balance.calculator.domain;
+package com.softserveinc.balance.calculator.dto;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-public class Balance {
+public class BalanceDTO {
 
     private Long id;
     private Long registerId;
@@ -14,7 +14,59 @@ public class Balance {
     private BigDecimal totalUnallocatedContributionAmount;
     private BigDecimal totalUnallocatedConsumptionAmount;
     
-    public Balance() {}
+    public BalanceDTO() {}
+
+    public static class Builder {
+        private BalanceDTO balance;
+        
+        public Builder() {
+            balance = new BalanceDTO();
+        }
+        
+        public Builder setId(Long id) {
+            balance.setId(id);
+            return this;
+        }
+        
+        public Builder setRegisterId(Long registerId) {
+            balance.setRegisterId(registerId);
+            return this;
+        }
+        
+        public Builder setCreatedOn(Timestamp createdOn) {
+            balance.setCreatedOn(createdOn);
+            return this;
+        }
+        
+        public Builder setCreatedBy(String createdBy) {
+            balance.setCreatedBy(createdBy);
+            return this;
+        }
+        
+        public Builder setTotalAllocatedContributionAmount(BigDecimal amount) {
+            balance.totalAllocatedContributionAmount = amount;
+            return this;
+        }
+        
+        public Builder setTotalAllocatedConsumptionAmount(BigDecimal amount) {
+            balance.totalAllocatedConsumptionAmount = amount;
+            return this;
+        }
+        
+        public Builder setTotalUnallocatedContributionAmount(BigDecimal amount) {
+            balance.totalUnallocatedContributionAmount = amount;
+            return this;
+        }
+        
+        public Builder setTotalUnallocatedConsumptionAmount(BigDecimal amount) {
+            balance.totalUnallocatedConsumptionAmount = amount;
+            return this;
+        }
+        
+        public BalanceDTO build() {
+            return balance;
+        }
+    }
     
     public Long getId() {
         return id;
@@ -109,7 +161,7 @@ public class Balance {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Balance other = (Balance) obj;
+        BalanceDTO other = (BalanceDTO) obj;
         if (createdBy == null) {
             if (other.createdBy != null)
                 return false;

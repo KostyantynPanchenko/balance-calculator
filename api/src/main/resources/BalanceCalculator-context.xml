@@ -35,6 +35,15 @@
     
     <!-- Balance -->
     <bean id="balanceResource" class="com.softserveinc.balance.calculator.api.resources.impl.BalanceResourceImpl">
+        <constructor-arg name = "balanceService" ref="balanceService"/>
+    </bean>
+    
+    <bean id="balanceService" class="com.softserveinc.balance.calculator.service.impl.BalanceServiceImpl">
+        <constructor-arg name = "balanceDao" ref="balanceDao"/>
+    </bean>
+    
+    <bean id="balanceDao" class="com.softserveinc.balance.calculator.repository.impl.BalanceDAOImpl">
+        <constructor-arg name = "jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
     
     <!-- Consumptions -->

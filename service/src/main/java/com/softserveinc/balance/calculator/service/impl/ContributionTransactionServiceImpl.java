@@ -33,7 +33,7 @@ public class ContributionTransactionServiceImpl implements ContributionTransacti
         try {
             return contributionDao.saveAll(input);
         } catch (RepositoryException e) {
-            throw new ServiceException(e.getMessage(), e);
+            throw new ServiceException(e);
         }
     }
 

@@ -39,7 +39,7 @@ public class ConsumptionTransactionDAOImpl implements ConsumptionTransactionDAO 
         try {
             return jdbcTemplate.batchUpdate(INSERT, batch);
         } catch (DataAccessException e) {
-            throw new RepositoryException(e.getMessage(), e);
+            throw new RepositoryException(e);
         }
     }
 

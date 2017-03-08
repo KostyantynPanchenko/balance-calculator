@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 import com.softserveinc.balance.calculator.dto.ConsumptionTransactionDTO;
 
 /**
- * Exposes create endpoint for <code>ConsumptionTransaction</code> batch processing.
+ * Create endpoint for <code>ConsumptionTransaction</code> batch processing.
  * 
  * @author Kostyantyn Panchenko
  * @version 1.0

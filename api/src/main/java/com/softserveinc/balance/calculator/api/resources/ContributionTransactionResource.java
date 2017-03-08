@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 import com.softserveinc.balance.calculator.dto.ContributionTransactionDTO;
 
 /**
- * Exposes create endpoint for <code>ContributionTransaction</code> batch processing.
+ * Create endpoint for <code>ContributionTransaction</code> batch processing.
  * 
  * @author Kostyantyn Panchenko
  * @version 1.0

@@ -18,6 +18,10 @@ public class EntityNotFoundServiceException extends ServiceException {
         super(message);
     }
     
+    public EntityNotFoundServiceException(Throwable cause) {
+        super(cause);
+    }
+    
     public EntityNotFoundServiceException(String message, Throwable cause) {
         super(message, cause);
     }

@@ -17,6 +17,10 @@ public class DataIntegrityViolationServiceException extends ServiceException {
         super(message);
     }
     
+    public DataIntegrityViolationServiceException(Throwable cause) {
+        super( cause);
+    }
+    
     public DataIntegrityViolationServiceException(String message, Throwable cause) {
         super(message, cause);
     }
