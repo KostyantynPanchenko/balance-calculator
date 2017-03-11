@@ -1,13 +1,13 @@
 package com.softserveinc.balance.calculator.dto;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.OffsetDateTime;
 
 public class BalanceDTO {
 
     private Long id;
     private Long registerId;
-    private Timestamp createdOn;
+    private String createdOn;
     private String createdBy;
     private BigDecimal totalAllocatedContributionAmount;
     private BigDecimal totalAllocatedConsumptionAmount;
@@ -33,8 +33,8 @@ public class BalanceDTO {
             return this;
         }
         
-        public Builder setCreatedOn(Timestamp createdOn) {
-            balance.setCreatedOn(createdOn);
+        public Builder setCreatedOn(OffsetDateTime createdOn) {
+            balance.setCreatedOn(createdOn.toString());
             return this;
         }
         
@@ -84,11 +84,11 @@ public class BalanceDTO {
         this.registerId = registerId;
     }
 
-    public Timestamp getCreatedOn() {
+    public String getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(Timestamp createdOn) {
+    public void setCreatedOn(String createdOn) {
         this.createdOn = createdOn;
     }
 

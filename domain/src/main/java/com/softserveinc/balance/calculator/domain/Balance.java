@@ -1,13 +1,13 @@
 package com.softserveinc.balance.calculator.domain;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.OffsetDateTime;
 
 public class Balance {
 
     private Long id;
-    private Long registerId;
-    private Timestamp createdOn;
+    private Long registerId;    
+    private OffsetDateTime createdOn;
     private String createdBy;
     private BigDecimal totalAllocatedContributionAmount;
     private BigDecimal totalAllocatedConsumptionAmount;
@@ -32,11 +32,11 @@ public class Balance {
         this.registerId = registerId;
     }
 
-    public Timestamp getCreatedOn() {
+    public OffsetDateTime getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(Timestamp createdOn) {
+    public void setCreatedOn(OffsetDateTime createdOn) {
         this.createdOn = createdOn;
     }
 

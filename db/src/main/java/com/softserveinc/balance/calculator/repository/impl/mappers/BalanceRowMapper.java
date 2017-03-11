@@ -2,6 +2,8 @@ package com.softserveinc.balance.calculator.repository.impl.mappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 
 import org.springframework.jdbc.core.RowMapper;
 
@@ -22,8 +24,8 @@ public class BalanceRowMapper implements RowMapper<Balance> {
         Balance balance = new Balance();
         balance.setId(rs.getLong(BalanceNamespace.ID_COLUMN_NAME));
         balance.setRegisterId(rs.getLong(BalanceNamespace.REGISTER_ID_COLUMN_NAME));
-        balance.setCreatedBy(rs.getString(BalanceNamespace.CREATED_BY_COLUMN_NAME));
-        balance.setCreatedOn(rs.getTimestamp(BalanceNamespace.CREATED_ON_COLUMN_NAME));
+        balance.setCreatedBy(rs.getString(BalanceNamespace.CREATED_BY_COLUMN_NAME));        
+        balance.setCreatedOn(OffsetDateTime.ofInstant(rs.getTimestamp(BalanceNamespace.CREATED_ON_COLUMN_NAME).toInstant(),ZoneId.systemDefault()));
         balance.setTotalAllocatedConsumptionAmount(rs.getBigDecimal(BalanceNamespace.TOTAL_ALLOCATED_CONSUMPTION_AMOUNT));
         balance.setTotalAllocatedContributionAmount(rs.getBigDecimal(BalanceNamespace.TOTAL_ALLOCATED_CONTRIBUTION_AMOUNT));
         balance.setTotalUnallocatedConsumptionAmount(rs.getBigDecimal(BalanceNamespace.TOTAL_UNALLOCATED_CONSUMPTION_AMOUNT));
