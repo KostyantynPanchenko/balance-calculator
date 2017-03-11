@@ -1,12 +1,12 @@
 package com.softserveinc.balance.calculator.domain;
 
-import java.sql.Timestamp;
+import java.time.OffsetDateTime;
 
 public abstract class Transaction {
 
     protected Long id;
     protected Long registerId;
-    protected Timestamp createdOn;
+    protected OffsetDateTime createdOn;
     protected String createdBy;
     
     protected Transaction() { }
@@ -27,11 +27,11 @@ public abstract class Transaction {
         this.registerId = registerId;
     }
 
-    public Timestamp getCreatedOn() {
+    public OffsetDateTime getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(Timestamp createdOn) {
+    public void setCreatedOn(OffsetDateTime createdOn) {
         this.createdOn = createdOn;
     }
 

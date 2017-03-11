@@ -1,7 +1,7 @@
 package com.softserveinc.balance.calculator.dto;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.OffsetDateTime;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -46,7 +46,7 @@ public class ConsumptionTransactionDTO extends AbstractTransactionDTO {
             return this;
         }
         
-        public Builder setCreatedOn(Timestamp createdOn) {
+        public Builder setCreatedOn(OffsetDateTime createdOn) {
             dto.setCreatedOn(createdOn);
             return this;
         }

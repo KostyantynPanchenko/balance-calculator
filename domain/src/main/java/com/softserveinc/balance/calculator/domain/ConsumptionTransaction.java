@@ -1,7 +1,7 @@
 package com.softserveinc.balance.calculator.domain;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.OffsetDateTime;
 
 public class ConsumptionTransaction extends Transaction {
 
@@ -31,7 +31,7 @@ public class ConsumptionTransaction extends Transaction {
             return this;
         }
         
-        public Builder setCreatedOn(Timestamp createdOn) {
+        public Builder setCreatedOn(OffsetDateTime createdOn) {
             transaction.setCreatedOn(createdOn);
             return this;
         }

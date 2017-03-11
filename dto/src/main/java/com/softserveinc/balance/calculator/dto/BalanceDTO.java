@@ -2,6 +2,7 @@ package com.softserveinc.balance.calculator.dto;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class BalanceDTO {
 
@@ -34,7 +35,8 @@ public class BalanceDTO {
         }
         
         public Builder setCreatedOn(OffsetDateTime createdOn) {
-            balance.setCreatedOn(createdOn.toString());
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+            balance.setCreatedOn(createdOn.format(formatter));
             return this;
         }
         
