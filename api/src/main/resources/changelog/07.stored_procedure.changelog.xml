@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd"> 
+  
+  <changeSet author="Kostyantyn Panchenko" id="changelog-7.0">
+    <createProcedure>
+        CREATE OR REPLACE FUNCTION register_allocation(r_id registers.id%TYPE) RETURNS VOID AS $$
+        DECLARE
+            current_cons_rec RECORD;
+            totalContributions RECORD;
+            totalConsumptions RECORD;
+            totalAllocatedContributions RECORD;
+            totalAllocatedConsumptions RECORD;
+            -- check for any consumption_transaction records that have not been fully allocated (i.e. not in consumption_allocation_complete)
+            db_cursor CURSOR(reg_id registers.id%TYPE) FOR
+            SELECT consumption_transactions.id, consumption_transactions.consumed_value
+            FROM consumption_transactions
+            LEFT JOIN consumption_allocation_complete ON consumption_transactions.id = consumption_allocation_complete.consumption_id
+            WHERE register_id = reg_id AND consumption_allocation_complete.consumption_id IS NULL
+            ORDER BY created_on;
+        BEGIN    
+            -- For each consumption_transaction record (in consumption_transaction but not in consumption_allocation_complete),
+            OPEN db_cursor(r_id);
+            LOOP
+                FETCH db_cursor INTO current_cons_rec;        
+                EXIT WHEN NOT FOUND;-- exit when no more row to fetch
+                -- output
+                RAISE NOTICE '---------------------------------';
+                RAISE NOTICE 'consumption id = %, consumed value =  %', current_cons_rec.id, current_cons_rec.consumed_value;
+        
+                DECLARE 
+                current_contribution_record RECORD;
+                contribution_record RECORD;
+                consumption_record RECORD;
+                remaining_contribution_amount DECIMAL(14,2);
+                remaining_consumption_amount DECIMAL(14,2);
+                consumed DECIMAL(14,2);
+                BEGIN -- (1)
+                    -- get available contribution_transaction records that have not been "completed", sort by date.
+                    FOR current_contribution_record IN 
+                        SELECT contribution_transactions.id, contribution_transactions.order_granted_value
+                        FROM contribution_transactions
+                        LEFT JOIN contribution_allocation_complete ON contribution_transactions.id = contribution_allocation_complete.contribution_id
+                        WHERE contribution_transactions.register_id = r_id AND contribution_allocation_complete.contribution_id IS NULL
+                        ORDER BY created_on
+                    LOOP -- (2) loop over contributions
+                        RAISE NOTICE 'contribution id = %, order granted value =  %', current_contribution_record.id, current_contribution_record.order_granted_value;
+                    
+                        -- Get remaining available balance on contribution_transaction by summing existing contribution_allocation
+                        -- records and then subtracting that from original granted amount on the contribution_transaction.
+                        SELECT INTO contribution_record SUM(consumption_amount) AS total FROM contribution_allocation WHERE contribution_id = current_contribution_record.id;
+                        IF contribution_record.total IS NOT NULL
+                        THEN
+                            remaining_contribution_amount = current_contribution_record.order_granted_value - contribution_record.total;
+                            RAISE NOTICE '=== Available contribution sum is %', remaining_contribution_amount;
+                        ELSE
+                            remaining_contribution_amount = current_contribution_record.order_granted_value;
+                            RAISE NOTICE '=== Available contribution sum is %', remaining_contribution_amount;
+                        END IF;
+                        
+                        SELECT INTO consumption_record SUM(consumption_amount) AS total FROM contribution_allocation WHERE consumption_id = current_cons_rec.id;
+                        IF consumption_record.total IS NOT NULL
+                        THEN
+                            remaining_consumption_amount = current_cons_rec.consumed_value - consumption_record.total;
+                            RAISE NOTICE '=== Available consumption sum is %', remaining_consumption_amount;
+                        ELSE
+                            remaining_consumption_amount = current_cons_rec.consumed_value;
+                           RAISE NOTICE '=== Available consumption sum is %', remaining_consumption_amount;
+                        END IF;
+                        
+                        -- Create a record in contribution_allocation.                
+                        IF remaining_contribution_amount &lt;= remaining_consumption_amount 
+                            THEN
+                                -- If the available amount is less than the consumption amount then the consumed_amount is that remaining amount
+                                -- and insert a record into contribution_allocations_complete to indicate the contribution is done.
+                                consumed = remaining_contribution_amount;
+                                INSERT INTO contribution_allocation(contribution_id, consumption_id, consumption_amount) VALUES(current_contribution_record.id, current_cons_rec.id, consumed);
+                                INSERT INTO contribution_allocation_complete(contribution_id) VALUES(current_contribution_record.id);
+                                INSERT INTO consumption_allocation(consumption_id, consumption_amount) VALUES(current_cons_rec.id, consumed);
+                            ELSE
+                                consumed = remaining_consumption_amount;
+                                INSERT INTO contribution_allocation(contribution_id, consumption_id, consumption_amount) VALUES(current_contribution_record.id, current_cons_rec.id, consumed);
+                                INSERT INTO consumption_allocation(consumption_id, consumption_amount) VALUES(current_cons_rec.id, consumed);
+                                INSERT INTO consumption_allocation_complete(consumption_id) VALUES(current_cons_rec.id);
+                                EXIT;
+                        END IF;
+                        
+                    END LOOP; --(2)
+                END; -- (1)
+            END LOOP;
+            CLOSE db_cursor;
+            
+            -- Total contributions amount
+            SELECT INTO totalContributions COALESCE(SUM(order_granted_value), 0 ) as amount FROM contribution_transactions WHERE register_id = r_id;
+        
+            -- Total consumptions amount
+            SELECT INTO totalConsumptions COALESCE(SUM(consumed_value), 0) as amount FROM consumption_transactions WHERE register_id = r_id;
+            
+            -- Total allocated contributions amount
+            SELECT INTO totalAllocatedContributions COALESCE(SUM(contribution_allocation.consumption_amount), 0 ) as amount
+            FROM contribution_allocation
+            INNER JOIN contribution_transactions ON contribution_allocation.contribution_id = contribution_transactions.id
+            WHERE contribution_transactions.register_id = r_id;
+        
+            -- Total allocated consumptions amount
+            SELECT INTO totalAllocatedConsumptions COALESCE(SUM(consumption_allocation.consumption_amount), 0 ) as amount
+            FROM consumption_allocation
+            INNER JOIN consumption_transactions
+            on consumption_allocation.consumption_id = consumption_transactions.id
+            WHERE consumption_transactions.register_id = r_id;
+            
+            INSERT INTO balance(register_id, total_allocated_contribution_amount, total_allocated_consumption_amount, total_unallocated_contribution_amount, total_unallocated_consumption_amount)
+            VALUES(
+                r_id,
+                totalAllocatedContributions.amount,
+                totalAllocatedConsumptions.amount,
+                totalContributions.amount - totalAllocatedContributions.amount,
+                totalConsumptions.amount - totalAllocatedConsumptions.amount
+                );
+        END; $$
+        LANGUAGE plpgsql;
+    </createProcedure>
+  </changeSet>
+</databaseChangeLog>

@@ -13,8 +13,12 @@
       <column name="store_id" type="bigint">
         <constraints nullable="false" references="stores(id)" foreignKeyName="stores_registers_pk_fk"/>
       </column>
-      <column name="name" type="varchar" />
-      <column name="timezone" type="varchar" />
+      <column name="name" type="varchar">
+        <constraints nullable="true"/>
+      </column>
+      <column name="timezone" type="varchar">
+        <constraints nullable="true"/>
+      </column>
     </createTable>
   </changeSet>
 </databaseChangeLog>

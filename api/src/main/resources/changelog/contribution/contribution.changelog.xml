@@ -13,13 +13,15 @@
       <column name="register_id" type="BIGINT">
         <constraints nullable="false" references="registers(id)" foreignKeyName="registers_contributions_pk_fk"/>
       </column>
-      <column name="order_granted_value" type="DECIMAL(12,2)">
+      <column name="order_granted_value" type="DECIMAL(14,2)">
         <constraints nullable="false"/>
       </column>
-      <column name="created_on" type="TIMESTAMP" defaultValueDate="CURRENT_TIMESTAMP">
+      <column name="created_on" type="TIMESTAMP WITH TIMEZONE" defaultValueDate="CURRENT_TIMESTAMP">
         <constraints nullable="false"/>
       </column>
-      <column name="created_by" type="VARCHAR"/>
+      <column name="created_by" type="VARCHAR">
+        <constraints nullable="true"/>
+      </column>
     </createTable>
   </changeSet>
 </databaseChangeLog>
