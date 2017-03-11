@@ -49,6 +49,7 @@
     <!-- Consumptions -->
     <bean id="consumptionResource" class="com.softserveinc.balance.calculator.api.resources.impl.ConsumptionTransactionResourceImpl">
         <constructor-arg name="consumptionService" ref="consumptionService"/>
+        <constructor-arg name="transactionAllocationService" ref="transactionAllocationService"/>
     </bean>
     
     <bean id="consumptionService" class="com.softserveinc.balance.calculator.service.impl.ConsumptionTransactionServiceImpl">
@@ -62,6 +63,7 @@
     <!-- Contributions -->
     <bean id="contributionResource" class="com.softserveinc.balance.calculator.api.resources.impl.ContributionTransactionResourceImpl">
         <constructor-arg name="contributionService" ref="contributionService"/>
+        <constructor-arg name="transactionAllocationService" ref="transactionAllocationService"/>
     </bean>
     
     <bean id="contributionService" class="com.softserveinc.balance.calculator.service.impl.ContributionTransactionServiceImpl">
@@ -70,6 +72,15 @@
     
     <bean id="contributionDao" class="com.softserveinc.balance.calculator.repository.impl.ContributionTransactionDAOImpl">
         <constructor-arg name="jdbcTemplate" ref="jdbcTemplate"/>
+    </bean>
+    
+    <!-- Allocations -->
+    <bean id="transactionAllocationService" class="com.softserveinc.balance.calculator.service.impl.TransactionAllocationServiceImpl">
+        <constructor-arg name="transactionAllocationDao" ref="transactionAllocationDao"/>
+    </bean>
+    
+    <bean id="transactionAllocationDao" class="com.softserveinc.balance.calculator.repository.impl.TransactionAllocationDAOImpl">
+        <constructor-arg name="dataSource" ref="dataSource"/>
     </bean>
     
     <!-- DataSource  -->

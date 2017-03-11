@@ -23,5 +23,5 @@ public interface ContributionTransactionService {
      * @throws ServiceException if error occurred during batch processing
      */
     int[] saveAll(List<ContributionTransactionDTO> contributions) throws ServiceException;
-
+    
 }

@@ -27,9 +27,6 @@
             LOOP
                 FETCH db_cursor INTO current_cons_rec;        
                 EXIT WHEN NOT FOUND;-- exit when no more row to fetch
-                -- output
-                RAISE NOTICE '---------------------------------';
-                RAISE NOTICE 'consumption id = %, consumed value =  %', current_cons_rec.id, current_cons_rec.consumed_value;
         
                 DECLARE 
                 current_contribution_record RECORD;

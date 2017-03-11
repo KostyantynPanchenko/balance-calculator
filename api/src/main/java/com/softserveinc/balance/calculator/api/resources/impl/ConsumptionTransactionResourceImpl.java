@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.softserveinc.balance.calculator.api.resources.ConsumptionTransactionResource;
 import com.softserveinc.balance.calculator.dto.ConsumptionTransactionDTO;
 import com.softserveinc.balance.calculator.service.ConsumptionTransactionService;
+import com.softserveinc.balance.calculator.service.TransactionAllocationService;
 import com.softserveinc.balance.calculator.service.exception.ServiceException;
 
 import io.dropwizard.jersey.errors.ErrorMessage;
@@ -27,17 +28,20 @@ public class ConsumptionTransactionResourceImpl implements ConsumptionTransactio
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ConsumptionTransactionResourceImpl.class);
     private ConsumptionTransactionService consumptionService;
+    private TransactionAllocationService transactionAllocationService;
     
-    public ConsumptionTransactionResourceImpl(ConsumptionTransactionService consumptionService) {
+    public ConsumptionTransactionResourceImpl(ConsumptionTransactionService consumptionService, TransactionAllocationService transactionAllocationService) {
         this.consumptionService = consumptionService;
+        this.transactionAllocationService = transactionAllocationService;
     }
     
     @Override
-    public Response saveConsumptions(List<ConsumptionTransactionDTO> consumptions) {
-        LOGGER.info("Started processing consumption transactions batch request.");
+    public Response saveConsumptions(List<ConsumptionTransactionDTO> consumptions, Long registerId) {
+        LOGGER.info("Started processing consumption transactions batch request for register {}.", registerId);
         try {
+            transactionAllocationService.registerAllocation(registerId);
             consumptionService.saveAll(consumptions);
-            LOGGER.info("Successfully processed consumption transactions batch request.");
+            LOGGER.info("Successfully processed consumption transactions batch request for register {}.", registerId);
             return Response.ok().build();
         } catch (ServiceException e) {
             LOGGER.error("Could not execute batch processing.", e.getMessage());

@@ -23,5 +23,5 @@ public interface ConsumptionTransactionService {
      * @throws ServiceException if error occurred during batch processing
      */
     int[] saveAll(List<ConsumptionTransactionDTO> consumptions) throws ServiceException;
-
+    
 }

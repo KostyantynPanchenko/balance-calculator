@@ -22,6 +22,7 @@ public class ConsumptionTransactionServiceImpl implements ConsumptionTransaction
 
     private ConsumptionTransactionDAO consumptionDao;
     
+    
     public ConsumptionTransactionServiceImpl(ConsumptionTransactionDAO consumptionDao) {
         this.consumptionDao = consumptionDao;
     }
@@ -44,4 +45,5 @@ public class ConsumptionTransactionServiceImpl implements ConsumptionTransaction
                 .setCreatedBy(consumption.getCreatedBy())
                 .build();
     }
+    
 }
