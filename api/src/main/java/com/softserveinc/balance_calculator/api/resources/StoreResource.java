@@ -73,7 +73,7 @@ public interface StoreResource {
     @PUT
     @Path("/{store_id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    Response update(@Valid @NotNull StoreDTO storeDto, @PathParam("store_id") Long id);
+    Response update(@Valid @NotNull StoreDTO storeDto, @PathParam("store_id") Long id, @QueryParam("tenantId") Long tenantId);
     
     
     /**

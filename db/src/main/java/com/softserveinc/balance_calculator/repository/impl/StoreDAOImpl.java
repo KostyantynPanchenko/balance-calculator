@@ -61,12 +61,11 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
     public int update(Store store) throws DataIntegrityViolationRepositoryException, RepositoryException {
         final String UPDATE = String.format(StoreNamespace.UPDATE,
                 StoreNamespace.TABLE_NAME,
-                StoreNamespace.TENANT_ID_COLUMN_NAME,
                 StoreNamespace.NAME_COLUMN_NAME,
                 StoreNamespace.DESCRIPTION_COLUMN_NAME,
                 StoreNamespace.ID_COLUMN_NAME);
         try {
-            return execute(UPDATE, new Object[] {store.getTenantId(), store.getName(), store.getDescription(), store.getId()});
+            return execute(UPDATE, new Object[] {store.getName(), store.getDescription(), store.getId()});
         } catch (DataIntegrityViolationException violation) {
             throw new DataIntegrityViolationRepositoryException(violation);
         } catch (DataAccessException e) {

@@ -67,13 +67,16 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         if (isStorePostRequest(requestContext)) {
+            System.out.println("store POST");
             filterStorePostRequest(requestContext);
         } else if (isStoreGetPutDeleteRequest(requestContext) || isRegisterPostRequest(requestContext)) {
-            filterStoreGetPutDeleteRequest(requestContext);
+            System.out.println("store GET PUT DELETE or register POST");
+            filterStoreGetPutDeleteRequest(requestContext); 
         } else if (isRegisterGetPutDeleteRequest(requestContext) || isPostToContributions(requestContext)) {
+            System.out.println("register GET PUT DELETE or contributions POST");
             filterRegisterGetPutDeleteRequest(requestContext);
         } else {
-            System.out.println("NOT ALLOWED");
+            System.out.println("NOT ALLOWED - " + requestContext.getUriInfo().getAbsolutePath());
             throw new NotAllowedException(Response.status(Status.METHOD_NOT_ALLOWED).build());
         }
     }
@@ -120,9 +123,13 @@ public class AuthorizationFilter implements ContainerRequestFilter {
             } catch (ServiceException e) {
                 throwWebApplicationException(String.format(STORE_NOT_FOUND, pathStoreId), Status.INTERNAL_SERVER_ERROR);
             }
+            URI newUri = new URI(requestContext.getUriInfo().getAbsolutePath().toString() + "?tenantId=" + jwtTenantId.toString());
+            requestContext.setRequestUri(newUri);
         } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException 
                 | UnsupportedEncodingException | IllegalArgumentException jwtEx) {
             throwWebApplicationException(jwtEx.getMessage(), Status.UNAUTHORIZED);
+        } catch (URISyntaxException e) {
+            throwWebApplicationException(e.getMessage(), Status.BAD_REQUEST);
         }
     }
     
@@ -169,7 +176,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     }
 
     private boolean isRegisterPostRequest(ContainerRequestContext requestContext) {
-        return getPathSegmentsSize(requestContext) == 3 && isGetOrPutOrDelete(requestContext);
+        return getPathSegmentsSize(requestContext) == 3 && isPost(requestContext);
     }
 
     private boolean isRegisterGetPutDeleteRequest(ContainerRequestContext requestContext) {

@@ -10,6 +10,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.softserveinc.balance_calculator.dto.ConsumptionTransactionDTO;
 
 /**
@@ -32,6 +34,6 @@ public interface ConsumptionTransactionResource {
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    Response saveConsumptions(List<ConsumptionTransactionDTO> consumptions, @PathParam("register_id") Long registerId);
+    Response saveConsumptions(@NotEmpty List<ConsumptionTransactionDTO> consumptions, @PathParam("register_id") Long registerId);
     
 }

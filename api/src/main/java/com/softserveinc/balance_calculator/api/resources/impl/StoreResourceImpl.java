@@ -83,10 +83,11 @@ public class StoreResourceImpl implements StoreResource {
     }
 
     @Override
-    public Response update(StoreDTO storeDto, Long id) {
+    public Response update(StoreDTO storeDto, Long id, Long tenantId) {
         LOGGER.info(String.format("Updating store with id=%d.", id));
         try {
             storeDto.setId(id);
+            storeDto.setTenantId(tenantId);
             storeService.update(storeDto);
         } catch (DataIntegrityViolationServiceException violation) {
             LOGGER.error(violation.getMessage(), violation);
