@@ -54,8 +54,8 @@ public class StoreResourceImpl implements StoreResource {
     }
 
     @Override
-    public Response create(StoreDTO storeDto, UriInfo uriInfo) {
-        LOGGER.info("Creating new store record.");
+    public Response create(StoreDTO storeDto, UriInfo uriInfo, Long tenantId) {
+        storeDto.setTenantId(tenantId);
         Long key;
         try {
             key = storeService.save(storeDto);

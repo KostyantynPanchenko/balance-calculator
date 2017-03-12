@@ -52,7 +52,7 @@ public class RegisterResourceImpl implements RegisterResource {
     }
 
     private String buildMessage(Long registerId, Long storeId) {
-        return String.format("Register entity with id=%d for store with id=%d not found.", registerId, storeId);
+        return String.format("Register entity with id=%d not found in store No%d.", registerId, storeId);
     }
 
     @Override
@@ -90,8 +90,15 @@ public class RegisterResourceImpl implements RegisterResource {
         LOGGER.info(String.format("Updating Register with id=%d for store No%d.", registerId, storeId));
         registerDto.setStoreId(storeId);
         registerDto.setId(registerId);
+        
+        System.out.println(registerDto);
+        
         try {
-            registerService.update(registerDto);
+            if (!oneRowUpdated(registerDto)) {
+                String message = String.format("Could not update entity with id=%d.", registerId);
+                LOGGER.error(message);
+                return Response.status(Status.NOT_FOUND).entity(new ErrorMessage(404, message + " Check if it exists in your store.")).build();
+            }            
         } catch (DataIntegrityViolationServiceException violation) {
             LOGGER.warn(violation.getMessage(), violation);
             return Response.status(Status.CONFLICT).entity(new ErrorMessage(409, violation.getMessage())).build();
@@ -104,14 +111,18 @@ public class RegisterResourceImpl implements RegisterResource {
         return Response.ok(registerDto).build();
     }
 
+    private boolean oneRowUpdated(RegisterDTO registerDto) throws DataIntegrityViolationServiceException, ServiceException {
+        return registerService.update(registerDto) == 1;
+    }
+
     @Override
     public Response delete(Long storeId, Long registerId) {
         LOGGER.info(String.format("Deleting Register with id=%d for store No%d", registerId, storeId));
         try {
-            if (!oneRowModified(storeId, registerId)) {
+            if (!oneRowDeleted(storeId, registerId)) {
                 String message = String.format("Could not delete entity with id=%d.", registerId);
                 LOGGER.error(message);
-                return Response.status(Status.BAD_REQUEST).entity(new ErrorMessage(400, message + " Check if it exists.")).build();
+                return Response.status(Status.NOT_FOUND).entity(new ErrorMessage(404, message + " Check if it exists in your store.")).build();
             }
         } catch (DataIntegrityViolationServiceException violation) {
             LOGGER.warn(violation.getMessage(), violation);
@@ -124,7 +135,7 @@ public class RegisterResourceImpl implements RegisterResource {
         return Response.noContent().build();
     }
 
-    private boolean oneRowModified(Long storeId, Long registerId) throws ServiceException {
+    private boolean oneRowDeleted(Long storeId, Long registerId) throws ServiceException {
         return registerService.delete(storeId, registerId) == 1;
     }
     

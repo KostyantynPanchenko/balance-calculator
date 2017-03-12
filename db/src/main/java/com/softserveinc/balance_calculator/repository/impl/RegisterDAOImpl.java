@@ -53,7 +53,7 @@ public class RegisterDAOImpl extends AbstractDAO<Register> implements RegisterDA
     @Override
     public int update(Register register) throws DataIntegrityViolationRepositoryException, RepositoryException {
         try {
-            return execute(RegisterNamespace.UPDATE, new Object[] { register.getName(), register.getTimezone(), register.getId() });
+            return execute(RegisterNamespace.UPDATE, new Object[] { register.getName(), register.getTimezone(), register.getStoreId(), register.getId() });
         } catch (DataIntegrityViolationException violation) {
             throw new DataIntegrityViolationRepositoryException(violation);
         } catch (DataAccessException e) {

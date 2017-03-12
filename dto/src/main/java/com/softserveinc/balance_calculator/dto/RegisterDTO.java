@@ -50,8 +50,8 @@ public class RegisterDTO {
         return timezone;
     }
 
-    public void setTimezome(String timezome) {
-        this.timezone = timezome;
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
     }
 
     @Override

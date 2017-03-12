@@ -59,6 +59,7 @@ public class RegisterServiceImpl implements RegisterService {
     
     private Register toRegister(RegisterDTO registerDto) {
         return new Register.Builder()
+                .setId(registerDto.getId())
                 .setStoreId(registerDto.getStoreId())
                 .setName(registerDto.getName())
                 .setTimezone(registerDto.getTimezone())

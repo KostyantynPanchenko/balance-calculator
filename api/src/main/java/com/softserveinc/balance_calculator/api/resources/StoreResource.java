@@ -10,6 +10,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -57,7 +58,7 @@ public interface StoreResource {
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    Response create(@Valid @NotNull StoreDTO storeDto, @Context UriInfo uriInfo);
+    Response create(@Valid @NotNull StoreDTO storeDto, @Context UriInfo uriInfo, @QueryParam("tenantId") Long tenantId);
     
     /**
      * Updates <code>Store</code> entity with values provided in request payload.

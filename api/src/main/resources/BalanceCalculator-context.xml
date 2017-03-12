@@ -103,6 +103,7 @@
 
     <bean id="authorizationFilter" class="com.softserveinc.balance_calculator.api.filters.AuthorizationFilter">
         <constructor-arg name="storeService" ref="storeService"/>
+        <constructor-arg name="registerService" ref="registerService"/>
     </bean>
     
     <context:property-placeholder location="jdbc.properties" />
