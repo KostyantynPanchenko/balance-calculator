@@ -67,16 +67,12 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         if (isStorePostRequest(requestContext)) {
-            System.out.println("store POST");
             filterStorePostRequest(requestContext);
         } else if (isStoreGetPutDeleteRequest(requestContext) || isRegisterPostRequest(requestContext)) {
-            System.out.println("store GET PUT DELETE or register POST");
             filterStoreGetPutDeleteRequest(requestContext); 
         } else if (isRegisterGetPutDeleteRequest(requestContext) || isPostToContributions(requestContext)) {
-            System.out.println("register GET PUT DELETE or contributions POST");
             filterRegisterGetPutDeleteRequest(requestContext);
         } else {
-            System.out.println("NOT ALLOWED - " + requestContext.getUriInfo().getAbsolutePath());
             throw new NotAllowedException(Response.status(Status.METHOD_NOT_ALLOWED).build());
         }
     }
@@ -275,13 +271,13 @@ public class AuthorizationFilter implements ContainerRequestFilter {
         MalformedJwtException, SignatureException, IllegalArgumentException, UnsupportedEncodingException {
         
         String jwt = extractJwtFromRequest(requestContext);
-        
-        return Long.valueOf(
-                (String) Jwts.parser()
+        Integer id = (Integer) Jwts.parser()
                 .setSigningKey(KEY.getBytes(CHARSET_NAME))
                 .parseClaimsJws(jwt)
                 .getBody()
-                .get(TENANT_ID));
+                .get(TENANT_ID);
+
+        return new Long(id.longValue());
     }
 
     /**

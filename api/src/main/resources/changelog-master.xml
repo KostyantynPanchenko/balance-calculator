@@ -11,5 +11,5 @@
   <include file="classpath:/changelog/contribution/contribution.changelog.xml" relativeToChangelogFile="true"/>
   <include file="classpath:/changelog/balance/balance.changelog.xml" relativeToChangelogFile="true"/>
   <include file="classpath:/changelog/06.transaction.management.changelog.xml" relativeToChangelogFile="true"/>
-  <include file="classpath:/changelog/07.stored_procedure.changelog.xml" relativeToChangelogFile="true"/> 
+  <include file="classpath:/changelog/07.stored_procedure.changelog.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

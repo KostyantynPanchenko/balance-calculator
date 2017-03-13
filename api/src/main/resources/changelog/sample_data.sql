@@ -1,3 +1,6 @@
+--liquibase formatted sql
+
+--changeset 08_data_import
 INSERT INTO stores(tenant_id, name, description) VALUES(23, 'MJ', 'Michael Jordan');
 INSERT INTO stores(tenant_id, name, description) VALUES(33, 'PIP', 'Scotie Pippen');
 INSERT INTO stores(tenant_id, name, description) VALUES(34, 'Shaq', 'Shaquille Oneil');

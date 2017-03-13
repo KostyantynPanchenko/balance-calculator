@@ -41,11 +41,9 @@ public class StoreResourceImpl implements StoreResource {
         try {
             return Response.status(Status.OK).entity(storeService.getStoreById(id)).build();
         } catch (EntityNotFoundServiceException notFound) {
-            LOGGER.warn(notFound.getMessage(), notFound);
-            return Response.status(Status.NOT_FOUND).entity(new ErrorMessage(404, buildMessage(id))).build();
+            return logAndReturnResponse(notFound, Status.NOT_FOUND, new ErrorMessage(404, buildMessage(id)));
         } catch (ServiceException e) {
-            LOGGER.error(e.getMessage(), e);
-            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(500, e.getMessage())).build();
+            return logAndReturnResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
         }
     }
     
@@ -60,11 +58,9 @@ public class StoreResourceImpl implements StoreResource {
         try {
             key = storeService.save(storeDto);
         } catch (DataIntegrityViolationServiceException violation) {
-            LOGGER.error(violation.getMessage(), violation);
-            return Response.status(Status.CONFLICT).entity(new ErrorMessage(409, violation.getMessage())).build();
+            return logAndReturnResponse(violation, Status.CONFLICT, new ErrorMessage(409, violation.getMessage()));
         } catch (ServiceException e) {
-            LOGGER.error(e.getMessage(), e);
-            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(500, e.getMessage())).build();
+            return logAndReturnResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
         }
         storeDto.setId(key);
         LOGGER.info(String.format("Successfully created new store with id=%d.", key));
@@ -85,16 +81,14 @@ public class StoreResourceImpl implements StoreResource {
     @Override
     public Response update(StoreDTO storeDto, Long id, Long tenantId) {
         LOGGER.info(String.format("Updating store with id=%d.", id));
+        storeDto.setId(id);
+        storeDto.setTenantId(tenantId);
         try {
-            storeDto.setId(id);
-            storeDto.setTenantId(tenantId);
             storeService.update(storeDto);
         } catch (DataIntegrityViolationServiceException violation) {
-            LOGGER.error(violation.getMessage(), violation);
-            return Response.status(Status.CONFLICT).entity(new ErrorMessage(409, violation.getMessage())).build();
+            return logAndReturnResponse(violation, Status.CONFLICT, new ErrorMessage(409, violation.getMessage()));
         } catch (ServiceException e) {
-            LOGGER.error(e.getMessage(), e);
-            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(500, e.getMessage())).build();
+            return logAndReturnResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
         }
         LOGGER.info(String.format("Successfully updated store with id=%d.", id));
         return Response.ok(storeDto).build();
@@ -110,11 +104,9 @@ public class StoreResourceImpl implements StoreResource {
                 return Response.status(Status.BAD_REQUEST).entity(new ErrorMessage(400, message)).build();
             }
         } catch (DataIntegrityViolationServiceException violation) {
-            LOGGER.error(violation.getMessage(), violation);
-            return Response.status(Status.CONFLICT).entity(new ErrorMessage(409, violation.getMessage())).build();
+            return logAndReturnResponse(violation, Status.CONFLICT, new ErrorMessage(409, violation.getMessage()));
         } catch (ServiceException e) {
-            LOGGER.error(e.getMessage(), e);
-            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(new ErrorMessage(500, e.getMessage())).build();
+            return logAndReturnResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
         }
         LOGGER.info(String.format("Succesfully deleted store with id=%d.", id));
         return Response.noContent().build();
@@ -122,5 +114,10 @@ public class StoreResourceImpl implements StoreResource {
 
     private boolean oneRowModified(Long id) throws ServiceException {
         return storeService.delete(id) == 1;
+    }
+    
+    private Response logAndReturnResponse(Exception e, Status status, ErrorMessage message) {
+        LOGGER.error(e.getMessage(), e);
+        return Response.status(status).entity(message).build();
     }
 }

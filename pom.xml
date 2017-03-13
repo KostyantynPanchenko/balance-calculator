@@ -18,7 +18,7 @@
     <slf4j.version>1.7.7</slf4j.version>
     <java.version>1.8</java.version>
     <assembly.plugin.version>2.6</assembly.plugin.version>
-    <mainClass>com.softserveinc.balance.calculator.api.BalanceCalculatorApplication</mainClass>
+    <mainClass>com.softserveinc.balance_calculator.api.BalanceCalculatorApplication</mainClass>
   </properties>
   
   <dependencies>
@@ -89,7 +89,7 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.0.2</version>
                 <configuration>
-                <encoding>UTF-8</encoding>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
             <plugin>

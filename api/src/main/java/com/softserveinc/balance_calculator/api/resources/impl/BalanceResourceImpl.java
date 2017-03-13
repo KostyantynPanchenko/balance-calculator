@@ -6,6 +6,7 @@ import java.time.format.DateTimeParseException;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -53,7 +54,7 @@ public class BalanceResourceImpl implements BalanceResource {
             throw new NotFoundException(String.format(NOT_FOUND, registerId));
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new NotFoundException(INTERNAL_SERVER_ERROR);
+            throw new ServerErrorException(INTERNAL_SERVER_ERROR, Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -67,7 +68,6 @@ public class BalanceResourceImpl implements BalanceResource {
      */
     private LocalDate parseDate(String date) throws BadRequestException {
         try {
-            System.out.println("Balance requested for " + date);
             return LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
         } catch (DateTimeParseException  e) {
             throw new BadRequestException(String.format(BAD_REQUEST, date));
