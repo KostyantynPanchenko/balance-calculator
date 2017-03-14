@@ -37,13 +37,13 @@ public class StoreResourceImpl implements StoreResource {
 
     @Override
     public Response getStoreById(Long id) {
-        LOGGER.info(String.format("Retrieving store with id=%d.", id));
+        LOGGER.info("Retrieving store with id={}", id);
         try {
             return Response.status(Status.OK).entity(storeService.getStoreById(id)).build();
         } catch (EntityNotFoundServiceException notFound) {
-            return logAndReturnResponse(notFound, Status.NOT_FOUND, new ErrorMessage(404, buildMessage(id)));
+            return getLoggedResponse(notFound, Status.NOT_FOUND, new ErrorMessage(404, buildMessage(id)));
         } catch (ServiceException e) {
-            return logAndReturnResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
+            return getLoggedResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
         }
     }
     
@@ -58,12 +58,12 @@ public class StoreResourceImpl implements StoreResource {
         try {
             key = storeService.save(storeDto);
         } catch (DataIntegrityViolationServiceException violation) {
-            return logAndReturnResponse(violation, Status.CONFLICT, new ErrorMessage(409, violation.getMessage()));
+            return getLoggedResponse(violation, Status.CONFLICT, new ErrorMessage(409, violation.getMessage()));
         } catch (ServiceException e) {
-            return logAndReturnResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
+            return getLoggedResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
         }
         storeDto.setId(key);
-        LOGGER.info(String.format("Successfully created new store with id=%d.", key));
+        LOGGER.info("Successfully created new store with id={}", key);
         return Response.created(buildUri(uriInfo, key)).entity(storeDto).build();
     }
 
@@ -80,35 +80,39 @@ public class StoreResourceImpl implements StoreResource {
 
     @Override
     public Response update(StoreDTO storeDto, Long id, Long tenantId) {
-        LOGGER.info(String.format("Updating store with id=%d.", id));
+        LOGGER.info("Updating store with id={}", id);
         storeDto.setId(id);
         storeDto.setTenantId(tenantId);
         try {
-            storeService.update(storeDto);
+            if (!oneRowUpdated(storeDto)) {
+                return getLoggedResponse(Status.BAD_REQUEST, String.format("Could not update entity with id=%d", storeDto));
+            }
         } catch (DataIntegrityViolationServiceException violation) {
-            return logAndReturnResponse(violation, Status.CONFLICT, new ErrorMessage(409, violation.getMessage()));
+            return getLoggedResponse(violation, Status.CONFLICT, new ErrorMessage(409, violation.getMessage()));
         } catch (ServiceException e) {
-            return logAndReturnResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
+            return getLoggedResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
         }
-        LOGGER.info(String.format("Successfully updated store with id=%d.", id));
+        LOGGER.info("Successfully updated store with id={}", id);
         return Response.ok(storeDto).build();
+    }
+
+    private boolean oneRowUpdated(StoreDTO storeDto) throws DataIntegrityViolationServiceException, ServiceException {
+        return storeService.update(storeDto) == 1;
     }
 
     @Override
     public Response delete(Long id) {
-        LOGGER.info(String.format("Deleting store with id=%d.", id));
+        LOGGER.info("Deleting store with id={}", id);
         try {
             if (!oneRowModified(id)) {
-                String message = String.format("Could not delete store with id=%d", id);
-                LOGGER.error(message);
-                return Response.status(Status.BAD_REQUEST).entity(new ErrorMessage(400, message)).build();
+                return getLoggedResponse(Status.BAD_REQUEST, String.format("Could not delete store with id=%d", id));
             }
         } catch (DataIntegrityViolationServiceException violation) {
-            return logAndReturnResponse(violation, Status.CONFLICT, new ErrorMessage(409, violation.getMessage()));
+            return getLoggedResponse(violation, Status.CONFLICT, new ErrorMessage(409, violation.getMessage()));
         } catch (ServiceException e) {
-            return logAndReturnResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
+            return getLoggedResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
         }
-        LOGGER.info(String.format("Succesfully deleted store with id=%d.", id));
+        LOGGER.info("Succesfully deleted store with id={}", id);
         return Response.noContent().build();
     }
 
@@ -116,8 +120,13 @@ public class StoreResourceImpl implements StoreResource {
         return storeService.delete(id) == 1;
     }
     
-    private Response logAndReturnResponse(Exception e, Status status, ErrorMessage message) {
+    private Response getLoggedResponse(Exception e, Status status, ErrorMessage message) {
         LOGGER.error(e.getMessage(), e);
         return Response.status(status).entity(message).build();
+    }
+
+    private Response getLoggedResponse(Status status, String message) {
+        LOGGER.error(message);
+        return Response.status(status).entity(new ErrorMessage(404, message)).build();
     }
 }

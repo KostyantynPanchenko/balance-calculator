@@ -5,3 +5,14 @@ server:
   adminConnectors:
   - type: http
     port: 9001
+
+logging:
+  appenders:
+    - type: console
+      threshold: INFO
+      target: stdout
+    - type: file
+      threshold: INFO
+      currentLogFilename: ./logs/balance-calculator.log
+      archivedLogFilenamePattern: ./logs/balance-calculator-%d.log.gz
+      archivedFileCount: 5

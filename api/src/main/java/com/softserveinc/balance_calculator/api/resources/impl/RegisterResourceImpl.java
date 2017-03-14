@@ -37,36 +37,36 @@ public class RegisterResourceImpl implements RegisterResource {
     
     @Override
     public Response getRegisterById(Long storeId, Long registerId) {
-        LOGGER.info(String.format("Retrieving Register with id=%d for store No%d", registerId, storeId));
+        LOGGER.info("Retrieving Register with id={} for Store id={}", registerId, storeId);
         RegisterDTO register;
         try {
             register = registerService.getRegisterById(storeId, registerId);
         } catch (EntityNotFoundServiceException notFound) {
-            return logAndReturnResponse(notFound, Status.NOT_FOUND, new ErrorMessage(404, buildMessage(registerId, storeId)));
+            return getLoggedResponse(notFound, Status.BAD_REQUEST, new ErrorMessage(404, buildMessage(registerId, storeId)));
         } catch (ServiceException e) {
-            return logAndReturnResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
+            return getLoggedResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
         }
         return Response.status(Status.OK).entity(register).build();
     }
 
     private String buildMessage(Long registerId, Long storeId) {
-        return String.format("Register entity with id=%d not found in store No%d.", registerId, storeId);
+        return String.format("Register entity with id=%d not found in Store id=%d", registerId, storeId);
     }
 
     @Override
     public Response create(RegisterDTO registerDto, Long storeId, UriInfo uriInfo) {
-        LOGGER.info(String.format("Creating new Register for store No%d", storeId));
+        LOGGER.info("Creating new Register for Store id={}", storeId);
         registerDto.setStoreId(storeId);
         Long key;
         try {
             key = registerService.save(registerDto);
         } catch (DataIntegrityViolationServiceException violation) {
-            return logAndReturnResponse(violation, Status.CONFLICT, new ErrorMessage(409, violation.getMessage()));
+            return getLoggedResponse(violation, Status.CONFLICT, new ErrorMessage(409, violation.getMessage()));
         } catch (ServiceException e) {
-            return logAndReturnResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
+            return getLoggedResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
         }
         registerDto.setId(key);
-        LOGGER.info(String.format("Successfully created new Register with id=%d for store No%d", key, storeId));
+        LOGGER.info("Successfully created new Register with id={} for Store id={}", key, storeId);
         return Response.created(buildUri(uriInfo, key)).entity(registerDto).build();
     }
     
@@ -83,7 +83,7 @@ public class RegisterResourceImpl implements RegisterResource {
 
     @Override
     public Response update(RegisterDTO registerDto, Long storeId, Long registerId) {
-        LOGGER.info(String.format("Updating Register with id=%d for store No%d.", registerId, storeId));
+        LOGGER.info("Updating Register with id={} for Store id={}", registerId, storeId);
         registerDto.setStoreId(storeId);
         registerDto.setId(registerId);
         
@@ -91,14 +91,12 @@ public class RegisterResourceImpl implements RegisterResource {
         
         try {
             if (!oneRowUpdated(registerDto)) {
-                String message = String.format("Could not update entity with id=%d.", registerId);
-                LOGGER.error(message);
-                return Response.status(Status.NOT_FOUND).entity(new ErrorMessage(404, message + " Check if it exists in your store.")).build();
-            }            
+                return getLoggedResponse(Status.BAD_REQUEST, String.format("Could not update Register with id=%d", registerId));
+            }
         } catch (DataIntegrityViolationServiceException violation) {
-            return logAndReturnResponse(violation, Status.CONFLICT, new ErrorMessage(409, violation.getMessage()));
+            return getLoggedResponse(violation, Status.CONFLICT, new ErrorMessage(409, violation.getMessage()));
         } catch (ServiceException e) {
-            return logAndReturnResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
+            return getLoggedResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
         }
         registerDto.setId(registerId);
         registerDto.setStoreId(storeId);
@@ -111,19 +109,17 @@ public class RegisterResourceImpl implements RegisterResource {
 
     @Override
     public Response delete(Long storeId, Long registerId) {
-        LOGGER.info(String.format("Deleting Register with id=%d for store No%d", registerId, storeId));
+        LOGGER.info("Deleting Register with id={} for Store id={}", registerId, storeId);
         try {
             if (!oneRowDeleted(storeId, registerId)) {
-                String message = String.format("Could not delete entity with id=%d.", registerId);
-                LOGGER.error(message);
-                return Response.status(Status.NOT_FOUND).entity(new ErrorMessage(404, message + " Check if it exists in your store.")).build();
+                return getLoggedResponse(Status.NOT_FOUND, String.format("Could not delete Register with id=%d", registerId));
             }
         } catch (DataIntegrityViolationServiceException violation) {
-            return logAndReturnResponse(violation, Status.CONFLICT, new ErrorMessage(409, violation.getMessage()));
+            return getLoggedResponse(violation, Status.CONFLICT, new ErrorMessage(409, violation.getMessage()));
         } catch (ServiceException e) {
-            return logAndReturnResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
+            return getLoggedResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
         }
-        LOGGER.info(String.format("Register with id=%d for store No%d was successfully deleted.", registerId, storeId));
+        LOGGER.info("Register with id={} for Store id={} was successfully deleted", registerId, storeId);
         return Response.noContent().build();
     }
 
@@ -131,9 +127,14 @@ public class RegisterResourceImpl implements RegisterResource {
         return registerService.delete(storeId, registerId) == 1;
     }
     
-    private Response logAndReturnResponse(Exception e, Status status, ErrorMessage message) {
+    private Response getLoggedResponse(Exception e, Status status, ErrorMessage message) {
         LOGGER.error(e.getMessage(), e);
         return Response.status(status).entity(message).build();
+    }
+
+    private Response getLoggedResponse(Status status, String message) {
+        LOGGER.error(message);
+        return Response.status(status).entity(new ErrorMessage(404, message)).build();
     }
     
 }
