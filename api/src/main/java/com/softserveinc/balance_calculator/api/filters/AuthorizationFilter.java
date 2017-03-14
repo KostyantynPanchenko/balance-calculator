@@ -145,7 +145,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
                     throwWebApplicationException(String.format(FORBIDDEN, new Object[] {pathStoreId, jwtTenantId}), Status.FORBIDDEN);
                 }
                 if (!isAuthorizedRequestToRegister(pathStoreId, pathRegisterId)) {
-                    throwWebApplicationException(String.format(FORBIDDEN, new Object[] {pathStoreId, pathRegisterId}), Status.FORBIDDEN);
+                    throwWebApplicationException(String.format(FORBIDDEN, new Object[] {pathStoreId, jwtTenantId}), Status.FORBIDDEN);
                 }
             } catch (EntityNotFoundServiceException notFound) {
                 throwWebApplicationException(String.format(REGISTER_NOT_FOUND, pathRegisterId, pathStoreId), Status.NOT_FOUND);

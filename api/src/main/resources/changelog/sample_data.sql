@@ -14,9 +14,9 @@ INSERT INTO registers(store_id, name, timezone) VALUES(3, 'Shaq No1', '-08:00');
 INSERT INTO registers(store_id, name, timezone) VALUES(3, 'Shaq No1', '-08:00');
 INSERT INTO registers(store_id, name, timezone) VALUES(3, 'Shaq No1', '-08:00');
 
--- INSERT INTO contribution_transactions(register_id, order_granted_value, created_on, created_by) VALUES(1, 30, now() - interval '5 days', 'Jonh Doe');
--- INSERT INTO contribution_transactions(register_id, order_granted_value, created_on, created_by) VALUES(1, 50, now() - interval '3 days', 'Jonh Doe');
+INSERT INTO contribution_transactions(register_id, order_granted_value, created_on, created_by) VALUES(1, 30, now() - interval '5 days', 'Jonh Doe');
+INSERT INTO contribution_transactions(register_id, order_granted_value, created_on, created_by) VALUES(1, 50, now() - interval '3 days', 'Jonh Doe');
 
--- INSERT INTO consumption_transactions(register_id, consumed_value, created_on, created_by) VALUES(1, 15, now() - interval '4 days', 'Jane Doe');
--- INSERT INTO consumption_transactions(register_id, consumed_value, created_on, created_by) VALUES(1, 40, now() - interval '2 days', 'Jane Doe');
--- INSERT INTO consumption_transactions(register_id, consumed_value, created_on, created_by) VALUES(1, 25, now() - interval '1 day', 'Jane Doe');
+INSERT INTO consumption_transactions(register_id, consumed_value, created_on, created_by) VALUES(1, 15, now() - interval '4 days', 'Jane Doe');
+INSERT INTO consumption_transactions(register_id, consumed_value, created_on, created_by) VALUES(1, 40, now() - interval '2 days', 'Jane Doe');
+INSERT INTO consumption_transactions(register_id, consumed_value, created_on, created_by) VALUES(1, 25, now() - interval '1 day', 'Jane Doe');
