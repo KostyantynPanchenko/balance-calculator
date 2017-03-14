@@ -15,18 +15,15 @@ import com.softserveinc.balance_calculator.repository.exception.RepositoryExcept
 public interface RegisterDAO {
 
     /**
-     * Retrieves a <code>Register</code> entity with specified id which relates
-     * to appropriate <code>Store</code> entity.
-     * 
-     * @param storeId       id of <code>Store</code> entity to which
-     *                      <code>Register</code> entity relates
+     * Retrieves a <code>Register</code> entity with specified id.
+     *
      * @param registerId    id of <code>Register</code> entity to be
      *                      retrieved
      * @return              retrieved <code>Register</code> entity
      * @throws DomainEntityNotFoundException when entity was not found 
      * @throws RepositoryException when could not execute SQL query
      */
-    Register getRegisterById(Long storeId, Long registerId) throws DomainEntityNotFoundException, RepositoryException;
+    Register getRegisterById(Long registerId) throws DomainEntityNotFoundException, RepositoryException;
     
     /**
      * Saves given <code>Register</code> entity.
@@ -53,13 +50,11 @@ public interface RegisterDAO {
     /**
      * Deletes <code>Register</code> entity.
      * 
-     * @param storeId       id of <code>Store</code> entity to which
-     *                      <code>Register</code> entity relates to
      * @param registerId    id of <code>Register</code> to be deleted
      * @return              number of modified rows
      * @throws DataIntegrityViolationRepositoryException when an attempt to insert or 
      *                      update data results in violation of an integrity constraint
      * @throws RepositoryException if could not perform deletion
      */
-    int delete(Long storeId, Long registerId) throws DataIntegrityViolationRepositoryException,RepositoryException;
+    int delete(Long registerId) throws DataIntegrityViolationRepositoryException,RepositoryException;
 }

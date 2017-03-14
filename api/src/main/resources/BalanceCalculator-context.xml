@@ -40,6 +40,7 @@
     
     <bean id="balanceService" class="com.softserveinc.balance_calculator.service.impl.BalanceServiceImpl">
         <constructor-arg name = "balanceDao" ref="balanceDao"/>
+        <constructor-arg name="registerDao" ref="registerDao"/>
     </bean>
     
     <bean id="balanceDao" class="com.softserveinc.balance_calculator.repository.impl.BalanceDAOImpl">

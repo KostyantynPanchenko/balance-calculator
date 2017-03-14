@@ -22,9 +22,6 @@ public interface RegisterService {
      * It receives a <code>Register</code> entity as a result of a call 
      * to <code>RegisterRepository</code> object and transforms it to 
      * <code>RegisterDTO</code> object.
-     * @param storeId           id of <code>Store</code> entity to which
-     *                          requested <code>Register</code> entity
-     *                          relates to
      * @param registerId        id of requested <code>Register</code> entity
      * @return                  <code>RegisterDTO</code> object representing 
      *                          <code>Register</code> object
@@ -32,7 +29,7 @@ public interface RegisterService {
      *                          with specified id was not found
      * @throws ServiceException when could not execute SQL query
      */
-    RegisterDTO getRegisterById(Long storeId, Long registerId) throws EntityNotFoundServiceException, ServiceException;
+    RegisterDTO getRegisterById(Long registerId) throws EntityNotFoundServiceException, ServiceException;
 
     /**
      * Processes request to create <code>Register</code> entity with 
@@ -71,15 +68,13 @@ public interface RegisterService {
     int update(RegisterDTO registerDto) throws DataIntegrityViolationServiceException, ServiceException;
 
     /**
+     * Deletes <code>Register</code> entity.
      * 
-     * @param storeId           id of <code>Store</code> entity to which
-     *                          specified <code>Register</code> entity
-     *                          relates to
      * @param registerId        id of <code>Register</code> entity to be deleted
      * @return                  number of modified rows
      * @throws DataIntegrityViolationServiceException  when an attempt 
      * to insert or update data results in violation of an integrity constraint
      * @throws ServiceException when could not execute SQL query
      */
-    int delete(Long storerId, Long registerId) throws DataIntegrityViolationServiceException, ServiceException;
+    int delete(Long registerId) throws DataIntegrityViolationServiceException, ServiceException;
 }

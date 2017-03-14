@@ -252,7 +252,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
      * @throws EntityNotFoundServiceException 
      */
     private boolean isAuthorizedRequestToRegister(Long storeId, Long registerId) throws EntityNotFoundServiceException, ServiceException {
-        return registerService.getRegisterById(storeId, registerId).getStoreId().equals(storeId);
+        return registerService.getRegisterById(registerId).getStoreId().equals(storeId);
     }
     
     /**

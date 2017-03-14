@@ -36,21 +36,21 @@ public class RegisterResourceImpl implements RegisterResource {
     }
     
     @Override
-    public Response getRegisterById(Long storeId, Long registerId) {
-        LOGGER.info("Retrieving Register with id={} for Store id={}", registerId, storeId);
+    public Response getRegisterById(Long registerId) {
+        LOGGER.info("Retrieving Register with id={}", registerId);
         RegisterDTO register;
         try {
-            register = registerService.getRegisterById(storeId, registerId);
+            register = registerService.getRegisterById(registerId);
         } catch (EntityNotFoundServiceException notFound) {
-            return getLoggedResponse(notFound, Status.BAD_REQUEST, new ErrorMessage(404, buildMessage(registerId, storeId)));
+            return getLoggedResponse(notFound, Status.BAD_REQUEST, new ErrorMessage(404, buildMessage(registerId)));
         } catch (ServiceException e) {
             return getLoggedResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
         }
         return Response.status(Status.OK).entity(register).build();
     }
 
-    private String buildMessage(Long registerId, Long storeId) {
-        return String.format("Register entity with id=%d not found in Store id=%d", registerId, storeId);
+    private String buildMessage(Long registerId) {
+        return String.format("Register entity with id=%d not found", registerId);
     }
 
     @Override
@@ -108,10 +108,10 @@ public class RegisterResourceImpl implements RegisterResource {
     }
 
     @Override
-    public Response delete(Long storeId, Long registerId) {
-        LOGGER.info("Deleting Register with id={} for Store id={}", registerId, storeId);
+    public Response delete(Long registerId) {
+        LOGGER.info("Deleting Register with id={}", registerId);
         try {
-            if (!oneRowDeleted(storeId, registerId)) {
+            if (!oneRowDeleted(registerId)) {
                 return getLoggedResponse(Status.NOT_FOUND, String.format("Could not delete Register with id=%d", registerId));
             }
         } catch (DataIntegrityViolationServiceException violation) {
@@ -119,12 +119,12 @@ public class RegisterResourceImpl implements RegisterResource {
         } catch (ServiceException e) {
             return getLoggedResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
         }
-        LOGGER.info("Register with id={} for Store id={} was successfully deleted", registerId, storeId);
+        LOGGER.info("Register with id={} was successfully deleted", registerId);
         return Response.noContent().build();
     }
 
-    private boolean oneRowDeleted(Long storeId, Long registerId) throws ServiceException {
-        return registerService.delete(storeId, registerId) == 1;
+    private boolean oneRowDeleted(Long registerId) throws ServiceException {
+        return registerService.delete(registerId) == 1;
     }
     
     private Response getLoggedResponse(Exception e, Status status, ErrorMessage message) {

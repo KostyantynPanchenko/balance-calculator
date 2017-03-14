@@ -19,9 +19,9 @@ public class RegisterServiceImpl implements RegisterService {
         this.registerDao = registerDao;
     }
     
-    public RegisterDTO getRegisterById(Long storeId, Long registerId) throws EntityNotFoundServiceException, ServiceException {
+    public RegisterDTO getRegisterById(Long registerId) throws EntityNotFoundServiceException, ServiceException {
         try {
-            return new RegisterDTO(registerDao.getRegisterById(storeId, registerId));
+            return new RegisterDTO(registerDao.getRegisterById(registerId));
         } catch (DomainEntityNotFoundException notFound) {
             throw new EntityNotFoundServiceException(notFound);
         } catch (RepositoryException e) {
@@ -49,9 +49,9 @@ public class RegisterServiceImpl implements RegisterService {
         }
     }
 
-    public int delete(Long storeId, Long registerId) throws DataIntegrityViolationServiceException, ServiceException {
+    public int delete(Long registerId) throws DataIntegrityViolationServiceException, ServiceException {
         try {
-            return registerDao.delete(storeId, registerId);
+            return registerDao.delete(registerId);
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }

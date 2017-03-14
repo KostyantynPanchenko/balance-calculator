@@ -34,15 +34,13 @@ public interface RegisterResource {
     /**
      * GET endpoint for <code>Register</code> entity with given id.
      * 
-     * @param storeId       <code>Store</code> entity id to which <code>Register</code>
-     *                      relates
      * @param registerId    <code>Register</code> entity id
      * @return              <code>Response</code> object which holds response status 
      *                      code and representation of <code>Register</code> entity
      */
     @GET
     @Path("/{register_id}")
-    Response getRegisterById(@PathParam("store_id") Long storeId, @PathParam("register_id") Long registerId);
+    Response getRegisterById(@PathParam("register_id") Long registerId);
 
     /**
      * Creates endpoint for <code>Register</code> entity.
@@ -66,8 +64,6 @@ public interface RegisterResource {
      * 
      * @param registerDto   <code>Register</code> data transfer object to which request
      *                      payload data will be mapped to
-     * @param storeId       <code>Store</code> id to which <code>Register</code> relates
-     *                      to
      * @param registerId    id of <code>Register</code> entity to be updated
      * @return              <code>Response</code> object containing representation of 
      *                      updated <code>Store</code> entity and response status code
@@ -80,13 +76,11 @@ public interface RegisterResource {
     /**
      * Delete endpoint for  <code>Register</code> entity.
      * 
-     * @param storeId       <code>Store</code> id to which <code>Register</code> entity
-     *                      belongs to
      * @param registerId    id of <code>Register</code> entity to be deleted
      * @return              <code>Response</code> object containing response status code
      */
     @DELETE
     @Path("/{register_id}")
-    Response delete(@PathParam("store_id") Long storeId, @PathParam("register_id") Long registerId);
+    Response delete(@PathParam("register_id") Long registerId);
 
 }

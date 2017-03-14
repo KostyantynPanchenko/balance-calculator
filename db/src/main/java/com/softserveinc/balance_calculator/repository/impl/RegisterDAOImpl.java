@@ -29,9 +29,13 @@ public class RegisterDAOImpl extends AbstractDAO<Register> implements RegisterDA
     }
 
     @Override
-    public Register getRegisterById(Long storeId, Long registerId) throws DomainEntityNotFoundException, RepositoryException {
+    public Register getRegisterById(Long registerId) throws DomainEntityNotFoundException, RepositoryException {
         try {
-            return getById(RegisterNamespace.SELECT, new Object[] {storeId, registerId}, new RegisterRowMapper());
+            String SQL = String.format(RegisterNamespace.SELECT,
+                    RegisterNamespace.ID_COLUMN_NAME, RegisterNamespace.STORE_ID_COLUMN_NAME,
+                    RegisterNamespace.NAME_COLUMN_NAME, RegisterNamespace.TIMEZONE_COLUMN_NAME,
+                    RegisterNamespace.TABLE_NAME, RegisterNamespace.ID_COLUMN_NAME);
+            return getById(SQL, new Object[] {registerId}, new RegisterRowMapper());
         } catch (EmptyResultDataAccessException notFound) {
             throw new DomainEntityNotFoundException(notFound);
         } catch (DataAccessException e) {
@@ -53,7 +57,10 @@ public class RegisterDAOImpl extends AbstractDAO<Register> implements RegisterDA
     @Override
     public int update(Register register) throws DataIntegrityViolationRepositoryException, RepositoryException {
         try {
-            return execute(RegisterNamespace.UPDATE, new Object[] { register.getName(), register.getTimezone(), register.getStoreId(), register.getId() });
+            String SQL = String.format(RegisterNamespace.UPDATE, RegisterNamespace.TABLE_NAME,
+                    RegisterNamespace.STORE_ID_COLUMN_NAME, RegisterNamespace.NAME_COLUMN_NAME,
+                    RegisterNamespace.TIMEZONE_COLUMN_NAME, RegisterNamespace.ID_COLUMN_NAME);
+            return execute(SQL, new Object[] { register.getStoreId(), register.getName(), register.getTimezone(), register.getId() });
         } catch (DataIntegrityViolationException violation) {
             throw new DataIntegrityViolationRepositoryException(violation);
         } catch (DataAccessException e) {
@@ -62,9 +69,11 @@ public class RegisterDAOImpl extends AbstractDAO<Register> implements RegisterDA
     }
 
     @Override
-    public int delete(Long storeId, Long registerId) throws DataIntegrityViolationRepositoryException, RepositoryException {
+    public int delete(Long registerId) throws DataIntegrityViolationRepositoryException, RepositoryException {
         try {
-            return execute(RegisterNamespace.DELETE, new Object[] { registerId, storeId });
+            String SQL = String.format(RegisterNamespace.DELETE,
+                    RegisterNamespace.TABLE_NAME, RegisterNamespace.ID_COLUMN_NAME);
+            return execute(SQL, new Object[] { registerId});
         } catch (DataIntegrityViolationException violation) {
             throw new DataIntegrityViolationRepositoryException(violation);
         } catch (DataAccessException e) {

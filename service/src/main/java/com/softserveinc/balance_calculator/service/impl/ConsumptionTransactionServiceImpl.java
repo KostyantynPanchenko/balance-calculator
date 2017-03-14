@@ -22,7 +22,6 @@ public class ConsumptionTransactionServiceImpl implements ConsumptionTransaction
 
     private ConsumptionTransactionDAO consumptionDao;
     
-    
     public ConsumptionTransactionServiceImpl(ConsumptionTransactionDAO consumptionDao) {
         this.consumptionDao = consumptionDao;
     }
