@@ -5,9 +5,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -25,7 +27,6 @@ import com.softserveinc.balance_calculator.service.StoreService;
 import com.softserveinc.balance_calculator.service.exception.EntityNotFoundServiceException;
 import com.softserveinc.balance_calculator.service.exception.ServiceException;
 
-import io.dropwizard.jersey.errors.ErrorMessage;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -58,7 +59,6 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     private final String STORE_NOT_FOUND = "Store with id=%d not found.";
     private final String REGISTER_NOT_FOUND = "Register with id=%d not found in store No%d.";
     private final String SERVER_ERROR = "Error occurred while trying to retrieve store with id=%d.";
-    private final String AUTHORIZATION_REQUIRED = "Authorization required. Token not found.";
     
     public AuthorizationFilter(StoreService storeService, RegisterService registerService) {
         this.storeService = storeService;
@@ -67,12 +67,14 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
+        Long tenantId = getTenantIdFromJwt(requestContext);
+        
         if (isStorePostRequest(requestContext)) {
-            filterStorePostRequest(requestContext);
+            filterStorePostRequest(tenantId, requestContext);
         } else if (isStoreGetPutDeleteRequest(requestContext) || isRegisterPostRequest(requestContext)) {
-            filterStoreGetPutDeleteRequest(requestContext); 
+            filterStoreGetPutDeleteRequest(tenantId, requestContext); 
         } else if (isRegisterGetPutDeleteRequest(requestContext) || isPostToContributions(requestContext)) {
-            filterRegisterGetPutDeleteRequest(requestContext);
+            filterRegisterGetPutDeleteRequest(tenantId, requestContext);
         } else {
             throw new NotAllowedException(Response.status(Status.METHOD_NOT_ALLOWED).build());
         }
@@ -80,51 +82,36 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 
     /**
      * Filters POST requests to <code>Store</code>.
+     * @param tenantId tenant id extracted from jwt
      *  
      * @param requestContext current <code>ContainerRequestContext</code>
-     * @throws IOException 
-     * @throws URISyntaxException 
+     * @throws URISyntaxException if could not construct URI
      */
-    private void filterStorePostRequest(ContainerRequestContext requestContext) throws IOException {
+    private void filterStorePostRequest(Long tenantId, ContainerRequestContext requestContext) {
         try {
-            Long tenantId = getTenantIdFromJwt(requestContext);
-            if (tenantId == null) {
-                throwWebApplicationException(AUTHORIZATION_REQUIRED, Status.UNAUTHORIZED);
-            }
             URI newUri = new URI(requestContext.getUriInfo().getAbsolutePath().toString() + "?tenantId=" + tenantId.toString());
             requestContext.setRequestUri(newUri);
-        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException 
-                | UnsupportedEncodingException | IllegalArgumentException jwtEx) {
-            throwWebApplicationException(jwtEx.getMessage(), Status.UNAUTHORIZED);
         } catch (URISyntaxException e) {
             throwWebApplicationException(e.getMessage(), Status.BAD_REQUEST);
         }
+        
     }
 
     /**
      * Filters GET, PUT and DELETE requests to <code>Store</code>.
+     * @param tenantId tenant id extracted from jwt
      *  
      * @param requestContext current <code>ContainerRequestContext</code>
      */
-    private void filterStoreGetPutDeleteRequest(ContainerRequestContext requestContext) {
+    private void filterStoreGetPutDeleteRequest(Long tenantId, ContainerRequestContext requestContext) {
         try {
             Long pathStoreId = getStoreIdFromPath(requestContext);
-            Long jwtTenantId = getTenantIdFromJwt(requestContext);
             
-            try {
-                if (!isAuthorizedRequestToStore(getTenantId(pathStoreId), jwtTenantId)) {
-                    throwWebApplicationException(String.format(FORBIDDEN_S, new Object[] {pathStoreId, jwtTenantId}), Status.FORBIDDEN);
-                }
-            } catch (EntityNotFoundServiceException notFound) {
-                throwWebApplicationException(String.format(STORE_NOT_FOUND, pathStoreId), Status.NOT_FOUND);
-            } catch (ServiceException e) {
-                throwWebApplicationException(String.format(STORE_NOT_FOUND, pathStoreId), Status.INTERNAL_SERVER_ERROR);
+            if (!isAuthorizedRequestToStore(getTenantId(pathStoreId), tenantId)) {
+                throwForbiddenException(String.format(FORBIDDEN_S, new Object[] {pathStoreId, tenantId}));
             }
-            URI newUri = new URI(requestContext.getUriInfo().getAbsolutePath().toString() + "?tenantId=" + jwtTenantId.toString());
+            URI newUri = new URI(requestContext.getUriInfo().getAbsolutePath().toString() + "?tenantId=" + tenantId.toString());
             requestContext.setRequestUri(newUri);
-        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException 
-                | UnsupportedEncodingException | IllegalArgumentException jwtEx) {
-            throwWebApplicationException(jwtEx.getMessage(), Status.UNAUTHORIZED);
         } catch (URISyntaxException e) {
             throwWebApplicationException(e.getMessage(), Status.BAD_REQUEST);
         }
@@ -132,33 +119,32 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     
     /**
      * Filters GET, PUT and DELETE requests to <code>Store</code>.
+     * @param tenantId tenant id extracted from jwt
      *  
      * @param requestContext current <code>ContainerRequestContext</code>
      */
-    private void filterRegisterGetPutDeleteRequest(ContainerRequestContext requestContext) {
-        try {
-            Long jwtTenantId = getTenantIdFromJwt(requestContext);
-            Long pathStoreId = getStoreIdFromPath(requestContext);
-            Long pathRegisterId = getRegisterIdFromPath(requestContext);
-            
-            try {
-                if (!isAuthorizedRequestToStore(getTenantId(pathStoreId), jwtTenantId)) {
-                    throwWebApplicationException(String.format(FORBIDDEN_S, new Object[] {pathStoreId, jwtTenantId}), Status.FORBIDDEN);
-                }
-                if (!isAuthorizedRequestToRegister(pathStoreId, pathRegisterId)) {
-                    throwWebApplicationException(String.format(FORBIDDEN_R, new Object[] {pathRegisterId, jwtTenantId}), Status.FORBIDDEN);
-                }
-            } catch (EntityNotFoundServiceException notFound) {
-                throwWebApplicationException(String.format(REGISTER_NOT_FOUND, pathRegisterId, pathStoreId), Status.NOT_FOUND);
-            } catch (ServiceException e) {
-                throwWebApplicationException(String.format(SERVER_ERROR, pathStoreId), Status.INTERNAL_SERVER_ERROR);
-            }
-        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException 
-                | UnsupportedEncodingException | IllegalArgumentException jwtEx) {
-            throwWebApplicationException(jwtEx.getMessage(), Status.UNAUTHORIZED);
+    private void filterRegisterGetPutDeleteRequest(Long tenantId, ContainerRequestContext requestContext) {
+        Long pathStoreId = getStoreIdFromPath(requestContext);
+        Long pathRegisterId = getRegisterIdFromPath(requestContext);
+        
+        if (!isAuthorizedRequestToStore(getTenantId(pathStoreId), tenantId)) {
+            throwForbiddenException(String.format(FORBIDDEN_S, new Object[] {pathStoreId, tenantId}));
+        }
+        if (!isAuthorizedRequestToRegister(pathStoreId, pathRegisterId)) {
+            throwForbiddenException(String.format(FORBIDDEN_R, new Object[] {pathRegisterId, tenantId}));
         }
     }
 
+    private void throwForbiddenException(String message) {
+        LOGGER.error(message);
+        throw new ForbiddenException(message);
+    }
+
+    private void throwNotFoundException(String message) {
+        LOGGER.error(message);
+        throw new NotFoundException(message);
+    }
+    
     private void throwWebApplicationException(String message, Status status) {
         LOGGER.error(message);
         throw new WebApplicationException(message, status);
@@ -224,10 +210,17 @@ public class AuthorizationFilter implements ContainerRequestFilter {
      * 
      * @param pathStoreId store id extracted from request URI
      * @return <code>Long</code> value of tenant id 
-     * @throws ServiceException if <code>Store</code> entity with specified id was not found
      */
-    private Long getTenantId(Long pathStoreId) throws ServiceException {
-        return storeService.getStoreById(pathStoreId).getTenantId();
+    private Long getTenantId(Long pathStoreId) {
+        Long tenantId = null;
+        try {
+            tenantId = storeService.getStoreById(pathStoreId).getTenantId();
+        } catch (EntityNotFoundServiceException notFound) {
+            throwNotFoundException(String.format(STORE_NOT_FOUND, pathStoreId));
+        } catch (ServiceException e) {
+            throwWebApplicationException(String.format(SERVER_ERROR, pathStoreId), Status.INTERNAL_SERVER_ERROR);
+        }
+        return tenantId;
     }
 
     /**
@@ -249,11 +242,17 @@ public class AuthorizationFilter implements ContainerRequestFilter {
      * @param tenantId tenant id extracted from <code>Store</code> entity
      * @param jwtTenantId tenant id extracted from JWT
      * @return true if tenant id specified in JWT matches tenant id in store with specified id; false otherwise
-     * @throws ServiceException 
-     * @throws EntityNotFoundServiceException 
      */
-    private boolean isAuthorizedRequestToRegister(Long storeId, Long registerId) throws EntityNotFoundServiceException, ServiceException {
-        return registerService.getRegisterById(registerId).getStoreId().equals(storeId);
+    private boolean isAuthorizedRequestToRegister(Long storeId, Long registerId) {
+        Long id = null;
+        try {
+            id = registerService.getRegisterById(registerId).getStoreId();
+        } catch (EntityNotFoundServiceException notFound) {
+            throwNotFoundException(String.format(REGISTER_NOT_FOUND, registerId, storeId));
+        } catch (ServiceException e) {
+            throwWebApplicationException(String.format(SERVER_ERROR, storeId), Status.INTERNAL_SERVER_ERROR);
+        }
+        return id.equals(storeId);
     }
     
     /**
@@ -261,23 +260,20 @@ public class AuthorizationFilter implements ContainerRequestFilter {
      * 
      * @param requestContext current <code>ContainerRequestContext</code>
      * @return tenant id
-     * @throws ExpiredJwtException if JWT expired
-     * @throws UnsupportedJwtException if JWT is not supported
-     * @throws MalformedJwtException in case of malformed JWT
-     * @throws SignatureException if JWT signature not correct
-     * @throws IllegalArgumentException if could not parse long value string
-     * @throws UnsupportedEncodingException if JWT encrypted with unsupported algorithm
      */
-    private Long getTenantIdFromJwt(ContainerRequestContext requestContext) throws ExpiredJwtException, UnsupportedJwtException,
-        MalformedJwtException, SignatureException, IllegalArgumentException, UnsupportedEncodingException {
-        
+    private Long getTenantIdFromJwt(ContainerRequestContext requestContext) {
         String jwt = extractJwtFromRequest(requestContext);
-        Integer id = (Integer) Jwts.parser()
-                .setSigningKey(KEY.getBytes(CHARSET_NAME))
-                .parseClaimsJws(jwt)
-                .getBody()
-                .get(TENANT_ID);
-
+        Integer id = null;
+        try {
+            id = (Integer) Jwts.parser()
+                    .setSigningKey(KEY.getBytes(CHARSET_NAME))
+                    .parseClaimsJws(jwt)
+                    .getBody()
+                    .get(TENANT_ID);
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException
+                | IllegalArgumentException | UnsupportedEncodingException e) {
+            throw new NotAuthorizedException("Bearer");
+        }
         return new Long(id.longValue());
     }
 
@@ -290,8 +286,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     private String extractJwtFromRequest(ContainerRequestContext requestContext) {
         String header = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
         if (header == null) {
-            throw new NotAuthorizedException(Response.status(Status.UNAUTHORIZED)
-                    .entity(new ErrorMessage(401, AUTHORIZATION_REQUIRED)).build());
+            throw new NotAuthorizedException("Bearer");
         }
         return header.substring(header.indexOf(DELIMITER) + 1);
     }
