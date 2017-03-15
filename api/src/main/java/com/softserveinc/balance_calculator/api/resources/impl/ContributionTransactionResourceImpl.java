@@ -39,6 +39,7 @@ public class ContributionTransactionResourceImpl implements ContributionTransact
     public Response saveContributions(List<ContributionTransactionDTO> contributions, Long registerId) {
         LOGGER.info("Started processing contribution transactions batch request for register {}.", registerId);
         try {
+            contributions.forEach(contribution -> contribution.setRegisterId(registerId));
             contributionService.saveAll(contributions);
             transactionAllocationService.registerAllocation(registerId);
             LOGGER.info("Successfully processed contribution transactions batch request for register {}.", registerId);

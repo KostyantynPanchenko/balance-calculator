@@ -39,6 +39,7 @@ public class ConsumptionTransactionResourceImpl implements ConsumptionTransactio
     public Response saveConsumptions(List<ConsumptionTransactionDTO> consumptions, Long registerId) {
         LOGGER.info("Started processing consumption transactions batch request for register {}.", registerId);
         try {
+            consumptions.forEach(consumption -> consumption.setRegisterId(registerId));
             consumptionService.saveAll(consumptions);
             transactionAllocationService.registerAllocation(registerId);
             LOGGER.info("Successfully processed consumption transactions batch request for register {}.", registerId);
