@@ -53,7 +53,8 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     private final String DELIMITER = " ";
     private final String CHARSET_NAME = "UTF-8";
     private final String TENANT_ID = "tenantId";
-    private final String FORBIDDEN = "Unauthorized request to store id=%d by tenantId=%d!";
+    private final String FORBIDDEN_S = "Unauthorized request to store id=%d by tenantId=%d!";
+    private final String FORBIDDEN_R = "Unauthorized request to register id=%d by tenantId=%d!";
     private final String STORE_NOT_FOUND = "Store with id=%d not found.";
     private final String REGISTER_NOT_FOUND = "Register with id=%d not found in store No%d.";
     private final String SERVER_ERROR = "Error occurred while trying to retrieve store with id=%d.";
@@ -112,7 +113,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
             
             try {
                 if (!isAuthorizedRequestToStore(getTenantId(pathStoreId), jwtTenantId)) {
-                    throwWebApplicationException(String.format(FORBIDDEN, new Object[] {pathStoreId, jwtTenantId}), Status.FORBIDDEN);
+                    throwWebApplicationException(String.format(FORBIDDEN_S, new Object[] {pathStoreId, jwtTenantId}), Status.FORBIDDEN);
                 }
             } catch (EntityNotFoundServiceException notFound) {
                 throwWebApplicationException(String.format(STORE_NOT_FOUND, pathStoreId), Status.NOT_FOUND);
@@ -142,10 +143,10 @@ public class AuthorizationFilter implements ContainerRequestFilter {
             
             try {
                 if (!isAuthorizedRequestToStore(getTenantId(pathStoreId), jwtTenantId)) {
-                    throwWebApplicationException(String.format(FORBIDDEN, new Object[] {pathStoreId, jwtTenantId}), Status.FORBIDDEN);
+                    throwWebApplicationException(String.format(FORBIDDEN_S, new Object[] {pathStoreId, jwtTenantId}), Status.FORBIDDEN);
                 }
                 if (!isAuthorizedRequestToRegister(pathStoreId, pathRegisterId)) {
-                    throwWebApplicationException(String.format(FORBIDDEN, new Object[] {pathStoreId, jwtTenantId}), Status.FORBIDDEN);
+                    throwWebApplicationException(String.format(FORBIDDEN_R, new Object[] {pathRegisterId, jwtTenantId}), Status.FORBIDDEN);
                 }
             } catch (EntityNotFoundServiceException notFound) {
                 throwWebApplicationException(String.format(REGISTER_NOT_FOUND, pathRegisterId, pathStoreId), Status.NOT_FOUND);
