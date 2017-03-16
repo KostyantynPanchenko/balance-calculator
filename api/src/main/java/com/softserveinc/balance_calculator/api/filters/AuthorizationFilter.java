@@ -17,7 +17,6 @@ import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.ext.Provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +40,6 @@ import io.jsonwebtoken.UnsupportedJwtException;
  * @since 07/03/2017
  *
  */
-@Provider
 @PreMatching
 public class AuthorizationFilter implements ContainerRequestFilter {
 
@@ -69,7 +67,9 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) throws IOException {
         Long tenantId = getTenantIdFromJwt(requestContext);
         
-        if (isStorePostRequest(requestContext)) {
+        if (isHealthcheckRequest(requestContext)) {
+            // OK, process 
+        } else if (isStorePostRequest(requestContext)) {
             filterStorePostRequest(tenantId, requestContext);
         } else if (isStoreGetPutDeleteRequest(requestContext) || isRegisterPostRequest(requestContext)) {
             filterStoreGetPutDeleteRequest(tenantId, requestContext); 
@@ -148,6 +148,10 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     private void throwWebApplicationException(String message, Status status) {
         LOGGER.error(message);
         throw new WebApplicationException(message, status);
+    }
+
+    private boolean isHealthcheckRequest(ContainerRequestContext requestContext) {
+        return requestContext.getUriInfo().getPath().toString().equals("/healthcheck");
     }
 
     private boolean isStorePostRequest(ContainerRequestContext requestContext) {
