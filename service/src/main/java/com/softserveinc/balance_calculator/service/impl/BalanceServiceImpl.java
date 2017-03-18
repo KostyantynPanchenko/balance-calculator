@@ -8,11 +8,10 @@ import com.softserveinc.balance_calculator.domain.Register;
 import com.softserveinc.balance_calculator.dto.BalanceDTO;
 import com.softserveinc.balance_calculator.repository.BalanceDAO;
 import com.softserveinc.balance_calculator.repository.RegisterDAO;
-import com.softserveinc.balance_calculator.repository.exception.DomainEntityNotFoundException;
 import com.softserveinc.balance_calculator.repository.exception.RepositoryException;
 import com.softserveinc.balance_calculator.service.BalanceService;
-import com.softserveinc.balance_calculator.service.exception.EntityNotFoundServiceException;
-import com.softserveinc.balance_calculator.service.exception.ServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.ServiceException;
+import com.softserveinc.balance_calculator.service.impl.mappers.BalanceMapper;
 
 public class BalanceServiceImpl implements BalanceService {
 
@@ -25,14 +24,15 @@ public class BalanceServiceImpl implements BalanceService {
     }
     
     @Override
-    public BalanceDTO getCurrentBalance(Long registerId) throws EntityNotFoundServiceException, ServiceException {
+    public BalanceDTO getCurrentBalance(Long registerId) throws ServiceException {
         try {
             Register register = registerDao.getRegisterById(registerId);
             Balance balance = balanceDao.getCurrentBalance(registerId);
+            if (register == null || balance == null) {
+                return null;
+            }
             transformTimezone(register, balance);
-            return toBalanceDTO(balance);
-        } catch (DomainEntityNotFoundException e) {
-            throw new EntityNotFoundServiceException(e);
+            return BalanceMapper.toBalanceDTO(balance);
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }
@@ -45,30 +45,18 @@ public class BalanceServiceImpl implements BalanceService {
     }
 
     @Override
-    public BalanceDTO getBalanceForDate(Long registerId, LocalDate date) throws EntityNotFoundServiceException, ServiceException {
+    public BalanceDTO getBalanceForDate(Long registerId, LocalDate date) throws ServiceException {
         try {
             Register register = registerDao.getRegisterById(registerId);
             Balance balance = balanceDao.getBalanceForDate(registerId, date);
+            if (register == null || balance == null) {
+                return null;
+            }
             transformTimezone(register, balance);
-            return toBalanceDTO(balance);
-        } catch (DomainEntityNotFoundException e) {
-            throw new EntityNotFoundServiceException(e);
+            return BalanceMapper.toBalanceDTO(balance);
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }
-    }
-
-    private BalanceDTO toBalanceDTO(Balance balance) {
-        return new BalanceDTO.Builder()
-                .setId(balance.getId())
-                .setRegisterId(balance.getRegisterId())
-                .setCreatedOn(balance.getCreatedOn())
-                .setCreatedBy(balance.getCreatedBy())
-                .setTotalAllocatedConsumptionAmount(balance.getTotalAllocatedConsumptionAmount())
-                .setTotalAllocatedContributionAmount(balance.getTotalAllocatedContributionAmount())
-                .setTotalUnallocatedConsumptionAmount(balance.getTotalUnallocatedConsumptionAmount())
-                .setTotalUnallocatedContributionAmount(balance.getTotalUnallocatedContributionAmount())
-                .build();
     }
 
 }

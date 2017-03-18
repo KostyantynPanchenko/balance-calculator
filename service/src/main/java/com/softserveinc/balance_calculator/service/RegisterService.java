@@ -1,9 +1,8 @@
 package com.softserveinc.balance_calculator.service;
 
 import com.softserveinc.balance_calculator.dto.RegisterDTO;
-import com.softserveinc.balance_calculator.service.exception.DataIntegrityViolationServiceException;
-import com.softserveinc.balance_calculator.service.exception.EntityNotFoundServiceException;
-import com.softserveinc.balance_calculator.service.exception.ServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.DataIntegrityViolationServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.ServiceException;
 
 /**
  * An interface holding collection of methods for processing 
@@ -25,11 +24,9 @@ public interface RegisterService {
      * @param registerId        id of requested <code>Register</code> entity
      * @return                  <code>RegisterDTO</code> object representing 
      *                          <code>Register</code> object
-     * @throws EntityNotFoundServiceException when <code>Register</code> entity 
-     *                          with specified id was not found
      * @throws ServiceException when could not execute SQL query
      */
-    RegisterDTO getRegisterById(Long registerId) throws EntityNotFoundServiceException, ServiceException;
+    RegisterDTO getRegisterById(Long registerId) throws ServiceException;
 
     /**
      * Processes request to create <code>Register</code> entity with 

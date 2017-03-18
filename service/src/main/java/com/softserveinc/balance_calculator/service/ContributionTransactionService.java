@@ -3,7 +3,7 @@ package com.softserveinc.balance_calculator.service;
 import java.util.List;
 
 import com.softserveinc.balance_calculator.dto.ContributionTransactionDTO;
-import com.softserveinc.balance_calculator.service.exception.ServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.ServiceException;
 
 /**
  * This interface defines method for batch processing of <code>ConsumptionTransaction</code> entities.

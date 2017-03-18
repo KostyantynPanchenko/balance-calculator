@@ -3,8 +3,7 @@ package com.softserveinc.balance_calculator.service;
 import java.time.LocalDate;
 
 import com.softserveinc.balance_calculator.dto.BalanceDTO;
-import com.softserveinc.balance_calculator.service.exception.EntityNotFoundServiceException;
-import com.softserveinc.balance_calculator.service.exception.ServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.ServiceException;
 
 /**
  * This interface provide methods for obtaining balance for specified <code>Register</code>
@@ -23,9 +22,8 @@ public interface BalanceService {
      * @param registerId id of <code>Register</code> for which balance should be retrieved
      * @return <code>DalanceDTO</code> object
      * @throws ServiceException when could not execute SQL query
-     * @throws EntityNotFoundServiceException when balance was not found
      */
-    BalanceDTO getCurrentBalance(Long registerId) throws EntityNotFoundServiceException, ServiceException;
+    BalanceDTO getCurrentBalance(Long registerId) throws ServiceException;
 
     /**
      * Returns balance for specified <code>Register</code> on specified date.
@@ -36,6 +34,6 @@ public interface BalanceService {
      * @throws ServiceException when could not execute SQL query
      * @throws EntityNotFoundServiceException when balance was not found
      */
-    BalanceDTO getBalanceForDate(Long registerId, LocalDate date) throws EntityNotFoundServiceException, ServiceException;
+    BalanceDTO getBalanceForDate(Long registerId, LocalDate date) throws ServiceException;
 
 }

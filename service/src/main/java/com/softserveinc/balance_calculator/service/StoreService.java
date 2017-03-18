@@ -1,9 +1,8 @@
 package com.softserveinc.balance_calculator.service;
 
 import com.softserveinc.balance_calculator.dto.StoreDTO;
-import com.softserveinc.balance_calculator.service.exception.DataIntegrityViolationServiceException;
-import com.softserveinc.balance_calculator.service.exception.EntityNotFoundServiceException;
-import com.softserveinc.balance_calculator.service.exception.ServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.DataIntegrityViolationServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.ServiceException;
 
 /**
  * An interface holding a collection of methods for processing 
@@ -26,8 +25,6 @@ public interface StoreService {
      * @param id                id of requested <code>Store</code> entity
      * @return                  <code>StoreDTO</code> object representing 
      *                          <code>Store</code> object
-     * @throws EntityNotFoundServiceException when <code>Store</code> entity 
-     *                          with specified id was not found
      * @throws ServiceException when could not execute SQL query
      */
     StoreDTO getStoreById(Long id) throws ServiceException;

@@ -1,4 +1,4 @@
-package com.softserveinc.balance_calculator.service.exception;
+package com.softserveinc.balance_calculator.service.exceptions;
 
 /**
  * Root of the hierarchy of service exceptions.

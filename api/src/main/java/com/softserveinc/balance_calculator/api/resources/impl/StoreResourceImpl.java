@@ -12,9 +12,8 @@ import org.slf4j.LoggerFactory;
 import com.softserveinc.balance_calculator.api.resources.StoreResource;
 import com.softserveinc.balance_calculator.dto.StoreDTO;
 import com.softserveinc.balance_calculator.service.StoreService;
-import com.softserveinc.balance_calculator.service.exception.DataIntegrityViolationServiceException;
-import com.softserveinc.balance_calculator.service.exception.EntityNotFoundServiceException;
-import com.softserveinc.balance_calculator.service.exception.ServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.DataIntegrityViolationServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.ServiceException;
 
 import io.dropwizard.jersey.errors.ErrorMessage;
 
@@ -39,16 +38,14 @@ public class StoreResourceImpl implements StoreResource {
     public Response getStoreById(Long id) {
         LOGGER.info("Retrieving store with id={}", id);
         try {
-            return Response.status(Status.OK).entity(storeService.getStoreById(id)).build();
-        } catch (EntityNotFoundServiceException notFound) {
-            return getLoggedResponse(notFound, Status.NOT_FOUND, new ErrorMessage(404, buildMessage(id)));
+            StoreDTO store  = storeService.getStoreById(id);
+            if (store == null) {
+                return getLoggedResponse(Status.NOT_FOUND, String.format("Store with id=%d not found.", id));
+            }
+            return Response.status(Status.OK).entity(store).build();
         } catch (ServiceException e) {
             return getLoggedResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
         }
-    }
-    
-    private String buildMessage(Long registerId) {
-        return String.format("Store with id=%d not found.", registerId);
     }
 
     @Override
@@ -104,7 +101,7 @@ public class StoreResourceImpl implements StoreResource {
     public Response delete(Long id) {
         LOGGER.info("Deleting store with id={}", id);
         try {
-            if (!oneRowModified(id)) {
+            if (!oneRowdeleted(id)) {
                 return getLoggedResponse(Status.BAD_REQUEST, String.format("Could not delete store with id=%d", id));
             }
         } catch (DataIntegrityViolationServiceException violation) {
@@ -116,7 +113,7 @@ public class StoreResourceImpl implements StoreResource {
         return Response.noContent().build();
     }
 
-    private boolean oneRowModified(Long id) throws ServiceException {
+    private boolean oneRowdeleted(Long id) throws ServiceException {
         return storeService.delete(id) == 1;
     }
     

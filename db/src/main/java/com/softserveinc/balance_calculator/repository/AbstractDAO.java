@@ -6,8 +6,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
-import com.softserveinc.balance_calculator.repository.exception.RepositoryException;
-
 /**
  * Abstract class which provides CRUD operations for domain model classes.
  * 
@@ -17,7 +15,7 @@ import com.softserveinc.balance_calculator.repository.exception.RepositoryExcept
  */
 public abstract class AbstractDAO<T> {
 
-    private JdbcTemplate template;
+    protected JdbcTemplate template;
     
     protected AbstractDAO(JdbcTemplate jdbcTemplate) {
         template = jdbcTemplate;
@@ -48,17 +46,4 @@ public abstract class AbstractDAO<T> {
         return keyHolder.getKey().longValue();
     }
     
-    /**
-     * Executes create/update/delete query based on given input.
-     * Delegated call to JdbcTemplate#update(String sql, Object... args)
-     * 
-     * @param SQL       query to be executed
-     * @param params    parameters for PreparedStatement placeholders substitution
-     * @return          number of modified rows
-     * @throws RepositoryException if could nod execute given query
-     * @see             JdbcTemplate#update(String sql, Object... args)
-     */
-    protected int execute(String SQL, Object[] params) throws RepositoryException {
-        return template.update(SQL, params);
-    }
 }

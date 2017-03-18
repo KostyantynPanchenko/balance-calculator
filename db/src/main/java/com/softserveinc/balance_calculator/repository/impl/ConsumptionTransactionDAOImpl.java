@@ -20,15 +20,10 @@ import com.softserveinc.balance_calculator.repository.impl.namespaces.Transactio
  *
  */
 public class ConsumptionTransactionDAOImpl implements ConsumptionTransactionDAO {
-    
-    private final String INSERT;
+
     private JdbcTemplate jdbcTemplate;
     
     protected ConsumptionTransactionDAOImpl(JdbcTemplate jdbcTemplate) {
-        INSERT = String.format(TransactionNamespace.CONSUMPTION_BATCH, TransactionNamespace.CONSUMPTION_TABLE_NAME,
-                TransactionNamespace.REGISTER_ID_COLUMN_NAME,
-                TransactionNamespace.CONSUMED_VALUE_COLUMN_NAME,
-                TransactionNamespace.CREATED_BY_COLUMN_NAME);
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -37,7 +32,7 @@ public class ConsumptionTransactionDAOImpl implements ConsumptionTransactionDAO 
         List<Object[]> batch = new LinkedList<>();
         consumptions.forEach(consumption -> batch.add(getBatchValues(consumption)));
         try {
-            return jdbcTemplate.batchUpdate(INSERT, batch);
+            return jdbcTemplate.batchUpdate(TransactionNamespace.CONSUMPTION_BATCH, batch);
         } catch (DataAccessException e) {
             throw new RepositoryException(e);
         }

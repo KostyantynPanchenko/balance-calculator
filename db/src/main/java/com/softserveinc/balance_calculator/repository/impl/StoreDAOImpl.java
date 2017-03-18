@@ -9,7 +9,6 @@ import com.softserveinc.balance_calculator.domain.Store;
 import com.softserveinc.balance_calculator.repository.AbstractDAO;
 import com.softserveinc.balance_calculator.repository.StoreDAO;
 import com.softserveinc.balance_calculator.repository.exception.DataIntegrityViolationRepositoryException;
-import com.softserveinc.balance_calculator.repository.exception.DomainEntityNotFoundException;
 import com.softserveinc.balance_calculator.repository.exception.RepositoryException;
 import com.softserveinc.balance_calculator.repository.impl.mappers.StorePreparedStatementCreator;
 import com.softserveinc.balance_calculator.repository.impl.mappers.StoreRowMapper;
@@ -29,18 +28,11 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
     }
 
     @Override
-    public Store getStoreById(final Long id) throws DomainEntityNotFoundException, RepositoryException {
-        final String GET = String.format(StoreNamespace.SELECT, 
-                StoreNamespace.ID_COLUMN_NAME,
-                StoreNamespace.TENANT_ID_COLUMN_NAME,
-                StoreNamespace.NAME_COLUMN_NAME,
-                StoreNamespace.DESCRIPTION_COLUMN_NAME,
-                StoreNamespace.TABLE_NAME,
-                StoreNamespace.ID_COLUMN_NAME);
+    public Store getStoreById(final Long id) throws RepositoryException {
         try {
-            return getById(GET, new Object[] {id}, new StoreRowMapper());
+            return getById(StoreNamespace.SELECT, new Object[] {id}, new StoreRowMapper());
         } catch (EmptyResultDataAccessException empty) {
-            throw new DomainEntityNotFoundException(empty);
+            return null;
         } catch (DataAccessException e) {
             throw new RepositoryException(e);
         }
@@ -59,13 +51,8 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
 
     @Override
     public int update(Store store) throws DataIntegrityViolationRepositoryException, RepositoryException {
-        final String UPDATE = String.format(StoreNamespace.UPDATE,
-                StoreNamespace.TABLE_NAME,
-                StoreNamespace.NAME_COLUMN_NAME,
-                StoreNamespace.DESCRIPTION_COLUMN_NAME,
-                StoreNamespace.ID_COLUMN_NAME);
         try {
-            return execute(UPDATE, new Object[] {store.getName(), store.getDescription(), store.getId()});
+            return template.update(StoreNamespace.UPDATE, new Object[] {store.getName(), store.getDescription(), store.getId()});
         } catch (DataIntegrityViolationException violation) {
             throw new DataIntegrityViolationRepositoryException(violation);
         } catch (DataAccessException e) {
@@ -75,11 +62,8 @@ public class StoreDAOImpl extends AbstractDAO<Store> implements StoreDAO {
 
     @Override
     public int deleteById(Long id) throws DataIntegrityViolationRepositoryException, RepositoryException {
-        final String DELETE  = String.format(StoreNamespace.DELETE, 
-                StoreNamespace.TABLE_NAME,
-                StoreNamespace.ID_COLUMN_NAME);
         try {
-            return execute(DELETE, new Object[] {id});
+            return template.update(StoreNamespace.DELETE, new Object[] {id});
         } catch (DataIntegrityViolationException violation) {
             throw new DataIntegrityViolationRepositoryException(violation.getMessage(), violation);
         } catch (DataAccessException e) {

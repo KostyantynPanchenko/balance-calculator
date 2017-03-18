@@ -2,7 +2,6 @@ package com.softserveinc.balance_calculator.repository;
 
 import com.softserveinc.balance_calculator.domain.Register;
 import com.softserveinc.balance_calculator.repository.exception.DataIntegrityViolationRepositoryException;
-import com.softserveinc.balance_calculator.repository.exception.DomainEntityNotFoundException;
 import com.softserveinc.balance_calculator.repository.exception.RepositoryException;
 
 /**
@@ -20,10 +19,9 @@ public interface RegisterDAO {
      * @param registerId    id of <code>Register</code> entity to be
      *                      retrieved
      * @return              retrieved <code>Register</code> entity
-     * @throws DomainEntityNotFoundException when entity was not found 
      * @throws RepositoryException when could not execute SQL query
      */
-    Register getRegisterById(Long registerId) throws DomainEntityNotFoundException, RepositoryException;
+    Register getRegisterById(Long registerId) throws RepositoryException;
     
     /**
      * Saves given <code>Register</code> entity.

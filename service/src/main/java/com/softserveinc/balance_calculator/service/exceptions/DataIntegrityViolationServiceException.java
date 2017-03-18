@@ -1,4 +1,4 @@
-package com.softserveinc.balance_calculator.service.exception;
+package com.softserveinc.balance_calculator.service.exceptions;
 
 /**
  * Exception thrown when an attempt to insert or update data results in violation of an integrity constraint.

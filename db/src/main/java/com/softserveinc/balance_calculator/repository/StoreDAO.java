@@ -2,7 +2,6 @@ package com.softserveinc.balance_calculator.repository;
 
 import com.softserveinc.balance_calculator.domain.Store;
 import com.softserveinc.balance_calculator.repository.exception.DataIntegrityViolationRepositoryException;
-import com.softserveinc.balance_calculator.repository.exception.DomainEntityNotFoundException;
 import com.softserveinc.balance_calculator.repository.exception.RepositoryException;
 
 /**
@@ -19,10 +18,9 @@ public interface StoreDAO {
      * 
      * @param id    id of <code>Store</code> entity to be retrieved
      * @return      retrieved <code>Store</code> entity
-     * @throws DomainEntityNotFoundException when entity not found
      * @throws RepositoryException when could not execute SQL query
      */
-    Store getStoreById(Long id) throws DomainEntityNotFoundException, RepositoryException;
+    Store getStoreById(Long id) throws RepositoryException;
     
     /**
      * Saves given <code>Store</code> entity.

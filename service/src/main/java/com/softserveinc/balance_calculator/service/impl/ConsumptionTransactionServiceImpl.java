@@ -8,7 +8,8 @@ import com.softserveinc.balance_calculator.dto.ConsumptionTransactionDTO;
 import com.softserveinc.balance_calculator.repository.ConsumptionTransactionDAO;
 import com.softserveinc.balance_calculator.repository.exception.RepositoryException;
 import com.softserveinc.balance_calculator.service.ConsumptionTransactionService;
-import com.softserveinc.balance_calculator.service.exception.ServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.ServiceException;
+import com.softserveinc.balance_calculator.service.impl.mappers.ConsumptionMapper;
 
 /**
  * Implementation of <code>ConsumptionTransactionService</code>.
@@ -29,20 +30,12 @@ public class ConsumptionTransactionServiceImpl implements ConsumptionTransaction
     @Override
     public int[] saveAll(List<ConsumptionTransactionDTO> consumptions) throws ServiceException {
         List<ConsumptionTransaction> input = new ArrayList<>(consumptions.size());
-        consumptions.forEach(consumption -> input.add(newTransaction(consumption)));
+        consumptions.forEach(consumption -> input.add(ConsumptionMapper.toDomainObject(consumption)));
         try {
             return consumptionDao.saveAll(input);
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }
-    }
-
-    private ConsumptionTransaction newTransaction(ConsumptionTransactionDTO consumption) {
-        return new ConsumptionTransaction.Builder()
-                .setRegisterId(consumption.getRegisterId())
-                .setConsumedValue(consumption.getConsumedValue())
-                .setCreatedBy(consumption.getCreatedBy())
-                .build();
     }
     
 }

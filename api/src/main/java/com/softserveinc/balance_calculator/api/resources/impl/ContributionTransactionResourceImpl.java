@@ -12,7 +12,7 @@ import com.softserveinc.balance_calculator.api.resources.ContributionTransaction
 import com.softserveinc.balance_calculator.dto.ContributionTransactionDTO;
 import com.softserveinc.balance_calculator.service.ContributionTransactionService;
 import com.softserveinc.balance_calculator.service.TransactionAllocationService;
-import com.softserveinc.balance_calculator.service.exception.ServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.ServiceException;
 
 import io.dropwizard.jersey.errors.ErrorMessage;
 

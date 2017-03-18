@@ -16,8 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.softserveinc.balance_calculator.api.resources.BalanceResource;
 import com.softserveinc.balance_calculator.dto.BalanceDTO;
 import com.softserveinc.balance_calculator.service.BalanceService;
-import com.softserveinc.balance_calculator.service.exception.EntityNotFoundServiceException;
-import com.softserveinc.balance_calculator.service.exception.ServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.ServiceException;
 
 /**
  * Implementation of <code>BalanceResource</code>
@@ -43,15 +42,15 @@ public class BalanceResourceImpl implements BalanceResource {
     public Response getBalance(Long registerId, String date) {
         try {
             BalanceDTO balance = null;
-            if (date != null) {
-                balance = balanceService.getBalanceForDate(registerId, parseDate(date));
-            } else {
+            if (date == null) {
                 balance = balanceService.getCurrentBalance(registerId);
+            } else {
+                balance = balanceService.getBalanceForDate(registerId, parseDate(date));
+            }
+            if (balance == null) {
+                throw new NotFoundException(String.format(NOT_FOUND, registerId));
             }
             return Response.status(Status.OK).entity(balance).build();
-        } catch (EntityNotFoundServiceException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new NotFoundException(String.format(NOT_FOUND, registerId));
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage(), e);
             throw new ServerErrorException(INTERNAL_SERVER_ERROR, Status.INTERNAL_SERVER_ERROR);

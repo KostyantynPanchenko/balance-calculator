@@ -23,8 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.softserveinc.balance_calculator.service.RegisterService;
 import com.softserveinc.balance_calculator.service.StoreService;
-import com.softserveinc.balance_calculator.service.exception.EntityNotFoundServiceException;
-import com.softserveinc.balance_calculator.service.exception.ServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.ServiceException;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -219,8 +218,9 @@ public class AuthorizationFilter implements ContainerRequestFilter {
         Long tenantId = null;
         try {
             tenantId = storeService.getStoreById(pathStoreId).getTenantId();
-        } catch (EntityNotFoundServiceException notFound) {
-            throwNotFoundException(String.format(STORE_NOT_FOUND, pathStoreId));
+            if (tenantId == null) {
+                throwNotFoundException(String.format(STORE_NOT_FOUND, pathStoreId));
+            }
         } catch (ServiceException e) {
             throwWebApplicationException(String.format(SERVER_ERROR, pathStoreId), Status.INTERNAL_SERVER_ERROR);
         }
@@ -251,8 +251,9 @@ public class AuthorizationFilter implements ContainerRequestFilter {
         Long id = null;
         try {
             id = registerService.getRegisterById(registerId).getStoreId();
-        } catch (EntityNotFoundServiceException notFound) {
-            throwNotFoundException(String.format(REGISTER_NOT_FOUND, registerId, storeId));
+            if (id == null) {
+                throwNotFoundException(String.format(REGISTER_NOT_FOUND, registerId, storeId));
+            }
         } catch (ServiceException e) {
             throwWebApplicationException(String.format(SERVER_ERROR, storeId), Status.INTERNAL_SERVER_ERROR);
         }

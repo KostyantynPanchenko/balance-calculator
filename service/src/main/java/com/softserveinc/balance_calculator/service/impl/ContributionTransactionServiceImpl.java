@@ -8,7 +8,8 @@ import com.softserveinc.balance_calculator.dto.ContributionTransactionDTO;
 import com.softserveinc.balance_calculator.repository.ContributionTransactionDAO;
 import com.softserveinc.balance_calculator.repository.exception.RepositoryException;
 import com.softserveinc.balance_calculator.service.ContributionTransactionService;
-import com.softserveinc.balance_calculator.service.exception.ServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.ServiceException;
+import com.softserveinc.balance_calculator.service.impl.mappers.ContributionMapper;
 
 /**
  * Implementation of <code>ContributionTransactionService</code>.
@@ -29,20 +30,12 @@ public class ContributionTransactionServiceImpl implements ContributionTransacti
     @Override
     public int[] saveAll(List<ContributionTransactionDTO> contributions) throws ServiceException {
         List<ContributionTransaction> input = new ArrayList<>(contributions.size());
-        contributions.forEach(contribution -> input.add(newTransaction(contribution)));
+        contributions.forEach(contribution -> input.add(ContributionMapper.toDomainObject(contribution)));
         try {
             return contributionDao.saveAll(input);
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }
-    }
-
-    private ContributionTransaction newTransaction(ContributionTransactionDTO contribution) {
-        return new ContributionTransaction.Builder()
-                .setRegisterId(contribution.getRegisterId())
-                .setOrderGrantedValue(contribution.getOrderGrantedValue())
-                .setCreatedBy(contribution.getCreatedBy())
-                .build();
     }
     
 }

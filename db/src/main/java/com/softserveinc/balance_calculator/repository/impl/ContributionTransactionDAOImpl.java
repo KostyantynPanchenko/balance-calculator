@@ -20,15 +20,10 @@ import com.softserveinc.balance_calculator.repository.impl.namespaces.Transactio
  *
  */
 public class ContributionTransactionDAOImpl implements ContributionTransactionDAO {
-    
-    private final String INSERT;
+
     private JdbcTemplate jdbcTemplate;
     
     protected ContributionTransactionDAOImpl(JdbcTemplate jdbcTemplate) {
-        INSERT = String.format(TransactionNamespace.CONTRIBUTION_BATCH, TransactionNamespace.CONTRIBUTION_TABLE_NAME,
-                TransactionNamespace.REGISTER_ID_COLUMN_NAME,
-                TransactionNamespace.ORDER_GRANTED_VALUE_COLUMN_NAME,
-                TransactionNamespace.CREATED_BY_COLUMN_NAME);
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -37,7 +32,7 @@ public class ContributionTransactionDAOImpl implements ContributionTransactionDA
         List<Object[]> batch = new LinkedList<>();
         contributions.forEach(contribution -> batch.add(getBatchValues(contribution)));
         try {
-            return jdbcTemplate.batchUpdate(INSERT, batch);
+            return jdbcTemplate.batchUpdate(TransactionNamespace.CONTRIBUTION_BATCH, batch);
         } catch (DataAccessException e) {
             throw new RepositoryException(e);
         }

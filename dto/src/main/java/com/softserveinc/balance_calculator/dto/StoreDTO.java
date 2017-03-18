@@ -4,8 +4,6 @@ package com.softserveinc.balance_calculator.dto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.softserveinc.balance_calculator.domain.Store;
-
 public class StoreDTO {
     
     private Long id;
@@ -18,12 +16,37 @@ public class StoreDTO {
 
     public StoreDTO() {
     }
-
-    public StoreDTO(Store store) {
-        this.id = store.getId();
-        this.tenantId = store.getTenantId();
-        this.name = store.getName();
-        this.description = store.getDescription();
+    
+    public static class Builder {
+        private StoreDTO store;
+        
+        public Builder() {
+            this.store = new StoreDTO();
+        }
+        
+        public Builder setId(Long id) {
+            this.store.setId(id);
+            return this;
+        }
+        
+        public Builder setTenantId(Long id) {
+            this.store.setTenantId(id);
+            return this;
+        }
+        
+        public Builder setName(String name) {
+            this.store.setName(name);
+            return this;
+        }
+        
+        public Builder setDescription(String description) {
+            this.store.setDescription(description);
+            return this;
+        }
+        
+        public StoreDTO build() {
+            return this.store;
+        }
     }
 
     public Long getId() {

@@ -12,9 +12,8 @@ import org.slf4j.LoggerFactory;
 import com.softserveinc.balance_calculator.api.resources.RegisterResource;
 import com.softserveinc.balance_calculator.dto.RegisterDTO;
 import com.softserveinc.balance_calculator.service.RegisterService;
-import com.softserveinc.balance_calculator.service.exception.DataIntegrityViolationServiceException;
-import com.softserveinc.balance_calculator.service.exception.EntityNotFoundServiceException;
-import com.softserveinc.balance_calculator.service.exception.ServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.DataIntegrityViolationServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.ServiceException;
 
 import io.dropwizard.jersey.errors.ErrorMessage;
 
@@ -41,16 +40,13 @@ public class RegisterResourceImpl implements RegisterResource {
         RegisterDTO register;
         try {
             register = registerService.getRegisterById(registerId);
-        } catch (EntityNotFoundServiceException notFound) {
-            return getLoggedResponse(notFound, Status.BAD_REQUEST, new ErrorMessage(404, buildMessage(registerId)));
+            if (register == null) {
+                return getLoggedResponse(Status.BAD_REQUEST, String.format("Register entity with id=%d not found", registerId));
+            }
         } catch (ServiceException e) {
             return getLoggedResponse(e, Status.INTERNAL_SERVER_ERROR, new ErrorMessage(500, e.getMessage()));
         }
         return Response.status(Status.OK).entity(register).build();
-    }
-
-    private String buildMessage(Long registerId) {
-        return String.format("Register entity with id=%d not found", registerId);
     }
 
     @Override

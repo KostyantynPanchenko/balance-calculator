@@ -4,12 +4,11 @@ import com.softserveinc.balance_calculator.domain.Store;
 import com.softserveinc.balance_calculator.dto.StoreDTO;
 import com.softserveinc.balance_calculator.repository.StoreDAO;
 import com.softserveinc.balance_calculator.repository.exception.DataIntegrityViolationRepositoryException;
-import com.softserveinc.balance_calculator.repository.exception.DomainEntityNotFoundException;
 import com.softserveinc.balance_calculator.repository.exception.RepositoryException;
 import com.softserveinc.balance_calculator.service.StoreService;
-import com.softserveinc.balance_calculator.service.exception.DataIntegrityViolationServiceException;
-import com.softserveinc.balance_calculator.service.exception.EntityNotFoundServiceException;
-import com.softserveinc.balance_calculator.service.exception.ServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.DataIntegrityViolationServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.ServiceException;
+import com.softserveinc.balance_calculator.service.impl.mappers.StoreMapper;
 
 public class StoreServiceImpl implements StoreService {
 
@@ -19,11 +18,13 @@ public class StoreServiceImpl implements StoreService {
         this.storeDao = storeDao;
     }
 
-    public StoreDTO getStoreById(Long id) throws EntityNotFoundServiceException, ServiceException {
+    public StoreDTO getStoreById(Long id) throws ServiceException {
         try {
-            return new StoreDTO(storeDao.getStoreById(id));
-        } catch (DomainEntityNotFoundException empty) {
-            throw new EntityNotFoundServiceException(empty);
+            Store store = storeDao.getStoreById(id);
+            if (store == null) {
+                return null;
+            }
+            return StoreMapper.toDTO(store);
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }
@@ -31,7 +32,7 @@ public class StoreServiceImpl implements StoreService {
     
     public Long save(StoreDTO storeDto) throws DataIntegrityViolationServiceException, ServiceException {
         try {
-            return storeDao.save(toStore(storeDto));
+            return storeDao.save(StoreMapper.toDomainObject(storeDto));
         } catch (DataIntegrityViolationRepositoryException violation) {
             throw new DataIntegrityViolationServiceException(violation);
         } catch (RepositoryException e) {
@@ -41,7 +42,7 @@ public class StoreServiceImpl implements StoreService {
     
     public int update(StoreDTO storeDto) throws DataIntegrityViolationServiceException, ServiceException {
         try {
-            return storeDao.update(toStore(storeDto));
+            return storeDao.update(StoreMapper.toDomainObject(storeDto));
         } catch (DataIntegrityViolationRepositoryException violation) {
             throw new DataIntegrityViolationServiceException(violation);
         } catch (RepositoryException e) {
@@ -57,14 +58,6 @@ public class StoreServiceImpl implements StoreService {
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }
-    }
-
-    private Store toStore(StoreDTO storeDto) {
-        return new Store.Builder()
-                .setId(storeDto.getId())
-                .setTenantId(storeDto.getTenantId())
-                .setName(storeDto.getName())
-                .setDescription(storeDto.getDescription()).build();
     }
 
 }

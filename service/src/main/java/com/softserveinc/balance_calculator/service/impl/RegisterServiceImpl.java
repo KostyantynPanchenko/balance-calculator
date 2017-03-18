@@ -4,12 +4,11 @@ import com.softserveinc.balance_calculator.domain.Register;
 import com.softserveinc.balance_calculator.dto.RegisterDTO;
 import com.softserveinc.balance_calculator.repository.RegisterDAO;
 import com.softserveinc.balance_calculator.repository.exception.DataIntegrityViolationRepositoryException;
-import com.softserveinc.balance_calculator.repository.exception.DomainEntityNotFoundException;
 import com.softserveinc.balance_calculator.repository.exception.RepositoryException;
 import com.softserveinc.balance_calculator.service.RegisterService;
-import com.softserveinc.balance_calculator.service.exception.DataIntegrityViolationServiceException;
-import com.softserveinc.balance_calculator.service.exception.EntityNotFoundServiceException;
-import com.softserveinc.balance_calculator.service.exception.ServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.DataIntegrityViolationServiceException;
+import com.softserveinc.balance_calculator.service.exceptions.ServiceException;
+import com.softserveinc.balance_calculator.service.impl.mappers.RegisterMapper;
 
 public class RegisterServiceImpl implements RegisterService {
 
@@ -19,11 +18,13 @@ public class RegisterServiceImpl implements RegisterService {
         this.registerDao = registerDao;
     }
     
-    public RegisterDTO getRegisterById(Long registerId) throws EntityNotFoundServiceException, ServiceException {
+    public RegisterDTO getRegisterById(Long registerId) throws ServiceException {
         try {
-            return new RegisterDTO(registerDao.getRegisterById(registerId));
-        } catch (DomainEntityNotFoundException notFound) {
-            throw new EntityNotFoundServiceException(notFound);
+            Register register = registerDao.getRegisterById(registerId);
+            if (register == null) {
+                return null;
+            }
+            return RegisterMapper.toDTO(register);
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }
@@ -31,7 +32,7 @@ public class RegisterServiceImpl implements RegisterService {
 
     public Long save(RegisterDTO registerDto) throws DataIntegrityViolationServiceException, ServiceException {
         try {
-            return registerDao.insert(toRegister(registerDto));
+            return registerDao.insert(RegisterMapper.toDomainObject(registerDto));
         } catch (DataIntegrityViolationRepositoryException violation) {
             throw new DataIntegrityViolationServiceException(violation);
         } catch (RepositoryException e) {
@@ -41,7 +42,7 @@ public class RegisterServiceImpl implements RegisterService {
 
     public int update(RegisterDTO registerDto) throws DataIntegrityViolationServiceException, ServiceException {
         try {
-            return registerDao.update(toRegister(registerDto));
+            return registerDao.update(RegisterMapper.toDomainObject(registerDto));
         } catch (DataIntegrityViolationRepositoryException violation) {
             throw new DataIntegrityViolationServiceException(violation);
         } catch (RepositoryException e) {
@@ -55,15 +56,6 @@ public class RegisterServiceImpl implements RegisterService {
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }
-    }
-    
-    private Register toRegister(RegisterDTO registerDto) {
-        return new Register.Builder()
-                .setId(registerDto.getId())
-                .setStoreId(registerDto.getStoreId())
-                .setName(registerDto.getName())
-                .setTimezone(registerDto.getTimezone())
-                .build();
     }
 
 }
