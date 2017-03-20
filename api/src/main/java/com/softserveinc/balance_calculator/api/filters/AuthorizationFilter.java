@@ -21,6 +21,8 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.softserveinc.balance_calculator.dto.RegisterDTO;
+import com.softserveinc.balance_calculator.dto.StoreDTO;
 import com.softserveinc.balance_calculator.service.RegisterService;
 import com.softserveinc.balance_calculator.service.StoreService;
 import com.softserveinc.balance_calculator.service.exceptions.ServiceException;
@@ -51,11 +53,11 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     private final String DELIMITER = " ";
     private final String CHARSET_NAME = "UTF-8";
     private final String TENANT_ID = "tenantId";
-    private final String FORBIDDEN_S = "Unauthorized request to store id=%d by tenantId=%d!";
-    private final String FORBIDDEN_R = "Unauthorized request to register id=%d by tenantId=%d!";
-    private final String STORE_NOT_FOUND = "Store with id=%d not found.";
-    private final String REGISTER_NOT_FOUND = "Register with id=%d not found in store No%d.";
-    private final String SERVER_ERROR = "Error occurred while trying to retrieve store with id=%d.";
+    private final String FORBIDDEN_S = "Unauthorized request to store id=%d by tenantId=%d";
+    private final String FORBIDDEN_R = "Unauthorized request to register id=%d by tenantId=%d";
+    private final String STORE_NOT_FOUND = "Store with id=%d not found";
+    private final String REGISTER_NOT_FOUND = "Register with id=%d not found in store No%d";
+    private final String SERVER_ERROR = "Error occurred while trying to retrieve store with id=%d";
     
     public AuthorizationFilter(StoreService storeService, RegisterService registerService) {
         this.storeService = storeService;
@@ -215,16 +217,16 @@ public class AuthorizationFilter implements ContainerRequestFilter {
      * @return <code>Long</code> value of tenant id 
      */
     private Long getTenantId(Long pathStoreId) {
-        Long tenantId = null;
+        StoreDTO store = null;
         try {
-            tenantId = storeService.getStoreById(pathStoreId).getTenantId();
-            if (tenantId == null) {
+            store = storeService.getStoreById(pathStoreId);
+            if (store == null) {
                 throwNotFoundException(String.format(STORE_NOT_FOUND, pathStoreId));
             }
         } catch (ServiceException e) {
             throwWebApplicationException(String.format(SERVER_ERROR, pathStoreId), Status.INTERNAL_SERVER_ERROR);
         }
-        return tenantId;
+        return store.getTenantId();
     }
 
     /**
@@ -248,16 +250,16 @@ public class AuthorizationFilter implements ContainerRequestFilter {
      * @return true if tenant id specified in JWT matches tenant id in store with specified id; false otherwise
      */
     private boolean isAuthorizedRequestToRegister(Long storeId, Long registerId) {
-        Long id = null;
+        RegisterDTO register = null;
         try {
-            id = registerService.getRegisterById(registerId).getStoreId();
-            if (id == null) {
+            register = registerService.getRegisterById(registerId);
+            if (register == null) {
                 throwNotFoundException(String.format(REGISTER_NOT_FOUND, registerId, storeId));
             }
         } catch (ServiceException e) {
             throwWebApplicationException(String.format(SERVER_ERROR, storeId), Status.INTERNAL_SERVER_ERROR);
         }
-        return id.equals(storeId);
+        return register.getStoreId().equals(storeId);
     }
     
     /**
