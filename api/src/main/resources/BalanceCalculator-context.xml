@@ -7,17 +7,11 @@
                         http://www.springframework.org/schema/context
                         http://www.springframework.org/schema/context/spring-context.xsd">
 
+    <import resource="classpath:service-context.xml" />
+    
     <!-- STORE  -->
     <bean id="storeResource" class="com.softserveinc.balance.calculator.api.resources.impl.StoreResourceImpl">
         <constructor-arg name="storeService" ref="storeService" />
-    </bean>
-    
-    <bean id="storeService" class="com.softserveinc.balance.calculator.service.impl.StoreServiceImpl">
-        <constructor-arg name="storeDao" ref="storeDao"/>
-    </bean>
-    
-    <bean id="storeDao" class="com.softserveinc.balance.calculator.repository.impl.StoreDAOImpl">
-        <constructor-arg name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
     
     <!-- REGISTER  -->
@@ -25,26 +19,9 @@
         <constructor-arg name="registerService" ref="registerService" />
     </bean>
     
-    <bean id="registerService" class="com.softserveinc.balance.calculator.service.impl.RegisterServiceImpl">
-        <constructor-arg name="registerDao" ref="registerDao"/>
-    </bean>
-    
-    <bean id="registerDao" class="com.softserveinc.balance.calculator.repository.impl.RegisterDAOImpl">
-        <constructor-arg name="jdbcTemplate" ref="jdbcTemplate"/>
-    </bean>
-    
     <!-- Balance -->
     <bean id="balanceResource" class="com.softserveinc.balance.calculator.api.resources.impl.BalanceResourceImpl">
         <constructor-arg name = "balanceService" ref="balanceService"/>
-    </bean>
-    
-    <bean id="balanceService" class="com.softserveinc.balance.calculator.service.impl.BalanceServiceImpl">
-        <constructor-arg name = "balanceDao" ref="balanceDao"/>
-        <constructor-arg name="registerDao" ref="registerDao"/>
-    </bean>
-    
-    <bean id="balanceDao" class="com.softserveinc.balance.calculator.repository.impl.BalanceDAOImpl">
-        <constructor-arg name = "jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
     
     <!-- Consumptions -->
@@ -53,60 +30,21 @@
         <constructor-arg name="transactionAllocationService" ref="transactionAllocationService"/>
     </bean>
     
-    <bean id="consumptionService" class="com.softserveinc.balance.calculator.service.impl.ConsumptionTransactionServiceImpl">
-        <constructor-arg name="consumptionDao" ref="consumptionDao"/>
-    </bean>
-    
-    <bean id="consumptionDao" class="com.softserveinc.balance.calculator.repository.impl.ConsumptionTransactionDAOImpl">
-        <constructor-arg name="jdbcTemplate" ref="jdbcTemplate"/>
-    </bean>
-    
     <!-- Contributions -->
     <bean id="contributionResource" class="com.softserveinc.balance.calculator.api.resources.impl.ContributionTransactionResourceImpl">
         <constructor-arg name="contributionService" ref="contributionService"/>
         <constructor-arg name="transactionAllocationService" ref="transactionAllocationService"/>
     </bean>
     
-    <bean id="contributionService" class="com.softserveinc.balance.calculator.service.impl.ContributionTransactionServiceImpl">
-        <constructor-arg name="contributionDao" ref="contributionDao"/>
-    </bean>
-    
-    <bean id="contributionDao" class="com.softserveinc.balance.calculator.repository.impl.ContributionTransactionDAOImpl">
-        <constructor-arg name="jdbcTemplate" ref="jdbcTemplate"/>
-    </bean>
-    
     <!-- Allocations -->
     <bean id="transactionAllocationService" class="com.softserveinc.balance.calculator.service.impl.TransactionAllocationServiceImpl">
         <constructor-arg name="transactionAllocationDao" ref="transactionAllocationDao"/>
     </bean>
-    
-    <bean id="transactionAllocationDao" class="com.softserveinc.balance.calculator.repository.impl.TransactionAllocationDAOImpl">
-        <constructor-arg name="dataSource" ref="dataSource"/>
-    </bean>
-    
-    <!-- DataSource  -->
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="${jdbc.driverClassName}"/>
-        <property name="url" value="${jdbc.url}"/>
-        <property name="username" value="${jdbc.username}"/>
-        <property name="password" value="${jdbc.password}"/>
-    </bean>
-    
-    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
-    
-    <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
-      <property name="dataSource" ref="dataSource" />
-      <property name="changeLog" value="classpath:changelog-master.xml" />
-      <property name="contexts" value="test, production" />
-    </bean>
 
+    <!-- Filter -->
     <bean id="authorizationFilter" class="com.softserveinc.balance.calculator.api.filters.AuthorizationFilter">
         <constructor-arg name="storeService" ref="storeService"/>
         <constructor-arg name="registerService" ref="registerService"/>
     </bean>
-    
-    <context:property-placeholder location="jdbc.properties" />
 
 </beans>
