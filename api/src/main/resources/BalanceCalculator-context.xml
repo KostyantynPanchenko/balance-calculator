@@ -9,12 +9,12 @@
 
     <import resource="classpath:service-context.xml" />
     
-    <!-- STORE  -->
+    <!-- STORE -->
     <bean id="storeResource" class="com.softserveinc.balance.calculator.api.resources.impl.StoreResourceImpl">
         <constructor-arg name="storeService" ref="storeService" />
     </bean>
     
-    <!-- REGISTER  -->
+    <!-- REGISTER -->
     <bean id="registerResource" class="com.softserveinc.balance.calculator.api.resources.impl.RegisterResourceImpl">
         <constructor-arg name="registerService" ref="registerService" />
     </bean>
@@ -42,9 +42,23 @@
     </bean>
 
     <!-- Filter -->
-    <bean id="authorizationFilter" class="com.softserveinc.balance.calculator.api.filters.AuthorizationFilter">
+    <bean id="preMatchingFilter" class="com.softserveinc.balance.calculator.api.filters.PreMatchingFilter">
         <constructor-arg name="storeService" ref="storeService"/>
         <constructor-arg name="registerService" ref="registerService"/>
+    </bean>
+    
+    <bean id="storeFilter" class="com.softserveinc.balance.calculator.api.filters.StoreFilter">
+        <constructor-arg name="storeService" ref="storeService"/>
+        <constructor-arg name="registerService" ref="registerService"/>
+    </bean>
+    
+    <bean id="registerFilter" class="com.softserveinc.balance.calculator.api.filters.RegisterFilter">
+        <constructor-arg name="storeService" ref="storeService"/>
+        <constructor-arg name="registerService" ref="registerService"/>
+    </bean>
+    
+    <bean id="healthCheck" class="com.softserveinc.balance.calculator.api.health.BalanceCalculatorDatabaseHealthCheck">
+        <constructor-arg name="dataSource" ref="dataSource"/>
     </bean>
 
 </beans>

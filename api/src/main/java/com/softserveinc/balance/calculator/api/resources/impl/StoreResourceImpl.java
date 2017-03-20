@@ -9,6 +9,7 @@ import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.softserveinc.balance.calculator.api.filters.bindings.FilterStores;
 import com.softserveinc.balance.calculator.api.resources.StoreResource;
 import com.softserveinc.balance.calculator.dto.StoreDTO;
 import com.softserveinc.balance.calculator.service.StoreService;
@@ -30,6 +31,7 @@ public class StoreResourceImpl implements StoreResource {
         this.storeService = storeService;
     }
 
+    @FilterStores
     @Override
     public Response getStoreById(Long id) {
         LOGGER.info("Retrieving store with id={}", id);
@@ -40,6 +42,7 @@ public class StoreResourceImpl implements StoreResource {
         return Response.status(Status.OK).entity(store).build();
     }
 
+    @FilterStores
     @Override
     public Response create(StoreDTO storeDto, UriInfo uriInfo, Long tenantId) {
         storeDto.setTenantId(tenantId);
@@ -60,6 +63,7 @@ public class StoreResourceImpl implements StoreResource {
         return uriInfo.getAbsolutePathBuilder().path(key.toString()).build();
     }
 
+    @FilterStores
     @Override
     public Response update(StoreDTO storeDto, Long id, Long tenantId) {
         LOGGER.info("Updating store with id={}", id);
@@ -76,6 +80,7 @@ public class StoreResourceImpl implements StoreResource {
         return storeService.update(storeDto) == 1;
     }
 
+    @FilterStores
     @Override
     public Response delete(Long id) {
         LOGGER.info("Deleting store with id={}", id);

@@ -1,26 +1,21 @@
 package com.softserveinc.balance.calculator.api;
 
-import javax.sql.DataSource;
 import javax.ws.rs.container.ContainerRequestFilter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-import com.softserveinc.balance.calculator.api.filters.AuthorizationFilter;
+import com.softserveinc.balance.calculator.api.filters.PreMatchingFilter;
+import com.softserveinc.balance.calculator.api.filters.RegisterFilter;
+import com.softserveinc.balance.calculator.api.filters.StoreFilter;
 import com.softserveinc.balance.calculator.api.health.BalanceCalculatorDatabaseHealthCheck;
 import com.softserveinc.balance.calculator.api.resources.BalanceResource;
 import com.softserveinc.balance.calculator.api.resources.ConsumptionTransactionResource;
 import com.softserveinc.balance.calculator.api.resources.ContributionTransactionResource;
 import com.softserveinc.balance.calculator.api.resources.RegisterResource;
 import com.softserveinc.balance.calculator.api.resources.StoreResource;
-import com.softserveinc.balance.calculator.api.resources.impl.BalanceResourceImpl;
-import com.softserveinc.balance.calculator.api.resources.impl.ConsumptionTransactionResourceImpl;
-import com.softserveinc.balance.calculator.api.resources.impl.ContributionTransactionResourceImpl;
-import com.softserveinc.balance.calculator.api.resources.impl.RegisterResourceImpl;
-import com.softserveinc.balance.calculator.api.resources.impl.StoreResourceImpl;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -48,23 +43,27 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
 
         @SuppressWarnings("resource")
         ApplicationContext context = new ClassPathXmlApplicationContext(XML_CONFIG_LOCATION);
+
+        StoreResource storeResource = context.getBean(StoreResource.class);
+        RegisterResource registerResource = context.getBean(RegisterResource.class);
+        ConsumptionTransactionResource consumptionResource = context.getBean(ConsumptionTransactionResource.class);
+        ContributionTransactionResource contributionResource = context.getBean(ContributionTransactionResource.class);
+        BalanceResource balanceResource = context.getBean(BalanceResource.class);
+//        ContainerRequestFilter filter = context.getBean(AuthorizationFilter.class);
+        BalanceCalculatorDatabaseHealthCheck healthCheck = context.getBean(BalanceCalculatorDatabaseHealthCheck.class);
         
-        final StoreResource storeResource = context.getBean(StoreResourceImpl.class);
-        final RegisterResource registerResource = context.getBean(RegisterResourceImpl.class);
-        final ConsumptionTransactionResource consumptionResource = context.getBean(ConsumptionTransactionResourceImpl.class);
-        final ContributionTransactionResource contributionResource = context.getBean(ContributionTransactionResourceImpl.class);
-        final DataSource dataSource = (DataSource) context.getBean(DriverManagerDataSource.class);
-        final BalanceResource balanceResource = context.getBean(BalanceResourceImpl.class);
-        final ContainerRequestFilter filter = context.getBean(AuthorizationFilter.class);
+        ContainerRequestFilter preMatchingFilter = context.getBean(PreMatchingFilter.class);
+        ContainerRequestFilter storeFilter = context.getBean(StoreFilter.class);
+        ContainerRequestFilter registerFilter = context.getBean(RegisterFilter.class);
         
         environment.jersey().register(storeResource);
         environment.jersey().register(registerResource);
         environment.jersey().register(consumptionResource);
         environment.jersey().register(contributionResource);
         environment.jersey().register(balanceResource);
-        environment.jersey().register(filter);
-        
-        final BalanceCalculatorDatabaseHealthCheck healthCheck = new BalanceCalculatorDatabaseHealthCheck(dataSource);
+        environment.jersey().register(preMatchingFilter);
+        environment.jersey().register(storeFilter);
+        environment.jersey().register(registerFilter);
         environment.healthChecks().register(HEALTH_CHECK_NAME, healthCheck);
     }
 

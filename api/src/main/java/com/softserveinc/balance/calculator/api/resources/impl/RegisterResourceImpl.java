@@ -9,6 +9,7 @@ import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.softserveinc.balance.calculator.api.filters.bindings.FilterRegisters;
 import com.softserveinc.balance.calculator.api.resources.RegisterResource;
 import com.softserveinc.balance.calculator.dto.RegisterDTO;
 import com.softserveinc.balance.calculator.service.RegisterService;
@@ -29,7 +30,8 @@ public class RegisterResourceImpl implements RegisterResource {
     public RegisterResourceImpl(RegisterService registerService) {
         this.registerService = registerService;
     }
-    
+
+    @FilterRegisters
     @Override
     public Response getRegisterById(Long registerId) {
         LOGGER.info("Retrieving Register with id={}", registerId);
@@ -39,7 +41,8 @@ public class RegisterResourceImpl implements RegisterResource {
         }
         return Response.status(Status.OK).entity(register).build();
     }
-
+    
+    @FilterRegisters
     @Override
     public Response create(RegisterDTO registerDto, Long storeId, UriInfo uriInfo) {
         LOGGER.info("Creating new Register for Store id={}", storeId);
@@ -61,6 +64,7 @@ public class RegisterResourceImpl implements RegisterResource {
         return uriInfo.getAbsolutePathBuilder().path(key.toString()).build();
     }
 
+    @FilterRegisters
     @Override
     public Response update(RegisterDTO registerDto, Long storeId, Long registerId) {
         LOGGER.info("Updating Register with id={} for Store id={}", registerId, storeId);
@@ -79,6 +83,7 @@ public class RegisterResourceImpl implements RegisterResource {
         return registerService.update(registerDto) == 1;
     }
 
+    @FilterRegisters
     @Override
     public Response delete(Long registerId) {
         LOGGER.info("Deleting Register with id={}", registerId);
