@@ -1,3 +1,4 @@
+
 package com.softserveinc.balance.calculator.api.filters;
 
 import java.io.IOException;
@@ -14,7 +15,8 @@ import com.softserveinc.balance.calculator.service.RegisterService;
 import com.softserveinc.balance.calculator.service.StoreService;
 
 /**
- * Authorization filter. Checks if request contain JWT and tenant can access requested store.
+ * Authorization filter. Checks if request contain JWT and tenant can access
+ * requested store.
  * 
  * @author Kostyantyn Panchenko
  * @version 1.0
@@ -23,21 +25,17 @@ import com.softserveinc.balance.calculator.service.StoreService;
  */
 @PreMatching
 public class PreMatchingFilter extends AbstractFilter implements ContainerRequestFilter {
-    
+
     public PreMatchingFilter(StoreService storeService, RegisterService registerService) {
         super(storeService, registerService);
     }
-    
+
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        System.out.println("PRE MATCHING FILTER");
-        
         Long tenantId = getTenantIdFromJwt(requestContext);
-        
+
         try {
-            URI newUri = new URI(requestContext.getUriInfo().getAbsolutePath().toString() + "?tenantId=" + tenantId.toString());
-            requestContext.setRequestUri(newUri);
-            System.out.println("URI rewritten");
+            requestContext.setRequestUri(new URI(requestContext.getUriInfo().getAbsolutePath().toString() + "?tenantId=" + tenantId.toString()));
         } catch (URISyntaxException e) {
             throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
         }

@@ -38,8 +38,6 @@ public class RegisterFilter extends AbstractFilter implements ContainerRequestFi
     
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        System.out.println("REGISTER FILTER");
-        
         Long tenantId = Long.valueOf(requestContext.getUriInfo().getQueryParameters().getFirst(TENANT_ID));
         Long pathStoreId = getStoreIdFromPath(requestContext);
         

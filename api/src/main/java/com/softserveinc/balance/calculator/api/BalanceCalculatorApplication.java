@@ -49,7 +49,6 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
         ConsumptionTransactionResource consumptionResource = context.getBean(ConsumptionTransactionResource.class);
         ContributionTransactionResource contributionResource = context.getBean(ContributionTransactionResource.class);
         BalanceResource balanceResource = context.getBean(BalanceResource.class);
-//        ContainerRequestFilter filter = context.getBean(AuthorizationFilter.class);
         BalanceCalculatorDatabaseHealthCheck healthCheck = context.getBean(BalanceCalculatorDatabaseHealthCheck.class);
         
         ContainerRequestFilter preMatchingFilter = context.getBean(PreMatchingFilter.class);

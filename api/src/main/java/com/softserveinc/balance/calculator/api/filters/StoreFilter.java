@@ -34,8 +34,6 @@ public class StoreFilter extends AbstractFilter implements ContainerRequestFilte
     
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        System.out.println("STORE FILTER");
-        
         Long tenantId = Long.valueOf(requestContext.getUriInfo().getQueryParameters().getFirst(TENANT_ID));
         
         if (!isPostRequest(requestContext)) {
