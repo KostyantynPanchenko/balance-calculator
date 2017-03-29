@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <import resource="classpath:dao-context.xml" />
+    
+    <!-- STORE  -->
+    <bean id="storeService" class="com.softserveinc.balance.calculator.service.impl.StoreServiceImpl">
+        <constructor-arg name="storeDao" ref="storeDao"/>
+    </bean>
+    
+    <!-- REGISTER  -->
+    <bean id="registerService" class="com.softserveinc.balance.calculator.service.impl.RegisterServiceImpl">
+        <constructor-arg name="registerDao" ref="registerDao"/>
+    </bean>
+    
+    <!-- Balance -->
+    <bean id="balanceService" class="com.softserveinc.balance.calculator.service.impl.BalanceServiceImpl">
+        <constructor-arg name = "balanceDao" ref="balanceDao"/>
+        <constructor-arg name="registerDao" ref="registerDao"/>
+    </bean>
+    
+    <!-- Consumptions -->
+    <bean id="consumptionService" class="com.softserveinc.balance.calculator.service.impl.ConsumptionTransactionServiceImpl">
+        <constructor-arg name="consumptionDao" ref="consumptionDao"/>
+    </bean>
+    
+    <!-- Contributions -->
+    <bean id="contributionService" class="com.softserveinc.balance.calculator.service.impl.ContributionTransactionServiceImpl">
+        <constructor-arg name="contributionDao" ref="contributionDao"/>
+    </bean>
+    
+    <!-- Allocations -->
+    <bean id="transactionAllocationService" class="com.softserveinc.balance.calculator.service.impl.TransactionAllocationServiceImpl">
+        <constructor-arg name="transactionAllocationDao" ref="transactionAllocationDao"/>
+    </bean>
+
+</beans>
