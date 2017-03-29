@@ -16,11 +16,11 @@ import com.softserveinc.balance.calculator.service.RegisterService;
 import com.softserveinc.balance.calculator.service.StoreService;
 
 /**
- * Authorization filter. Checks if request contain JWT and tenant can access requested store.
+ * Authorization filter. Checks if request is authorized to access requested <code>Register</code>.
  * 
  * @author Kostyantyn Panchenko
  * @version 1.0
- * @since 07/03/2017
+ * @since 17/03/2017
  *
  */
 @Provider

@@ -26,7 +26,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
  * 
  * @author Kostyantyn Panchenko
  * @version 1.0
- * @since 07/03/2017
+ * @since 17/03/2017
  *
  */
 public abstract class AbstractFilter {

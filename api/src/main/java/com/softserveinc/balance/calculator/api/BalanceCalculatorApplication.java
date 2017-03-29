@@ -24,7 +24,7 @@ import io.dropwizard.setup.Environment;
 /**
  * The main class for BalanceCalculator applications.
  *
- * @param <BalanceCalculatorConfig> the type of configuration class for this application
+ * @param BalanceCalculatorConfig the type of configuration class for this application
  */
 public class BalanceCalculatorApplication extends Application<BalanceCalculatorConfig> {
     

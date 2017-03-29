@@ -15,12 +15,12 @@ import com.softserveinc.balance.calculator.service.RegisterService;
 import com.softserveinc.balance.calculator.service.StoreService;
 
 /**
- * Authorization filter. Checks if request contain JWT and tenant can access
- * requested store.
+ * Prematching filter. Runs before request is mapped to handler method in resource class.
+ * Checks if request contain JWT and tenant can access requested store.
  * 
  * @author Kostyantyn Panchenko
  * @version 1.0
- * @since 07/03/2017
+ * @since 17/03/2017
  *
  */
 @PreMatching
