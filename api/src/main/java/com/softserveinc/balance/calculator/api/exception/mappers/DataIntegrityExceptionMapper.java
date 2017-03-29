@@ -7,12 +7,14 @@ import javax.ws.rs.ext.Provider;
 
 import org.springframework.dao.DataIntegrityViolationException;
 
+import io.dropwizard.jersey.errors.ErrorMessage;
+
 @Provider
 public class DataIntegrityExceptionMapper implements ExceptionMapper<DataIntegrityViolationException> {
 
     @Override
     public Response toResponse(DataIntegrityViolationException exception) {
-        return Response.status(Status.CONFLICT).entity("Database constraint violation.").build();
+        return Response.status(Status.CONFLICT).entity(new ErrorMessage(Status.CONFLICT.getStatusCode(), "Database constraint violation.")).build();
     }
 
 }

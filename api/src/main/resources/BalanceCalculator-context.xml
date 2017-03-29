@@ -60,5 +60,10 @@
     <bean id="healthCheck" class="com.softserveinc.balance.calculator.api.health.BalanceCalculatorDatabaseHealthCheck">
         <constructor-arg name="dataSource" ref="dataSource"/>
     </bean>
+    
+    <!-- Exception mappers -->
+    <bean id="dataAccessExceptionMapper" class="com.softserveinc.balance.calculator.api.exception.mappers.DataAccessExceptionMapper"/>
+    
+    <bean id="dataIntegrityExceptionMapper" class="com.softserveinc.balance.calculator.api.exception.mappers.DataIntegrityExceptionMapper"/>
 
 </beans>

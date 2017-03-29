@@ -1,12 +1,17 @@
 package com.softserveinc.balance.calculator.api;
 
 import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.ext.ExceptionMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 
+import com.softserveinc.balance.calculator.api.exception.mappers.DataAccessExceptionMapper;
+import com.softserveinc.balance.calculator.api.exception.mappers.DataIntegrityExceptionMapper;
 import com.softserveinc.balance.calculator.api.filters.PreMatchingFilter;
 import com.softserveinc.balance.calculator.api.filters.RegisterFilter;
 import com.softserveinc.balance.calculator.api.filters.StoreFilter;
@@ -55,6 +60,9 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
         ContainerRequestFilter storeFilter = context.getBean(StoreFilter.class);
         ContainerRequestFilter registerFilter = context.getBean(RegisterFilter.class);
         
+        ExceptionMapper<DataAccessException> access = context.getBean(DataAccessExceptionMapper.class);
+        ExceptionMapper<DataIntegrityViolationException> violation = context.getBean(DataIntegrityExceptionMapper.class);
+        
         environment.jersey().register(storeResource);
         environment.jersey().register(registerResource);
         environment.jersey().register(consumptionResource);
@@ -63,6 +71,8 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
         environment.jersey().register(preMatchingFilter);
         environment.jersey().register(storeFilter);
         environment.jersey().register(registerFilter);
+        environment.jersey().register(access);
+        environment.jersey().register(violation);
         environment.healthChecks().register(HEALTH_CHECK_NAME, healthCheck);
     }
 
