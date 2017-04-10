@@ -8,13 +8,13 @@ import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.object.StoredProcedure;
 
 import com.softserveinc.balance.calculator.repository.TransactionAllocationDAO;
-import com.softserveinc.balance.calculator.repository.impl.namespaces.TransactionAllocationNamespace;
+import static com.softserveinc.balance.calculator.repository.impl.namespaces.TransactionAllocationNamespace.*;
 
 public class TransactionAllocationDAOImpl extends StoredProcedure implements TransactionAllocationDAO {
     
     public TransactionAllocationDAOImpl(DataSource dataSource) {
-        super(dataSource, TransactionAllocationNamespace.SPROC_NAME);
-        declareParameter(new SqlParameter(TransactionAllocationNamespace.PARAM, Types.BIGINT));
+        super(dataSource, SPROC_NAME);
+        declareParameter(new SqlParameter(PARAM, Types.BIGINT));
         compile();
     }
     

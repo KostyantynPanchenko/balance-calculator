@@ -1,4 +1,4 @@
-package com.softserveinc.balance.calculator.repository;
+package com.softserveinc.balance.calculator.repository.impl;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;

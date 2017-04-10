@@ -4,11 +4,13 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.softserveinc.balance.calculator.domain.Store;
-import com.softserveinc.balance.calculator.repository.AbstractDAO;
 import com.softserveinc.balance.calculator.repository.StoreDAO;
 import com.softserveinc.balance.calculator.repository.impl.mappers.StorePreparedStatementCreator;
 import com.softserveinc.balance.calculator.repository.impl.mappers.StoreRowMapper;
-import com.softserveinc.balance.calculator.repository.impl.namespaces.StoreNamespace;
+
+import static com.softserveinc.balance.calculator.repository.impl.namespaces.StoreNamespace.SELECT;
+import static com.softserveinc.balance.calculator.repository.impl.namespaces.StoreNamespace.UPDATE;
+import static com.softserveinc.balance.calculator.repository.impl.namespaces.StoreNamespace.DELETE;
 
 /**
  * Implementation of <code>StoreRepository</code> interface.
@@ -26,7 +28,7 @@ public class StoreDAOImpl extends AbstractDAO implements StoreDAO {
     @Override
     public Store getStoreById(final Long id) {
         try {
-            return (Store) template.queryForObject(StoreNamespace.SELECT, new Object[] {id}, new StoreRowMapper());
+            return (Store) template.queryForObject(SELECT, new Object[] {id}, new StoreRowMapper());
         } catch (EmptyResultDataAccessException empty) {
             return null;
         }
@@ -39,12 +41,12 @@ public class StoreDAOImpl extends AbstractDAO implements StoreDAO {
 
     @Override
     public int update(Store store) {
-        return template.update(StoreNamespace.UPDATE, new Object[] {store.getName(), store.getDescription(), store.getId()});
+        return template.update(UPDATE, new Object[] {store.getName(), store.getDescription(), store.getId()});
     }
 
     @Override
     public int deleteById(Long id) {
-        return template.update(StoreNamespace.DELETE, new Object[] {id});
+        return template.update(DELETE, new Object[] {id});
     }
 
 }

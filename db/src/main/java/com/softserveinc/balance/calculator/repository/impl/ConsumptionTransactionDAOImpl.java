@@ -1,44 +1,31 @@
 package com.softserveinc.balance.calculator.repository.impl;
 
-import java.util.LinkedList;
-import java.util.List;
+import static com.softserveinc.balance.calculator.repository.impl.namespaces.TransactionNamespace.CONSUMPTION_BATCH;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.softserveinc.balance.calculator.domain.ConsumptionTransaction;
+import com.softserveinc.balance.calculator.domain.Transaction;
 import com.softserveinc.balance.calculator.repository.ConsumptionTransactionDAO;
-import com.softserveinc.balance.calculator.repository.impl.namespaces.TransactionNamespace;
 
 /**
  * Default implementation for <code>ConsumptionTransactionDAO</code> entities.
  * 
  * @author Kostyantyn Panchenko
- * @version 1.0
- * @since 06/03/2017
+ * @version 2.0
+ * @since 10/04/2017
  *
  */
-public class ConsumptionTransactionDAOImpl implements ConsumptionTransactionDAO {
-
-    private JdbcTemplate jdbcTemplate;
+public class ConsumptionTransactionDAOImpl extends AbstractTransactionDAO<ConsumptionTransaction> implements ConsumptionTransactionDAO {
     
-    protected ConsumptionTransactionDAOImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public ConsumptionTransactionDAOImpl(JdbcTemplate jdbcTemplate) {
+        super(jdbcTemplate);
+        this.batchSQL = CONSUMPTION_BATCH;
     }
 
     @Override
-    public int[] saveAll(List<ConsumptionTransaction> consumptions) {
-        List<Object[]> batch = new LinkedList<>();
-        consumptions.forEach(consumption -> batch.add(getBatchValues(consumption)));
-        return jdbcTemplate.batchUpdate(TransactionNamespace.CONSUMPTION_BATCH, batch);
-    }
-
-    /**
-     * Prepares arguments for batch processing.
-     * 
-     * @param consumption <code>ConsumptionTransaction</code> object
-     * @return an object holding values for batch processing
-     */
-    private Object[] getBatchValues(ConsumptionTransaction consumption) {
+    Object[] getBatchValues(Transaction transaction) {
+        ConsumptionTransaction consumption = (ConsumptionTransaction) transaction;
         return new Object[] {
                 consumption.getRegisterId(),
                 consumption.getConsumedValue(),

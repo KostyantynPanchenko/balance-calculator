@@ -7,7 +7,8 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 
 import com.softserveinc.balance.calculator.domain.Register;
-import com.softserveinc.balance.calculator.repository.impl.namespaces.RegisterNamespace;
+import static com.softserveinc.balance.calculator.repository.impl.namespaces.RegisterNamespace.INSERT;
+import static com.softserveinc.balance.calculator.repository.impl.namespaces.RegisterNamespace.ID_COLUMN_NAME;
 
 /**
  * PreparedStatementCreator implementation for <code>Register</code> domain class.
@@ -24,7 +25,7 @@ public class RegisterPreparedStatementCreator implements PreparedStatementCreato
     
     @Override
     public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement(RegisterNamespace.INSERT, new String[] {RegisterNamespace.ID_COLUMN_NAME});
+        PreparedStatement ps = connection.prepareStatement(INSERT, new String[] {ID_COLUMN_NAME});
         ps.setLong(1, register.getStoreId());
         ps.setString(2, register.getName());
         ps.setString(3, register.getTimezone());

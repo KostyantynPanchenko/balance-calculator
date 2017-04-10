@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 
 import com.softserveinc.balance.calculator.domain.Store;
-import com.softserveinc.balance.calculator.repository.impl.namespaces.StoreNamespace;
+import static com.softserveinc.balance.calculator.repository.impl.namespaces.StoreNamespace.*;
 
 /**
  * PreparedStatementCreator implementation for <code>Store</code> domain class.
@@ -24,7 +24,7 @@ public class StorePreparedStatementCreator implements PreparedStatementCreator {
     
     @Override
     public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement(StoreNamespace.INSERT, new String[] {StoreNamespace.ID_COLUMN_NAME});
+        PreparedStatement ps = connection.prepareStatement(INSERT, new String[] {ID_COLUMN_NAME});
         ps.setLong(1, store.getTenantId());
         ps.setString(2, store.getName());
         ps.setString(3, store.getDescription());
