@@ -14,58 +14,68 @@ public class BalanceDTO {
     private BigDecimal totalAllocatedConsumptionAmount;
     private BigDecimal totalUnallocatedContributionAmount;
     private BigDecimal totalUnallocatedConsumptionAmount;
-    
-    public BalanceDTO() {}
 
     public static class Builder {
-        private BalanceDTO balance;
-        
-        public Builder() {
-            balance = new BalanceDTO();
-        }
-        
+        private Long id;
+        private Long registerId;
+        private String createdOn;
+        private String createdBy;
+        private BigDecimal totalAllocatedContributionAmount;
+        private BigDecimal totalAllocatedConsumptionAmount;
+        private BigDecimal totalUnallocatedContributionAmount;
+        private BigDecimal totalUnallocatedConsumptionAmount;
+                
         public Builder setId(Long id) {
-            balance.setId(id);
+            this.id = id;
             return this;
         }
         
         public Builder setRegisterId(Long registerId) {
-            balance.setRegisterId(registerId);
+            this.registerId = registerId;
             return this;
         }
         
         public Builder setCreatedOn(OffsetDateTime createdOn) {
             DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-            balance.setCreatedOn(createdOn.format(formatter));
+            this.createdOn = createdOn.format(formatter);
             return this;
         }
         
         public Builder setCreatedBy(String createdBy) {
-            balance.setCreatedBy(createdBy);
+            this.createdBy = createdBy;
             return this;
         }
         
         public Builder setTotalAllocatedContributionAmount(BigDecimal amount) {
-            balance.totalAllocatedContributionAmount = amount;
+            this.totalAllocatedContributionAmount = amount;
             return this;
         }
         
         public Builder setTotalAllocatedConsumptionAmount(BigDecimal amount) {
-            balance.totalAllocatedConsumptionAmount = amount;
+            this.totalAllocatedConsumptionAmount = amount;
             return this;
         }
         
         public Builder setTotalUnallocatedContributionAmount(BigDecimal amount) {
-            balance.totalUnallocatedContributionAmount = amount;
+            this.totalUnallocatedContributionAmount = amount;
             return this;
         }
         
         public Builder setTotalUnallocatedConsumptionAmount(BigDecimal amount) {
-            balance.totalUnallocatedConsumptionAmount = amount;
+            this.totalUnallocatedConsumptionAmount = amount;
             return this;
         }
         
         public BalanceDTO build() {
+            BalanceDTO balance = new BalanceDTO();
+            balance.setId(id);
+            balance.setRegisterId(registerId);
+            balance.setCreatedBy(createdBy);
+            balance.setCreatedOn(createdOn);
+            balance.setTotalAllocatedConsumptionAmount(totalAllocatedConsumptionAmount);
+            balance.setTotalAllocatedContributionAmount(totalAllocatedContributionAmount);
+            balance.setTotalUnallocatedConsumptionAmount(totalUnallocatedConsumptionAmount);
+            balance.setTotalUnallocatedContributionAmount(totalUnallocatedContributionAmount);
             return balance;
         }
     }

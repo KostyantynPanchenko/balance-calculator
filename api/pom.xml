@@ -1,46 +1,54 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.softserveinc</groupId>
-    <artifactId>balance-calculator</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>api</artifactId>
-  
-  <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <dropwizard.version>1.0.6</dropwizard.version>
-    <jjwt.version>0.6.0</jjwt.version>
-    <jackson-databind.version>2.8.5</jackson-databind.version>
-  </properties>
-  
-  <dependencies>
-    <dependency>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
         <groupId>com.softserveinc</groupId>
-        <artifactId>service</artifactId>
+        <artifactId>balance-calculator</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-        <groupId>com.softserveinc</groupId>
-        <artifactId>dto</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-        <groupId>io.dropwizard</groupId>
-        <artifactId>dropwizard-core</artifactId>
-        <version>${dropwizard.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>io.jsonwebtoken</groupId>
-        <artifactId>jjwt</artifactId>
-        <version>${jjwt.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>${jackson-databind.version}</version>
-    </dependency>
-  </dependencies>
+    </parent>
+    <artifactId>api</artifactId>
+
+    <properties>
+        <spring-framework.version>4.3.5.RELEASE</spring-framework.version>
+        <dropwizard.version>1.0.6</dropwizard.version>
+        <jjwt.version>0.6.0</jjwt.version>
+        <jackson-databind.version>2.8.5</jackson-databind.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.softserveinc</groupId>
+            <artifactId>service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.softserveinc</groupId>
+            <artifactId>dto</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-core</artifactId>
+            <version>${dropwizard.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring-framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring-framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

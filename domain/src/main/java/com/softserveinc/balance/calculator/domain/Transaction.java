@@ -8,8 +8,6 @@ public abstract class Transaction {
     protected Long registerId;
     protected OffsetDateTime createdOn;
     protected String createdBy;
-    
-    protected Transaction() { }
 
     public Long getId() {
         return id;

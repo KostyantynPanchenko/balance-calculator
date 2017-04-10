@@ -13,39 +13,40 @@ public class StoreDTO {
     private String name;
     @Size(min = 2, max = 400)
     private String description;
-
-    public StoreDTO() {
-    }
     
     public static class Builder {
-        private StoreDTO store;
-        
-        public Builder() {
-            this.store = new StoreDTO();
-        }
-        
+        private Long id;
+        private Long tenantId;
+        private String name;
+        private String description;
+                
         public Builder setId(Long id) {
-            this.store.setId(id);
+            this.id = id;
             return this;
         }
         
         public Builder setTenantId(Long id) {
-            this.store.setTenantId(id);
+            this.tenantId = id;
             return this;
         }
         
         public Builder setName(String name) {
-            this.store.setName(name);
+            this.name = name;
             return this;
         }
         
         public Builder setDescription(String description) {
-            this.store.setDescription(description);
+            this.description = description;
             return this;
         }
         
         public StoreDTO build() {
-            return this.store;
+            StoreDTO store = new StoreDTO();
+            store.setId(id);
+            store.setTenantId(tenantId);
+            store.setName(name);
+            store.setDescription(description);
+            return store;
         }
     }
 

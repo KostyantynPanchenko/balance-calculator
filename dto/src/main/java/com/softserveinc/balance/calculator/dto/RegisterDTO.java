@@ -13,36 +13,39 @@ public class RegisterDTO {
     private String name;
     private String timezone;
     
-    public RegisterDTO() { }
-    
     public static class Builder {
-        private RegisterDTO register;
+        private Long id;
+        private Long storeId;
+        private String name;
+        private String timezone;
         
-        public Builder() {
-            this.register = new RegisterDTO();
-        }
         public Builder setId(Long id) {
-            this.register.setId(id);
+            this.id = id;
             return this;
         }
         
         public Builder setStoreId(Long storeId) {
-            this.register.setStoreId(storeId);
+            this.storeId = storeId;
             return this;
         }
         
         public Builder setName(String name) {
-            this.register.setName(name);
+            this.name = name;
             return this;
         }
         
         public Builder setTimezone(String timezone) {
-            this.register.setTimezone(timezone);
+            this.timezone = timezone;
             return this;
         }
         
         public RegisterDTO build() {
-            return this.register;
+            RegisterDTO register = new RegisterDTO();
+            register.setId(id);
+            register.setStoreId(storeId);
+            register.setName(name);
+            register.setTimezone(timezone);
+            return register;
         }
     }
     

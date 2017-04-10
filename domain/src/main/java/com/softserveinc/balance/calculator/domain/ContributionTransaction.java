@@ -10,63 +10,46 @@ public class ContributionTransaction extends Transaction {
     public ContributionTransaction() { }
     
     public static class Builder {
-        private ContributionTransaction transaction;
-        
-        public Builder() {
-            transaction = new ContributionTransaction();
-        }
+        private Long id;
+        private Long registerId;
+        private OffsetDateTime createdOn;
+        private String createdBy;
+        private BigDecimal orderGrantedValue;
         
         public Builder setId(Long id) {
-            transaction.setId(id);
+            this.id = id;
             return this;
         }
         
         public Builder setRegisterId(Long registerId) {
-            transaction.setRegisterId(registerId);
+            this.registerId = registerId;
             return this;
         }
         
         public Builder setOrderGrantedValue(BigDecimal orderGrantedValue) {
-            transaction.setOrderGrantedValue(orderGrantedValue);
+            this.orderGrantedValue = orderGrantedValue;
             return this;
         }
         
         public Builder setCreatedOn(OffsetDateTime createdOn) {
-            transaction.setCreatedOn(createdOn);
+            this.createdOn = createdOn;
             return this;
         }
         
         public Builder setCreatedBy(String createdBy) {
-            transaction.setCreatedBy(createdBy);
+            this.createdBy = createdBy;
             return this;
         }
         
         public ContributionTransaction build() {
-            return transaction;
+            ContributionTransaction dto = new ContributionTransaction();
+            dto.setId(id);
+            dto.setRegisterId(registerId);
+            dto.setCreatedBy(createdBy);
+            dto.setCreatedOn(createdOn);
+            dto.setOrderGrantedValue(orderGrantedValue);
+            return dto;
         }
-    }
-
-    public BigDecimal getOrderGrantedValue() {
-        return orderGrantedValue;
-    }
-
-    public void setOrderGrantedValue(BigDecimal orderGrantedValue) {
-        this.orderGrantedValue = orderGrantedValue;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result
-                + ((createdBy == null) ? 0 : createdBy.hashCode());
-        result = prime * result
-                + ((createdOn == null) ? 0 : createdOn.hashCode());
-        result = prime * result + ((orderGrantedValue == null) ? 0
-                : orderGrantedValue.hashCode());
-        result = prime * result
-                + ((registerId == null) ? 0 : registerId.hashCode());
-        return result;
     }
 
     @Override
@@ -101,10 +84,18 @@ public class ContributionTransaction extends Transaction {
         return true;
     }
 
+    public void setOrderGrantedValue(BigDecimal orderGrantedValue) {
+        this.orderGrantedValue = orderGrantedValue;
+    }
+
     @Override
     public String toString() {
         return "ContributionTransaction [id=" + id + ", registerId=" + registerId + "orderGrantedValue=" 
                 + orderGrantedValue + ", createdOn=" + createdOn + ", createdBy=" + createdBy + "]";
+    }
+
+    public Object getOrderGrantedValue() {
+        return this.orderGrantedValue;
     }
     
     

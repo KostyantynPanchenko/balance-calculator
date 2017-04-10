@@ -5,37 +5,40 @@ public class Register {
     private Long storeId;
     private String name;
     private String timezone;
-    
-    public Register() { }
 
     public static class Builder {
-        private Register register;
+        private Long id;
+        private Long storeId;
+        private String name;
+        private String timezone;
         
-        public Builder() {
-            this.register = new Register();
-        }
         public Builder setId(Long id) {
-            this.register.setId(id);
+            this.id = id;
             return this;
         }
         
         public Builder setStoreId(Long storeId) {
-            this.register.setStoreId(storeId);
+            this.storeId = storeId;
             return this;
         }
         
         public Builder setName(String name) {
-            this.register.setName(name);
+            this.name = name;
             return this;
         }
         
         public Builder setTimezone(String timezone) {
-            this.register.setTimezone(timezone);
+            this.timezone = timezone;
             return this;
         }
         
         public Register build() {
-            return this.register;
+            Register register = new Register();
+            register.setId(id);
+            register.setStoreId(storeId);
+            register.setName(name);
+            register.setTimezone(timezone);
+            return register;
         }
     }
     

@@ -6,57 +6,51 @@ import java.time.OffsetDateTime;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import com.softserveinc.balance.calculator.domain.ContributionTransaction;
-
 public class ContributionTransactionDTO extends AbstractTransactionDTO {
 
     @NotNull
     @Min(0)
     private BigDecimal orderGrantedValue;
-    
-    public ContributionTransactionDTO() { }
-    
-    public ContributionTransactionDTO(ContributionTransaction transaction) {
-        id = transaction.getId();
-        registerId = transaction.getRegisterId();
-        orderGrantedValue = transaction.getOrderGrantedValue();
-        createdOn = transaction.getCreatedOn();
-        createdBy = transaction.getCreatedBy();
-    }
 
     public static class Builder {
-        private ContributionTransactionDTO dto;
-        
-        public Builder() {
-            dto = new ContributionTransactionDTO();
-        }
+        private Long id;
+        private Long registerId;
+        private OffsetDateTime createdOn;
+        private String createdBy;
+        private BigDecimal orderGrantedValue;
         
         public Builder setId(Long id) {
-            dto.setId(id);
+            this.id = id;
             return this;
         }
         
         public Builder setRegisterId(Long registerId) {
-            dto.setRegisterId(registerId);
+            this.registerId = registerId;
             return this;
         }
         
         public Builder setOrderGrantedValue(BigDecimal orderGrantedValue) {
-            dto.setOrderGrantedValue(orderGrantedValue);
+            this.orderGrantedValue = orderGrantedValue;
             return this;
         }
         
         public Builder setCreatedOn(OffsetDateTime createdOn) {
-            dto.setCreatedOn(createdOn);
+            this.createdOn = createdOn;
             return this;
         }
         
         public Builder setCreatedBy(String createdBy) {
-            dto.setCreatedBy(createdBy);
+            this.createdBy = createdBy;
             return this;
         }
         
         public ContributionTransactionDTO build() {
+            ContributionTransactionDTO dto = new ContributionTransactionDTO();
+            dto.setId(id);
+            dto.setRegisterId(registerId);
+            dto.setCreatedBy(createdBy);
+            dto.setCreatedOn(createdOn);
+            dto.setOrderGrantedValue(orderGrantedValue);
             return dto;
         }
     }

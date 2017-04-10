@@ -6,38 +6,40 @@ public class Store {
     private Long tenantId;
     private String name;
     private String description;
-    
-    public Store() { }
 
     public static class Builder {
-        private Store store;
-        
-        public Builder() {
-            this.store = new Store();
-        }
+        private Long id;
+        private Long tenantId;
+        private String name;
+        private String description;
         
         public Builder setId(Long id) {
-            this.store.setId(id);
+            this.id = id;
             return this;
         }
         
         public Builder setTenantId(Long id) {
-            this.store.setTenantId(id);
+            this.tenantId = id;
             return this;
         }
         
         public Builder setName(String name) {
-            this.store.setName(name);
+            this.name = name;
             return this;
         }
         
         public Builder setDescription(String description) {
-            this.store.setDescription(description);
+            this.description = description;
             return this;
         }
         
         public Store build() {
-            return this.store;
+            Store store = new Store();
+            store.setId(id);
+            store.setTenantId(tenantId);
+            store.setName(name);
+            store.setDescription(description);
+            return store;
         }
     }
     

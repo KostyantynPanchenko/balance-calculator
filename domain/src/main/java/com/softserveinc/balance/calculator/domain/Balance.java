@@ -6,15 +6,13 @@ import java.time.OffsetDateTime;
 public class Balance {
 
     private Long id;
-    private Long registerId;    
+    private Long registerId;
     private OffsetDateTime createdOn;
     private String createdBy;
     private BigDecimal totalAllocatedContributionAmount;
     private BigDecimal totalAllocatedConsumptionAmount;
     private BigDecimal totalUnallocatedContributionAmount;
     private BigDecimal totalUnallocatedConsumptionAmount;
-    
-    public Balance() {}
     
     public Long getId() {
         return id;

@@ -6,43 +6,47 @@ import java.time.OffsetDateTime;
 public class ConsumptionTransaction extends Transaction {
 
     private BigDecimal consumedValue;
-    
-    public ConsumptionTransaction() { }
 
     public static class Builder {
-        private ConsumptionTransaction transaction;
-        
-        public Builder() {
-            transaction = new ConsumptionTransaction();
-        }
+        private Long id;
+        private Long registerId;
+        private OffsetDateTime createdOn;
+        private String createdBy;
+        private BigDecimal consumedValue;
         
         public Builder setId(Long id) {
-            transaction.setId(id);
+            this.id = id;
             return this;
         }
         
         public Builder setRegisterId(Long registerId) {
-            transaction.setRegisterId(registerId);
+            this.registerId = registerId;
             return this;
         }
         
         public Builder setConsumedValue(BigDecimal consumedValue) {
-            transaction.setConsumedValue(consumedValue);
+            this.consumedValue = consumedValue;
             return this;
         }
         
         public Builder setCreatedOn(OffsetDateTime createdOn) {
-            transaction.setCreatedOn(createdOn);
+            this.createdOn = createdOn;
             return this;
         }
         
         public Builder setCreatedBy(String createdBy) {
-            transaction.setCreatedBy(createdBy);
+            this.createdBy = createdBy;
             return this;
         }
         
         public ConsumptionTransaction build() {
-            return transaction;
+            ConsumptionTransaction dto = new ConsumptionTransaction();
+            dto.setId(id);
+            dto.setRegisterId(registerId);
+            dto.setCreatedBy(createdBy);
+            dto.setCreatedOn(createdOn);
+            dto.setConsumedValue(consumedValue);
+            return dto;
         }
     }
     
