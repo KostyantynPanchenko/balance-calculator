@@ -10,33 +10,33 @@
     <import resource="classpath:dao-context.xml" />
     
     <!-- STORE  -->
-    <bean id="storeService" class="com.softserveinc.balance.calculator.service.impl.StoreServiceImpl">
+    <bean id="storeService" class="balance.calculator.service.impl.StoreServiceImpl">
         <constructor-arg name="storeDao" ref="storeDao"/>
     </bean>
     
     <!-- REGISTER  -->
-    <bean id="registerService" class="com.softserveinc.balance.calculator.service.impl.RegisterServiceImpl">
+    <bean id="registerService" class="balance.calculator.service.impl.RegisterServiceImpl">
         <constructor-arg name="registerDao" ref="registerDao"/>
     </bean>
     
     <!-- Balance -->
-    <bean id="balanceService" class="com.softserveinc.balance.calculator.service.impl.BalanceServiceImpl">
+    <bean id="balanceService" class="balance.calculator.service.impl.BalanceServiceImpl">
         <constructor-arg name = "balanceDao" ref="balanceDao"/>
         <constructor-arg name="registerDao" ref="registerDao"/>
     </bean>
     
     <!-- Consumptions -->
-    <bean id="consumptionService" class="com.softserveinc.balance.calculator.service.impl.ConsumptionTransactionServiceImpl">
+    <bean id="consumptionService" class="balance.calculator.service.impl.ConsumptionTransactionServiceImpl">
         <constructor-arg name="consumptionDao" ref="consumptionDao"/>
     </bean>
     
     <!-- Contributions -->
-    <bean id="contributionService" class="com.softserveinc.balance.calculator.service.impl.ContributionTransactionServiceImpl">
+    <bean id="contributionService" class="balance.calculator.service.impl.ContributionTransactionServiceImpl">
         <constructor-arg name="contributionDao" ref="contributionDao"/>
     </bean>
     
     <!-- Allocations -->
-    <bean id="transactionAllocationService" class="com.softserveinc.balance.calculator.service.impl.TransactionAllocationServiceImpl">
+    <bean id="transactionAllocationService" class="balance.calculator.service.impl.TransactionAllocationServiceImpl">
         <constructor-arg name="transactionAllocationDao" ref="transactionAllocationDao"/>
     </bean>
 

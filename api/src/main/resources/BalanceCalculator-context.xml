@@ -10,60 +10,60 @@
     <import resource="classpath:service-context.xml" />
     
     <!-- STORE -->
-    <bean id="storeResource" class="com.softserveinc.balance.calculator.api.resources.impl.StoreResourceImpl">
+    <bean id="storeResource" class="balance.calculator.api.resources.impl.StoreResourceImpl">
         <constructor-arg name="storeService" ref="storeService" />
     </bean>
     
     <!-- REGISTER -->
-    <bean id="registerResource" class="com.softserveinc.balance.calculator.api.resources.impl.RegisterResourceImpl">
+    <bean id="registerResource" class="balance.calculator.api.resources.impl.RegisterResourceImpl">
         <constructor-arg name="registerService" ref="registerService" />
     </bean>
     
     <!-- Balance -->
-    <bean id="balanceResource" class="com.softserveinc.balance.calculator.api.resources.impl.BalanceResourceImpl">
+    <bean id="balanceResource" class="balance.calculator.api.resources.impl.BalanceResourceImpl">
         <constructor-arg name = "balanceService" ref="balanceService"/>
     </bean>
     
     <!-- Consumptions -->
-    <bean id="consumptionResource" class="com.softserveinc.balance.calculator.api.resources.impl.ConsumptionTransactionResourceImpl">
+    <bean id="consumptionResource" class="balance.calculator.api.resources.impl.ConsumptionTransactionResourceImpl">
         <constructor-arg name="consumptionService" ref="consumptionService"/>
         <constructor-arg name="transactionAllocationService" ref="transactionAllocationService"/>
     </bean>
     
     <!-- Contributions -->
-    <bean id="contributionResource" class="com.softserveinc.balance.calculator.api.resources.impl.ContributionTransactionResourceImpl">
+    <bean id="contributionResource" class="balance.calculator.api.resources.impl.ContributionTransactionResourceImpl">
         <constructor-arg name="contributionService" ref="contributionService"/>
         <constructor-arg name="transactionAllocationService" ref="transactionAllocationService"/>
     </bean>
     
     <!-- Allocations -->
-    <bean id="transactionAllocationService" class="com.softserveinc.balance.calculator.service.impl.TransactionAllocationServiceImpl">
+    <bean id="transactionAllocationService" class="balance.calculator.service.impl.TransactionAllocationServiceImpl">
         <constructor-arg name="transactionAllocationDao" ref="transactionAllocationDao"/>
     </bean>
 
     <!-- Filter -->
-    <bean id="preMatchingFilter" class="com.softserveinc.balance.calculator.api.filters.PreMatchingFilter">
+    <bean id="preMatchingFilter" class="balance.calculator.api.filters.PreMatchingFilter">
         <constructor-arg name="storeService" ref="storeService"/>
         <constructor-arg name="registerService" ref="registerService"/>
     </bean>
     
-    <bean id="storeFilter" class="com.softserveinc.balance.calculator.api.filters.StoreFilter">
+    <bean id="storeFilter" class="balance.calculator.api.filters.StoreFilter">
         <constructor-arg name="storeService" ref="storeService"/>
         <constructor-arg name="registerService" ref="registerService"/>
     </bean>
     
-    <bean id="registerFilter" class="com.softserveinc.balance.calculator.api.filters.RegisterFilter">
+    <bean id="registerFilter" class="balance.calculator.api.filters.RegisterFilter">
         <constructor-arg name="storeService" ref="storeService"/>
         <constructor-arg name="registerService" ref="registerService"/>
     </bean>
     
-    <bean id="healthCheck" class="com.softserveinc.balance.calculator.api.health.BalanceCalculatorDatabaseHealthCheck">
+    <bean id="healthCheck" class="balance.calculator.api.health.BalanceCalculatorDatabaseHealthCheck">
         <constructor-arg name="dataSource" ref="dataSource"/>
     </bean>
     
     <!-- Exception mappers -->
-    <bean id="dataAccessExceptionMapper" class="com.softserveinc.balance.calculator.api.exception.mappers.DataAccessExceptionMapper"/>
+    <bean id="dataAccessExceptionMapper" class="balance.calculator.api.exception.mappers.DataAccessExceptionMapper"/>
     
-    <bean id="dataIntegrityExceptionMapper" class="com.softserveinc.balance.calculator.api.exception.mappers.DataIntegrityExceptionMapper"/>
+    <bean id="dataIntegrityExceptionMapper" class="balance.calculator.api.exception.mappers.DataIntegrityExceptionMapper"/>
 
 </beans>

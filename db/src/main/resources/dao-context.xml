@@ -7,27 +7,27 @@
                         http://www.springframework.org/schema/context
                         http://www.springframework.org/schema/context/spring-context.xsd">
                         
-    <bean id="storeDao" class="com.softserveinc.balance.calculator.repository.impl.StoreDAOImpl">
+    <bean id="storeDao" class="balance.calculator.repository.impl.StoreDAOImpl">
         <constructor-arg name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
     
-    <bean id="registerDao" class="com.softserveinc.balance.calculator.repository.impl.RegisterDAOImpl">
+    <bean id="registerDao" class="balance.calculator.repository.impl.RegisterDAOImpl">
         <constructor-arg name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
     
-    <bean id="balanceDao" class="com.softserveinc.balance.calculator.repository.impl.BalanceDAOImpl">
+    <bean id="balanceDao" class="balance.calculator.repository.impl.BalanceDAOImpl">
         <constructor-arg name = "jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
     
-    <bean id="consumptionDao" class="com.softserveinc.balance.calculator.repository.impl.ConsumptionTransactionDAOImpl">
+    <bean id="consumptionDao" class="balance.calculator.repository.impl.ConsumptionTransactionDAOImpl">
         <constructor-arg name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
     
-    <bean id="contributionDao" class="com.softserveinc.balance.calculator.repository.impl.ContributionTransactionDAOImpl">
+    <bean id="contributionDao" class="balance.calculator.repository.impl.ContributionTransactionDAOImpl">
         <constructor-arg name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
     
-    <bean id="transactionAllocationDao" class="com.softserveinc.balance.calculator.repository.impl.TransactionAllocationDAOImpl">
+    <bean id="transactionAllocationDao" class="balance.calculator.repository.impl.TransactionAllocationDAOImpl">
         <constructor-arg name="dataSource" ref="dataSource"/>
     </bean>
     
