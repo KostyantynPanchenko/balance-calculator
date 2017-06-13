@@ -5,9 +5,8 @@ import java.io.IOException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.Provider;
-
-import balance.calculator.api.filters.bindings.FilterStores;
 
 /**
  * CORS filter.
@@ -18,7 +17,6 @@ import balance.calculator.api.filters.bindings.FilterStores;
  *
  */
 @Provider
-@FilterStores
 public class CrossOriginFilter implements ContainerResponseFilter {
 
     private static final String ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
@@ -32,10 +30,11 @@ public class CrossOriginFilter implements ContainerResponseFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
-          responseContext.getHeaders().add(ACCESS_CONTROL_ALLOW_ORIGIN, ALL);
-          responseContext.getHeaders().add(ACCESS_CONTROL_ALLOW_CREDENTIALS, TRUE);
-          responseContext.getHeaders().add(ACCESS_CONTROL_ALLOW_HEADERS, HEADERS);
-          responseContext.getHeaders().add(ACCESS_CONTROL_ALLOW_METHODS, ALLOWED_HTTP_METHODS);
+        MultivaluedMap<String, Object> headers = responseContext.getHeaders();
+        headers.add(ACCESS_CONTROL_ALLOW_ORIGIN, ALL);
+        headers.add(ACCESS_CONTROL_ALLOW_CREDENTIALS, TRUE);
+        headers.add(ACCESS_CONTROL_ALLOW_HEADERS, HEADERS);
+        headers.add(ACCESS_CONTROL_ALLOW_METHODS, ALLOWED_HTTP_METHODS);
     }
 
 }
