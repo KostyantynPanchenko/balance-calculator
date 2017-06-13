@@ -57,6 +57,8 @@
         <constructor-arg name="registerService" ref="registerService"/>
     </bean>
     
+    <bean id="corsFilter" class="balance.calculator.api.filters.CrossOriginFilter"/>
+    
     <bean id="healthCheck" class="balance.calculator.api.health.BalanceCalculatorDatabaseHealthCheck">
         <constructor-arg name="dataSource" ref="dataSource"/>
     </bean>

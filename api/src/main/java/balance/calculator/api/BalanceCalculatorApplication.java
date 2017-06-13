@@ -1,6 +1,7 @@
 package balance.calculator.api;
 
 import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.ext.ExceptionMapper;
 
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import balance.calculator.api.exception.mappers.DataAccessExceptionMapper;
 import balance.calculator.api.exception.mappers.DataIntegrityExceptionMapper;
+import balance.calculator.api.filters.CrossOriginFilter;
 import balance.calculator.api.filters.PreMatchingFilter;
 import balance.calculator.api.filters.RegisterFilter;
 import balance.calculator.api.filters.StoreFilter;
@@ -58,6 +60,7 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
         ContainerRequestFilter preMatchingFilter = context.getBean(PreMatchingFilter.class);
         ContainerRequestFilter storeFilter = context.getBean(StoreFilter.class);
         ContainerRequestFilter registerFilter = context.getBean(RegisterFilter.class);
+        ContainerResponseFilter corsFilter = context.getBean(CrossOriginFilter.class);
         
         ExceptionMapper<DataAccessException> access = context.getBean(DataAccessExceptionMapper.class);
         ExceptionMapper<DataIntegrityViolationException> violation = context.getBean(DataIntegrityExceptionMapper.class);
@@ -70,6 +73,7 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
         environment.jersey().register(preMatchingFilter);
         environment.jersey().register(storeFilter);
         environment.jersey().register(registerFilter);
+        environment.jersey().register(corsFilter);
         environment.jersey().register(access);
         environment.jersey().register(violation);
         environment.healthChecks().register(HEALTH_CHECK_NAME, healthCheck);
