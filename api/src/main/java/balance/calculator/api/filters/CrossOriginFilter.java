@@ -26,7 +26,7 @@ public class CrossOriginFilter implements ContainerResponseFilter {
     private static final String ACCESS_CONTROL_ALLOW_HEADERS = "Access-Control-Allow-Headers";
     private static final String HEADERS = "origin, content-type, accept, authorization";
     private static final String ACCESS_CONTROL_ALLOW_METHODS = "Access-Control-Allow-Methods";
-    private static final String ALLOWED_HTTP_METHODS = "GET, POST, PUT, DELETE, OPTIONS, HEAD";
+    private static final String METHODS = "GET, POST, PUT, DELETE, OPTIONS, HEAD";
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
@@ -34,7 +34,7 @@ public class CrossOriginFilter implements ContainerResponseFilter {
         headers.add(ACCESS_CONTROL_ALLOW_ORIGIN, ALL);
         headers.add(ACCESS_CONTROL_ALLOW_CREDENTIALS, TRUE);
         headers.add(ACCESS_CONTROL_ALLOW_HEADERS, HEADERS);
-        headers.add(ACCESS_CONTROL_ALLOW_METHODS, ALLOWED_HTTP_METHODS);
+        headers.add(ACCESS_CONTROL_ALLOW_METHODS, METHODS);
     }
 
 }

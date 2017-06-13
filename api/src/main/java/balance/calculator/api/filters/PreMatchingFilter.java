@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -25,19 +26,21 @@ import balance.calculator.service.StoreService;
  */
 @PreMatching
 public class PreMatchingFilter extends AbstractFilter implements ContainerRequestFilter {
-
+    
     public PreMatchingFilter(StoreService storeService, RegisterService registerService) {
         super(storeService, registerService);
     }
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        Long tenantId = getTenantIdFromJwt(requestContext);
-
-        try {
-            requestContext.setRequestUri(new URI(requestContext.getUriInfo().getAbsolutePath().toString() + "?tenantId=" + tenantId.toString()));
-        } catch (URISyntaxException e) {
-            throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
+        if (!requestContext.getMethod().toUpperCase().equals(HttpMethod.OPTIONS)) { 
+            Long tenantId = getTenantIdFromJwt(requestContext);
+    
+            try {
+                requestContext.setRequestUri(new URI(requestContext.getUriInfo().getAbsolutePath().toString() + "?tenantId=" + tenantId.toString()));
+            } catch (URISyntaxException e) {
+                throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
