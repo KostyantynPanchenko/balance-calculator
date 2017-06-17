@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -38,7 +37,6 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
     
     private final static Logger LOGGER = LoggerFactory.getLogger(BalanceCalculatorApplication.class);
     private final static String STARTING = "Starting application...";
-    private final String XML_CONFIG_LOCATION = "classpath:BalanceCalculator-context.xml";
     private final String HEALTH_CHECK_NAME = "BalanceCalculator App";
     
     public static void main(String[] args) throws Exception {
@@ -50,7 +48,6 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
     public void run(BalanceCalculatorConfig config, Environment environment) throws Exception {
 
         @SuppressWarnings("resource")
-//        ApplicationContext context = new ClassPathXmlApplicationContext(XML_CONFIG_LOCATION);
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         StoreResource storeResource = context.getBean(StoreResource.class);
