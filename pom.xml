@@ -14,11 +14,12 @@
     </modules>
 
     <properties>
+        <spring.version>4.3.5.RELEASE</spring.version>
         <java.version>1.8</java.version>
         <maven-compiver-plugin.version>3.6.1</maven-compiver-plugin.version>
         <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
         <maven-shade-plugin.version>2.3</maven-shade-plugin.version>
-        <mainClass>com.softserveinc.balance.calculator.api.BalanceCalculatorApplication</mainClass>
+        <mainClass>balance.calculator.api.BalanceCalculatorApplication</mainClass>
     </properties>
 
     <dependencyManagement>
@@ -47,6 +48,16 @@
                 <groupId>com.softserveinc</groupId>
                 <artifactId>service</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+               <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

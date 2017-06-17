@@ -9,7 +9,6 @@
     <artifactId>api</artifactId>
 
     <properties>
-        <spring.version>4.3.5.RELEASE</spring.version>
         <dropwizard.version>1.0.6</dropwizard.version>
         <jjwt.version>0.6.0</jjwt.version>
         <jackson-databind.version>2.8.5</jackson-databind.version>
@@ -32,12 +31,10 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

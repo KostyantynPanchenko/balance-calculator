@@ -7,10 +7,12 @@ import javax.ws.rs.ext.ExceptionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import balance.calculator.api.configuration.AppConfig;
 import balance.calculator.api.exception.mappers.DataAccessExceptionMapper;
 import balance.calculator.api.exception.mappers.DataIntegrityExceptionMapper;
 import balance.calculator.api.filters.CrossOriginFilter;
@@ -48,7 +50,8 @@ public class BalanceCalculatorApplication extends Application<BalanceCalculatorC
     public void run(BalanceCalculatorConfig config, Environment environment) throws Exception {
 
         @SuppressWarnings("resource")
-        ApplicationContext context = new ClassPathXmlApplicationContext(XML_CONFIG_LOCATION);
+//        ApplicationContext context = new ClassPathXmlApplicationContext(XML_CONFIG_LOCATION);
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         StoreResource storeResource = context.getBean(StoreResource.class);
         RegisterResource registerResource = context.getBean(RegisterResource.class);
