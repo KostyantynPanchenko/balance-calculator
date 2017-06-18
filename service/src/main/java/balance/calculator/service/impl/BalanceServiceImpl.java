@@ -3,6 +3,8 @@ package balance.calculator.service.impl;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 
+import org.springframework.stereotype.Component;
+
 import balance.calculator.domain.Balance;
 import balance.calculator.domain.Register;
 import balance.calculator.dto.BalanceDTO;
@@ -11,6 +13,7 @@ import balance.calculator.repository.RegisterDAO;
 import balance.calculator.service.BalanceService;
 import balance.calculator.service.impl.mappers.BalanceMapper;
 
+@Component
 public class BalanceServiceImpl implements BalanceService {
 
     private BalanceDAO balanceDao;

@@ -3,6 +3,7 @@ package balance.calculator.repository.impl;
 import static balance.calculator.repository.impl.namespaces.TransactionNamespace.CONSUMPTION_BATCH;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import balance.calculator.domain.ConsumptionTransaction;
 import balance.calculator.domain.Transaction;
@@ -16,6 +17,7 @@ import balance.calculator.repository.ConsumptionTransactionDAO;
  * @since 10/04/2017
  *
  */
+@Component
 public class ConsumptionTransactionDAOImpl extends AbstractTransactionDAO<ConsumptionTransaction> implements ConsumptionTransactionDAO {
     
     public ConsumptionTransactionDAOImpl(JdbcTemplate jdbcTemplate) {

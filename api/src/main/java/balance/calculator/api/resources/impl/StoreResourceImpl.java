@@ -8,6 +8,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import balance.calculator.api.filters.bindings.FilterStores;
 import balance.calculator.api.resources.StoreResource;
@@ -22,6 +23,7 @@ import balance.calculator.service.StoreService;
  * @see     StoreResource
  * @since   03/05/2017
  */
+@Component
 public class StoreResourceImpl implements StoreResource {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(StoreResourceImpl.class);

@@ -6,9 +6,11 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Component;
 
 import io.dropwizard.jersey.errors.ErrorMessage;
 
+@Component
 @Provider
 public class DataAccessExceptionMapper implements ExceptionMapper<DataAccessException> {
 

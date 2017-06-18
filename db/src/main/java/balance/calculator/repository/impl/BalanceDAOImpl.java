@@ -1,16 +1,19 @@
 package balance.calculator.repository.impl;
 
-import static balance.calculator.repository.impl.namespaces.BalanceNamespace.*;
+import static balance.calculator.repository.impl.namespaces.BalanceNamespace.GET_BALANCE_FOR_DATE;
+import static balance.calculator.repository.impl.namespaces.BalanceNamespace.GET_CURRENT_BALANCE;
 
 import java.time.LocalDate;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import balance.calculator.domain.Balance;
 import balance.calculator.repository.BalanceDAO;
 import balance.calculator.repository.impl.mappers.BalanceRowMapper;
 
+@Component
 public class BalanceDAOImpl implements BalanceDAO {
 
     private JdbcTemplate jdbcTemplate;

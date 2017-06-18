@@ -4,26 +4,16 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-import balance.calculator.repository.BalanceDAO;
-import balance.calculator.repository.ConsumptionTransactionDAO;
-import balance.calculator.repository.ContributionTransactionDAO;
-import balance.calculator.repository.RegisterDAO;
-import balance.calculator.repository.StoreDAO;
-import balance.calculator.repository.TransactionAllocationDAO;
-import balance.calculator.repository.impl.BalanceDAOImpl;
-import balance.calculator.repository.impl.ConsumptionTransactionDAOImpl;
-import balance.calculator.repository.impl.ContributionTransactionDAOImpl;
-import balance.calculator.repository.impl.RegisterDAOImpl;
-import balance.calculator.repository.impl.StoreDAOImpl;
-import balance.calculator.repository.impl.TransactionAllocationDAOImpl;
 import liquibase.integration.spring.SpringLiquibase;
 
 @Configuration
+@ComponentScan("balance.calculator.repository.impl")
 @PropertySource("classpath:jdbc.properties")
 public class RepoConfig {
 
@@ -41,36 +31,6 @@ public class RepoConfig {
     
     @Value("${jdbc.url}")
     private String url;
-    
-    @Bean
-    public StoreDAO getStoreDao(JdbcTemplate jdbcTemplate) {
-        return new StoreDAOImpl(jdbcTemplate);
-    }
-    
-    @Bean 
-    public RegisterDAO getRegisterDao(JdbcTemplate jdbcTemplate) {
-        return new RegisterDAOImpl(jdbcTemplate);
-    }
-    
-    @Bean 
-    public ConsumptionTransactionDAO getConsumptionTransactionDao(JdbcTemplate jdbcTemplate) {
-        return new ConsumptionTransactionDAOImpl(jdbcTemplate);
-    }
-    
-    @Bean 
-    public ContributionTransactionDAO getContributionTransactionDao(JdbcTemplate jdbcTemplate) {
-        return new ContributionTransactionDAOImpl(jdbcTemplate);
-    }
-    
-    @Bean
-    public TransactionAllocationDAO getTransactionAllocationDao(DataSource dataSource) {
-        return new TransactionAllocationDAOImpl(dataSource);
-    }
-    
-    @Bean
-    public BalanceDAO getBalanceDao(JdbcTemplate jdbcTemplate) {
-        return new BalanceDAOImpl(jdbcTemplate);
-    }
     
     @Bean
     public DataSource getDataSource() {

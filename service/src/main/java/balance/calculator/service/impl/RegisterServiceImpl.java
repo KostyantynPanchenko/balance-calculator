@@ -1,11 +1,14 @@
 package balance.calculator.service.impl;
 
+import org.springframework.stereotype.Component;
+
 import balance.calculator.domain.Register;
 import balance.calculator.dto.RegisterDTO;
 import balance.calculator.repository.RegisterDAO;
 import balance.calculator.service.RegisterService;
 import balance.calculator.service.impl.mappers.RegisterMapper;
 
+@Component
 public class RegisterServiceImpl implements RegisterService {
 
     private RegisterDAO registerDao;

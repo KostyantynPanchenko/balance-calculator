@@ -2,6 +2,8 @@ package balance.calculator.api.health;
 
 import javax.sql.DataSource;
 
+import org.springframework.stereotype.Component;
+
 import com.codahale.metrics.health.HealthCheck;
 
 /**
@@ -11,6 +13,7 @@ import com.codahale.metrics.health.HealthCheck;
  * @version 1.0
  * @since 06/03/2017
  */
+@Component
 public class BalanceCalculatorDatabaseHealthCheck extends HealthCheck {
 
     private DataSource dataSource;

@@ -6,6 +6,7 @@ import static balance.calculator.repository.impl.namespaces.StoreNamespace.UPDAT
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import balance.calculator.domain.Store;
 import balance.calculator.repository.StoreDAO;
@@ -19,6 +20,7 @@ import balance.calculator.repository.impl.mappers.StoreRowMapper;
  * @version 1.0
  * @since 05/03/2017
  */
+@Component
 public class StoreDAOImpl extends AbstractDAO implements StoreDAO {
     
     public StoreDAOImpl(JdbcTemplate jdbcTemplate) {

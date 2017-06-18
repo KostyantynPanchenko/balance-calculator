@@ -8,6 +8,7 @@ import javax.ws.rs.ext.Provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import balance.calculator.api.filters.bindings.FilterStores;
 import balance.calculator.service.RegisterService;
@@ -21,6 +22,7 @@ import balance.calculator.service.StoreService;
  * @since 07/03/2017
  *
  */
+@Component
 @Provider
 @FilterStores
 public class StoreFilter extends AbstractFilter implements ContainerRequestFilter {

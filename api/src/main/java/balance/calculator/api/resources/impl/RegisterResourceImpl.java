@@ -8,6 +8,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import balance.calculator.api.filters.bindings.FilterRegisters;
 import balance.calculator.api.resources.RegisterResource;
@@ -22,6 +23,7 @@ import balance.calculator.service.RegisterService;
  * @see     RegisterResource
  * @since   03/05/2017
  */
+@Component
 public class RegisterResourceImpl implements RegisterResource {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(RegisterResourceImpl.class);

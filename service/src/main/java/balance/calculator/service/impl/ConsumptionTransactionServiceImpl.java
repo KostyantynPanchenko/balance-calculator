@@ -3,6 +3,8 @@ package balance.calculator.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import balance.calculator.domain.ConsumptionTransaction;
 import balance.calculator.dto.ConsumptionTransactionDTO;
 import balance.calculator.repository.ConsumptionTransactionDAO;
@@ -17,6 +19,7 @@ import balance.calculator.service.impl.mappers.ConsumptionMapper;
  * @see ConsumptionTransactionService
  * @since 06/03/2017
  */
+@Component
 public class ConsumptionTransactionServiceImpl implements ConsumptionTransactionService {
 
     private ConsumptionTransactionDAO consumptionDao;

@@ -6,6 +6,7 @@ import static balance.calculator.repository.impl.namespaces.RegisterNamespace.UP
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import balance.calculator.domain.Register;
 import balance.calculator.repository.RegisterDAO;
@@ -19,6 +20,7 @@ import balance.calculator.repository.impl.mappers.RegisterRowMapper;
  * @version 1.0
  * @since 05/03/2017
  */
+@Component
 public class RegisterDAOImpl extends AbstractDAO implements RegisterDAO {
 
     public RegisterDAOImpl(JdbcTemplate jdbcTemplate) {

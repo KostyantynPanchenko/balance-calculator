@@ -6,6 +6,7 @@ import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import balance.calculator.api.resources.ContributionTransactionResource;
 import balance.calculator.dto.ContributionTransactionDTO;
@@ -20,6 +21,7 @@ import balance.calculator.service.TransactionAllocationService;
  * @see ContributionTransactionResource
  * @since 06/03/2017
  */
+@Component
 public class ContributionTransactionResourceImpl implements ContributionTransactionResource {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ContributionTransactionResourceImpl.class);

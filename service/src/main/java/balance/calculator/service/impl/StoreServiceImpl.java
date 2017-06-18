@@ -1,11 +1,14 @@
 package balance.calculator.service.impl;
 
+import org.springframework.stereotype.Component;
+
 import balance.calculator.domain.Store;
 import balance.calculator.dto.StoreDTO;
 import balance.calculator.repository.StoreDAO;
 import balance.calculator.service.StoreService;
 import balance.calculator.service.impl.mappers.StoreMapper;
 
+@Component
 public class StoreServiceImpl implements StoreService {
 
     private StoreDAO storeDao;

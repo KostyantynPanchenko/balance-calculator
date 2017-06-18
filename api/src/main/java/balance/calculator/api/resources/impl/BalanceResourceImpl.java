@@ -9,6 +9,8 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.springframework.stereotype.Component;
+
 import balance.calculator.api.resources.BalanceResource;
 import balance.calculator.dto.BalanceDTO;
 import balance.calculator.service.BalanceService;
@@ -21,6 +23,7 @@ import balance.calculator.service.BalanceService;
  * @see <code>BalanceResource</code>
  * @since 09/03/2017
  */
+@Component
 public class BalanceResourceImpl implements BalanceResource {
 
     private BalanceService balanceService;

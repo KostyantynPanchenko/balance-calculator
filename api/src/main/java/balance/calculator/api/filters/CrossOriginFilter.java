@@ -8,6 +8,8 @@ import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.Provider;
 
+import org.springframework.stereotype.Component;
+
 /**
  * CORS filter.
  * 
@@ -16,6 +18,7 @@ import javax.ws.rs.ext.Provider;
  * @since 13/06/2017
  *
  */
+@Component
 @Provider
 public class CrossOriginFilter implements ContainerResponseFilter {
 

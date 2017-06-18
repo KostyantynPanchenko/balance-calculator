@@ -12,6 +12,8 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.Response.Status;
 
+import org.springframework.stereotype.Component;
+
 import balance.calculator.service.RegisterService;
 import balance.calculator.service.StoreService;
 
@@ -24,6 +26,7 @@ import balance.calculator.service.StoreService;
  * @since 17/03/2017
  *
  */
+@Component
 @PreMatching
 public class PreMatchingFilter extends AbstractFilter implements ContainerRequestFilter {
     
